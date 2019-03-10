@@ -1,0 +1,11 @@
+﻿
+
+
+/* Overriden the bootstrap.min.css class  */
+.panel-heading {
+    text-align: right
+}
+
+
+
+
