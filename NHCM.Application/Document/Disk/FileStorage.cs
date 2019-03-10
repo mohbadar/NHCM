@@ -1,14 +1,14 @@
-﻿using Cropper;
-using Cropper.Models;
+﻿using NHCM.Application.Document.Disk.Cropper;
+using NHCM.Application.Document.Disk.Cropper.Models;
 using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Security.Cryptography;
 using System.Text;
 
-namespace FileManager
+namespace NHCM.Application.Document.Disk.FileManager
 {
-    public class FileSystemStorage
+    public class FileStorage
     {
         public async System.Threading.Tasks.Task<string> CreateAsync(Stream file, string fileextension, string path)
         {

@@ -1,8 +1,6 @@
 ﻿using System.Drawing;
 
-
-
-namespace Cropper
+namespace NHCM.Application.Document.Disk.Cropper
 {
     public static class ImageUtils
     {

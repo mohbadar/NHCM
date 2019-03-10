@@ -8,12 +8,11 @@ using NHCM.Application.Recruitment.Models;
 using NHCM.Application.Recruitment.Queries;
 using NHCM.Domain.Entities;
 using NHCM.Application.Lookup.Queries;
-using NHCM.Persistence;
-using FileManager;
 using Microsoft.Extensions.Configuration;
 using Microsoft.AspNetCore.Http;
-using Cropper.Models;
-using NHCM.Persistence.FileHandler;
+using NHCM.Application.Document.Disk.FileManager;
+using NHCM.Application.Document.Disk;
+using NHCM.Application.Document.Disk.Cropper.Models;
 
 namespace NHCM.WebUI.Pages.Recruitment
 {
@@ -129,7 +128,7 @@ namespace NHCM.WebUI.Pages.Recruitment
 
         public async Task<IActionResult> OnPostUpload([FromQuery]IFormFile img)
         {
-            FileSystemStorage _storage = new FileSystemStorage();
+            FileStorage _storage = new FileStorage();
             var extension = System.IO.Path.GetExtension(img.FileName);
             // check for a valid mediatype
             if (!img.ContentType.StartsWith("image/"))
@@ -159,7 +158,7 @@ namespace NHCM.WebUI.Pages.Recruitment
 
         public async Task<IActionResult> OnPostCrop([FromBody] CropRequest cropmodel)
         {
-            FileSystemStorage _storage = new FileSystemStorage();
+            FileStorage _storage = new FileStorage();
             string filename = await _storage.Crop(cropmodel, _configuration["Photo"]);
 
             var result = new object();
@@ -182,10 +181,9 @@ namespace NHCM.WebUI.Pages.Recruitment
             return new JsonResult(result);
         }
 
-        public async Task<IActionResult> OnPostDownload([FromBody] File file)
+        public async Task<IActionResult> OnPostDownload([FromBody] UploadedFile file)
         {
-
-            FileSystemStorage _storage = new FileSystemStorage();
+            FileStorage _storage = new FileStorage();
             var filepath = _configuration["Photo"] + file.Name;
             System.IO.Stream filecontent = await _storage.GetAsync(filepath);
             var filetype = _storage.GetContentType(filepath);
