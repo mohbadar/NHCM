@@ -262,6 +262,73 @@ td .label {
     box-shadow: 0 0 4px #808080;
 }
 
-.dataTables_scrollHeadInner{
-    background:#e5e5e5;
+.dataTables_scrollHeadInner {
+    background: #e5e5e5;
 }
+
+.file-input .btn {
+    box-shadow: none !important;
+}
+
+.file-caption {
+    height: 35px;
+}
+
+.hrmis-error {
+    border: 1px solid red !important;
+    color: red;
+}
+
+.Shamsi {
+    text-align: right;
+}
+
+.login-container .form-group {
+    margin-bottom: 20px;
+    position: relative;
+}
+
+.login-container .content-group {
+    margin-bottom: 20px !important;
+}
+
+.login-container h5 {
+    font-size: 14px;
+    font-family: inherit;
+    font-weight: bold;
+    line-height: 1.5;
+    color: inherit;
+    margin-top: 10px;
+    color: #214877;
+}
+
+.login-container h4 {
+    font-size: 18px;
+    font-family: inherit;
+    font-weight: bold;
+    line-height: 1.5;
+    color: inherit;
+    margin-top: 10px;
+    color: #214877;
+}
+
+.login-container .has-feedback-left .form-control {
+    padding-left: 12px;
+    padding-right: 36px;
+}
+
+.login-container .has-feedback-left .form-control-feedback {
+    left: auto;
+    right: 0;
+}
+
+
+.login-container a {
+    color: #1b3b62;
+}
+
+    .login-container a:hover, .login-container a:active {
+        color: #1b3b62;
+    }
+
+

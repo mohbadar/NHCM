@@ -7,6 +7,34 @@
             page.el = $('body');
             new clean.page(page);
         },
+        format: function (s, row, indexes) {
+            if (!indexes) return s;
+            // get each key of indexes and replace with coresponding row value
+            if (row instanceof Array) // row: [1, "Ahmad", "CEO", "21", ...]
+                for (key in indexes) {
+                    var index = indexes[key];
+                    //if (typeof index == "number") index = {index:index};
+                    if (!isNaN(index)) index = { index: index };
+                    var val = row[index.index]; val = val == null ? "" : this.accounting(val, key);
+                    if (index.fn) val = val[0];
+                    s = s.replace(new RegExp("{" + key + "}", 'g'), val) // replace all
+                }
+            else // row: {ID:1, Name:"Ahmad", "Position":"CEO", "Age": 21, ...}
+                for (key in indexes) {
+                    var val = row[key]; val = val == null ? "" : this.accounting(val, key) /*val*/;
+                    if (typeof indexes[key] !== "number" && key.fn == "first") { val = val[0]; key = key.index };
+                    s = s.replace(new RegExp("{" + key + "}", 'g'), row[key]) // replace all
+                }
+            return s;
+        },
+        accounting: function (n, key) {
+            if (key && key.length >= 2 && (key.substr(key.length - 2, 2).toLowerCase() == "id" || key.substr(key.length - 4, 4).toLowerCase() == "code" || key.substr("mobile") > -1 || key.substr("phone") > -1)) return n;
+            if (!$.isNumeric(n)) return n;
+            if ((n + "").length > 3 && (n + "").substr(0, 1) == "0")
+                return n;
+
+            return n.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+        },
         data: {
             get: function (opt) {
                 $.extend(opt, { type: 'get' });
@@ -145,16 +173,22 @@ var clean = window.clean = window.clean || {};
     clean.form = function (opt) {
         this.opt = opt = opt || {};
         this.el = opt.el;
+        this.path = "";
         this.page = opt.page;
         this.prefix = this.el.attr('prefix') || "ux";
         this.record = {};
+        this.uploaders = {};
+        this.uploaders.photo = {};
+        this.uploaders.document = {};
         this.master = {};
+        this.tazkira = {};
         this.actions = this.el.find('.div-form-control [action]');
         this.fields = [];
         this.grid = {};
         this.grid.template = this.el.find('.form-grid');
         this.grid.table = this.el.attr('id').replace('dv', 'gv');
         this.grid.cols = [];
+        this.validationrule = {};
         this.init(this.el);
     }
     clean.form.prototype = {
@@ -171,13 +205,31 @@ var clean = window.clean = window.clean || {};
         getfields: function () {
             var self = this;
             self.fields = self.el.find(':text, :radio, :checkbox, input:hidden, select, textarea').not(":button, :submit");
+            var filtered = self.fields.filter(function (item, index, arry) {
+                if ($(self.fields[item]).attr('id').startsWith(self.prefix)) return self.fields[item];
+            });
+            self.fields = filtered;
         },
         construct: function () {
             var self = this;
+
+
+            var path = self.el.attr('id');
+            self.path = '/' + path.substring(path.indexOf("_") + 1).replace('_', '/');
+
             self.getfields();
             self.el.find('select').select2({
                 placeholder: "--",
                 allowClear: true
+            });
+
+            self.el.find('select').on('change', function (evt) {
+                $thisVal = $(this).val();
+                if ($thisVal != '') {
+                    setTimeout(function () {
+                        self.el.valid();
+                    }, 100);
+                }
             });
             // Configuring the datepicker on inputs
 
@@ -206,17 +258,27 @@ var clean = window.clean = window.clean || {};
                 });
             });
 
+            self.el.find('.national-id').each(function () {
+                var opt = {};
+                opt.el = $(this).find('.national-id-input');
+                opt.parent = $(this).parent();
+                opt.form = self;
+                self.tazkira = new clean.Tazkira(opt);
+            });
+
             $(self.grid.template.find('thead').find('th')).each(function (index) {
                 self.grid.cols.push($(this).attr('colname'));
             });
             $(self.grid.template).find('table').addClass('table table-bordered table-hover datatable-highlight').attr('id', self.grid.table);
             self.el.parents('.panel').append(self.grid.template);
 
-            if (self.el.find('.img-uploader')) {
-
+            if (self.el.find('.img-uploader').length) {
+                var ouput = self.el.find('.img-uploader').siblings('.output').attr('id');
                 var croppicContainerModalOptions = {
-                    uploadUrl: '/Recruitment/Person/Upload',
-                    cropUrl: '/Recruitment/Person/Crop',
+                    uploadUrl: self.path + '/Upload',
+                    cropUrl: self.path + '/Crop',
+                    downloadUrl: self.path + '/Download',
+                    outputUrlId: ouput,
                     modal: true,
                     imgEyecandy: true,
                     doubleZoomControls: false,
@@ -232,26 +294,69 @@ var clean = window.clean = window.clean || {};
                     onReset: function () { console.log('onReset') },
                     onError: function (errormessage) { console.log('onError:' + errormessage) }
                 }
-                var cropperHeader = new Croppic(self.prefix + 'Photo', croppicContainerModalOptions);
+                self.uploaders.photo = new Croppic(self.prefix + 'Photo', croppicContainerModalOptions);
+            
             }
+
+            //$('.file-attachment').fileinput({
+            //    browseLabel: '',
+            //    browseClass: 'btn btn-primary btn-icon',
+            //    removeLabel: '',
+            //    uploadLabel: '',
+            //    browseIcon: '<i class="icon-plus22"></i> ',
+            //    removeClass: 'btn btn-remove btn-icon',
+            //    removeIcon: '<i class="icon-cancel-square"></i> ',
+            //    layoutTemplates: {
+            //        caption: '<div tabindex="-1" class="form-control file-caption {class}">\n' + '<span class="icon-file-plus kv-caption-icon"></span><div class="file-caption-name"></div>\n' + '</div>'
+            //    },
+            //    initialCaption: "انتخاب نگردیده"
+            //});
+
+            self.validationrule = self.validation();
         },
         save: function () {
             var self = this;
-            self.el.find('.auto-gen-hidden').remove();
-            var validation = self.validation(self.el);
-            if (self.el.valid()) {
-                var path = self.el.attr('id');
+            //self.el.find('.auto-gen-hidden').remove();
+            self.getfields();
+
+            var _tazkira = false;
+            if (self.tazkira.hasOwnProperty('serialNo')) {
+                _tazkira = self.tazkira.validate();
+                if (_tazkira) {
+                    $('#uxnid').val(self.tazkira.val());
+                }
+            }
+            else {
+                _tazkira = true;
+            }
+            self.fields.each(function () {
+                var fld = $(this);
+                var col = fld.attr('id').substring(self.prefix.length);
+            });
+
+            var _photovalid = false;
+            if (self.uploaders.photo.hasOwnProperty('options')) {
+                _photovalid = self.uploaders.photo.validate();
+                if (!_photovalid) {
+                    clean.widget.error('عکس اپلود نگردیده', 'کاربر محترم، لطفاً عکس کارمند را انتخاب نماید. دیتا کارمندان بدون عکس ثبت نمیگردد');
+                }
+            }
+            else {
+                _photovalid = true;
+            }
+
+
+            if (self.el.valid() && _photovalid && _tazkira) {
+                var path = self.path + '/save';
                 if (self.el.hasClass('sub-form')) {
                     self.el.append("<input type='hidden' class='auto-gen-hidden' id='" + self.prefix + self.el.attr('parentcol') + "' value = '" + self.page.mainform.record.id + "' /> ");
                     self.getfields();
                 }
-                path = '/' + path.substring(path.indexOf("_") + 1).replace('_', '/') + '/save';
                 var data = {};
                 self.fields.each(function () {
                     var fld = $(this);
                     var col = fld.attr('id').substring(self.prefix.length);
-                    if (col.indexOf('_auto') === -1)
-                        Object.defineProperty(data, col.toString(), { value: fld.val().toString(), enumerable: true });
+                    Object.defineProperty(data, col.toString(), { value: fld.val().toString(), enumerable: true });
                 });
                 clean.data.post({
                     async: false, url: path, data: clean.data.json.write(data), dataType: 'json',
@@ -266,13 +371,12 @@ var clean = window.clean = window.clean || {};
                         }
                     }
                 });
+
             }
         },
         search: function (r) {
             var self = r || this;
-            var path = self.el.attr('id');
-            path = '/' + path.substring(path.indexOf("_") + 1).replace('_', '/') + '/search';
-
+            var path = self.path + '/search';
             self.el.find('.auto-gen-hidden').remove();
             if (self.el.hasClass('sub-form')) {
                 self.el.append("<input type='hidden' class='auto-gen-hidden search' id='" + self.prefix + self.el.attr('parentcol') + "' value = '" + self.page.mainform.record.id + "' /> ");
@@ -309,10 +413,14 @@ var clean = window.clean = window.clean || {};
                 fld.val(null).change();
             });
             self.el.find('.auto-gen-hidden').remove();
+            if (!$.isEmptyObject(self.uploaders.photo)) {
+                self.uploaders.photo.destroy();
+                self.uploaders.photo.init();
+            }
             self.getfields();
         },
         test: function () {
-            var self = this;
+            alert('test');
         },
         configure: function (opt) {
         },
@@ -334,6 +442,13 @@ var clean = window.clean = window.clean || {};
                         self.el.append("<input type='hidden' class='auto-gen-hidden' id='" + self.prefix + "id' value='" + d[key] + "' />");
                         self.getfields();
                     }
+                }
+                if (key == 'nid') {
+                    self.tazkira.val(d[key]);
+                }
+
+                if (key == 'photoPath') {
+                    self.uploaders.photo.bind(d[key]);
                 }
             }
             $('.sub-form').each(function () {
@@ -381,17 +496,21 @@ var clean = window.clean = window.clean || {};
                 self.record.id = $(this).attr('data');
                 self.fetch(self);
             });
+            self.bindtoform(d[0]);
         },
         validation: function () {
-            $(this.el).validate({
+            var self = this;
+            var validator = $(self.el).validate({
                 ignore: 'input[type=hidden], input[type=file] .select2-input',
                 errorClass: 'validation-error-label',
                 successClass: 'validation-valid-label',
                 highlight: function (element, errorClass) {
-                    $(element).removeClass(errorClass);
+                    $(element).addClass("hrmis-error");
                 },
                 unhighlight: function (element, errorClass) {
-                    $(element).removeClass(errorClass);
+                    setTimeout(function () {
+                        $(element).removeClass("hrmis-error");
+                    }, 50);
                 },
                 errorPlacement: function (error, element) {
                     if (element.parents('div').hasClass('input-group')) {
@@ -407,9 +526,26 @@ var clean = window.clean = window.clean || {};
                 rules: {
                     email: {
                         email: true
+                    },
+                    SerialNumber: {
+                        digits: true,
+                        maxlength: 15
+                    },
+                    Juld: {
+                        maxlength: 12
+                    },
+                    Page: {
+                        digits: true,
+                        maxlength: 2
+                    },
+                    No: {
+                        digits: true,
+                        maxlength: 1
                     }
+
                 }
             });
+            return validator;
         }
     };
 }
@@ -458,13 +594,12 @@ var clean = window.clean = window.clean || {};
                         $('.dependent-screens').html(html);
                         var subform = {};
                         subform.el = $('#' + formname);
-
                         subform.page = self.page;
                         if (subform.el.hasClass('page-component')) {
                             if (subform.el.attr('type') == 'form' && subform.el.hasClass('sub-form')) {
                                 var sub = new clean[subform.el.attr('type')](subform);
                                 self.page.subforms.push(sub);
-                                self.page.mainform.el.parents('.panel').find('.main-form-details').hide();
+                                // self.page.mainform.el.parents('.panel').find('.main-form-details').hide();
                                 //self.page.mainform.el.find('.main-form-details').hide();
                             }
                         }
@@ -478,27 +613,114 @@ var clean = window.clean = window.clean || {};
     };
 })();
 
+var clean = window.clean = window.clean || {};
+(function () {
+    clean.Tazkira = function (opt) {
+        this.el = opt.el;
+        this.sib = $('#' + this.el.attr('sibling'));
+        this.sib.val = '';
+        this.form = opt.form;
+        this.row = opt.parent;
+        this.template = "<div class='col-md-2 col-sm-12 col-xs-12 pull-right tazkira-group $g-class'><div class='form-group'><label class='text-bold'><span class='text-danger pull-left'>&nbsp;*</span>$Label</label><input id='$id' name='$name' class='form-control alt-tazkira' required/></div></div>";
+        this.serialNo = {};
+        this.juld = {};
+        this.page = {};
+        this.No = {};
+        this.init();
 
-// Requires JQuery
-// Configure the side bar of an screen by passing values for Sidebar container and the id of div where partials to be loaded.
+    };
+    clean.Tazkira.prototype = {
+        init: function () {
+            var self = this;
 
+            var sn = self.template.replace('$Label', 'نمبر سند هویت').replace('$id', 'sn').replace('$g-class', 'always').replace('$name', 'SerialNumber');
+            self.row.append(sn);
+            self.serialNo = $('#sn');
 
+            var jd = self.template.replace('$Label', 'جلد').replace('$id', 'jd').replace('$g-class', 'old').replace('$name', 'Juld');
+            self.row.append(jd);
+            self.juld = $('#jd');
 
-function configureSideBar(sidebar, pageLanding, parent) {        //Get all anchors having attribute "page"
-    var anchorsContainer = $('#' + sidebar.toString()).find("a[page]");
-    $.each(anchorsContainer, function () {
-        var el = $(this);
-        el.on('click', function () {
-            if (parent !== "") {
-                $('#' + pageLanding.toString()).load('/' + el.attr("page").toString() + '/' + parent.toString());
+            var pg = self.template.replace('$Label', 'نمبر صفحه').replace('$id', 'pg').replace('$g-class', 'old').replace('$name', 'Page');
+            self.row.append(pg);
+            self.page = $('#pg');
+
+            var no = self.template.replace('$Label', 'نمبر ثبت').replace('$id', 'no').replace('$g-class', 'old').replace('$name', 'No');;
+            self.row.append(no);
+            self.No = $('#no');
+
+            self.sib.change(function () {
+                var v = $(this).find("option:selected").text().trim();
+                self.sib.val = v;
+                self.changeselect(v);
+            });
+
+            $('.old').hide();
+        },
+        changeselect: function (v) {
+            var self = this;
+            if (v == 'تذکره ورقی') {
+                $('.old').show();
+                $('.alt-tazkira').val("");
+                // self.validator();
             }
-
             else {
-                $('#lblMessage').html("معلومات فورم اصلی ثبت نمیباشد");
+                $('.old').hide();
+            }
+        },
+        getExpr: function (col) {
+            var v = "{S:'%" + (this.serialNo.val().trim() != "" ? this.serialNo.val().trim() : "") + "'," +
+                "J:'%" + (this.juld.val().trim() != "" ? this.juld.val().trim() : "") + "'," +
+                "P:'%" + (this.page.val().trim() != "" ? this.page.val().trim() : "") + "'," +
+                "N:'%" + (this.No.val().trim() != "" ? this.No.val().trim() : "") + "'}";
+            var expr = {};
+            expr.fn = "endswith";
+            expr.expr = {};
+            expr.expr[col] = v;
+            return expr;
+        },
+        validate: function () {
+            if (this.sib.val == 'تذکره ورقی')
+                return $('.alt-tazkira').valid();
+            else
+                return $('#sn').valid();
+        },
+        val: function (v) {
+            if (v !== undefined) {
+                v = v + "";
+                // clear
+                this.serialNo.val('');
+                this.juld.val('');
+                this.page.val('');
+                this.No.val('');
+                var v2;
+                try {
+                    eval('v2 = ' + v);
+                    this.serialNo.val(v2.S.replace(',', ''));
+                    this.juld.val(v2.J.replace(',', ''));
+                    this.page.val(v2.P.replace(',', ''));
+                    this.No.val(v2.N.replace(',', ''));
+                }
+                catch (e) {
+                    v2 = v.split(" ");
+                }
+                // set
+                return v;
             }
 
-        });
-    });
-}
+            var vals = [this.serialNo.val(), this.juld.val(), this.page.val(), this.No.val()];
+            if (!this.serialNo.val().trim() && !this.juld.val().trim() && !this.page.val().trim() && !this.No.val().trim()) return '';
+            // get
+            v = clean.format("{S: '{serialNoID}', J:'{JuldID}',P:'{PageID}',N:'{NoID}'}", vals, { serialNoID: 0, JuldID: 1, PageID: 2, NoID: 3 });
+            return v;
+
+
+        }
+    }
+})();
+
+
+
+
 
 

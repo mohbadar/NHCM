@@ -14,11 +14,8 @@ namespace NHCM.Persistence.Configurations
         {
 
 
-          
 
 
-            //modelBuilder.Entity<Person>(entity =>
-            //{
                 builder.ToTable("Person", "rec");
 
                 builder.Property(e => e.Id)
@@ -39,6 +36,8 @@ namespace NHCM.Persistence.Configurations
 
                 builder.Property(e => e.DateOfBirth).HasColumnType("timestamp with time zone");
 
+                builder.Property(e => e.DocumentTypeId).HasColumnName("DocumentTypeID");
+
                 builder.Property(e => e.EthnicityId).HasColumnName("EthnicityID");
 
                 builder.Property(e => e.FatherName)
@@ -57,8 +56,7 @@ namespace NHCM.Persistence.Configurations
 
                 builder.Property(e => e.GrandFatherName).HasMaxLength(90);
 
-               
-                builder.Property(e => e.GrandFatherNameEng).HasColumnName("GrandFatherNameEng").HasMaxLength(90);
+                builder.Property(e => e.GrandFatherNameEng).HasMaxLength(90);
 
                 builder.Property(e => e.HashKey).HasMaxLength(32);
 
@@ -78,6 +76,12 @@ namespace NHCM.Persistence.Configurations
                     .HasColumnType("timestamp with time zone")
                     .HasDefaultValueSql("now()");
 
+                builder.Property(e => e.Nid)
+                    .HasColumnName("NID")
+                    .HasMaxLength(60);
+
+                builder.Property(e => e.PhotoPath).HasMaxLength(200);
+
                 builder.Property(e => e.PreFix).HasMaxLength(14);
 
                 builder.Property(e => e.ReferenceNo).HasMaxLength(200);
@@ -87,7 +91,14 @@ namespace NHCM.Persistence.Configurations
                 builder.Property(e => e.Remark).HasMaxLength(50);
 
                 builder.Property(e => e.StatusId).HasColumnName("StatusID");
-            //});
+
+                builder.HasOne(d => d.DocumentType)
+                    .WithMany(p => p.Person)
+                    .HasForeignKey(d => d.DocumentTypeId)
+                    .HasConstraintName("Person_DocumentTypeID_fkey");
+            
+
+
         }
     }
 }

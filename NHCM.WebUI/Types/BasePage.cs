@@ -11,7 +11,7 @@ using System.Threading.Tasks;
 
 namespace NHCM.WebUI.Types
 {
-    public   class BasePage : PageModel
+    public class BasePage : PageModel
     {
 
         private IMediator _mediator;
@@ -41,6 +41,8 @@ namespace NHCM.WebUI.Types
         public List<SelectListItem> ListOfStatus = new List<SelectListItem>();
         public List<SelectListItem> ListOfAssetType = new List<SelectListItem>();
         public List<SelectListItem> ListOfReferenceType = new List<SelectListItem>();
+        public List<SelectListItem> ListOfDocumentTypes = new List<SelectListItem>();
+
 
         public List<SelectListItem> ListOfPublicationType = new List<SelectListItem>();
 
@@ -182,15 +184,12 @@ namespace NHCM.WebUI.Types
             foreach (PublicationType publicationType in publicationTypes)
                 ListOfPublicationType.Add(new SelectListItem() { Text = publicationType.Dari, Value = publicationType.Id.ToString() });
 
+
+            List<DocumentType> documentTypes = new List<DocumentType>();
+            documentTypes = await Mediator.Send(new GetDocumentTypeQuery() { ScreenID = 1, ID = null });
+            foreach (DocumentType documentType in documentTypes)
+                ListOfDocumentTypes.Add(new SelectListItem() { Text = documentType.Name, Value = documentType.Id.ToString() });
             await next.Invoke();
         }
-
-
-
-
-
-
-
-      
     }
 }

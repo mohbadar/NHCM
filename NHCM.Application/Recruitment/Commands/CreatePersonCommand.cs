@@ -50,6 +50,14 @@ namespace NHCM.Application.Recruitment.Commands
         public string Remark { get; set; }
         public int? BloodGroupId { get; set; }
 
+
+
+
+
+        public int? DocumentTypeId { get; set; }
+        public string PhotoPath { get; set; }
+        public string Nid { get; set; }
+
     }
 
 
@@ -111,6 +119,8 @@ namespace NHCM.Application.Recruitment.Commands
                         LastName = request.LastName.Trim(),
                         FatherName = request.FatherName,
                         FatherNameEng = request.FatherNameEng,
+                        GrandFatherName = request.GrandFatherName,
+                        GrandFatherNameEng = request.GrandFatherNameEng,
                         LastNameEng = request.LastNameEng.Trim(),
                         PreFix = PrefixBuilder.ToString(),
                         Suffix = Suffix,
@@ -127,7 +137,11 @@ namespace NHCM.Application.Recruitment.Commands
                         BloodGroupId = request.BloodGroupId,
                         ModifiedBy = request.ModifiedBy,
                         CreatedBy = request.CreatedBy,
-                        CreatedOn = request.CreatedOn
+                        CreatedOn = request.CreatedOn,
+
+                        Nid = request.Nid,
+                        PhotoPath = request.PhotoPath,
+                        DocumentTypeId = request.DocumentTypeId
 
                     };
 
@@ -156,6 +170,7 @@ namespace NHCM.Application.Recruitment.Commands
                     UpdateablePerson.FirstName = request.FirstName; //request.FirstName;
                     UpdateablePerson.LastName = request.LastName;
                     UpdateablePerson.FatherName = request.FatherName;
+                    UpdateablePerson.FatherNameEng = request.FatherNameEng;
                     UpdateablePerson.GrandFatherName = request.GrandFatherName;
                     UpdateablePerson.FirstNameEng = request.FirstNameEng;
                     UpdateablePerson.LastNameEng = request.LastNameEng;
@@ -168,6 +183,14 @@ namespace NHCM.Application.Recruitment.Commands
                     UpdateablePerson.ReligionId = request.ReligionId;
                     UpdateablePerson.Comments = request.Comments;
                     UpdateablePerson.BloodGroupId = request.BloodGroupId;
+
+
+
+                    UpdateablePerson.Nid = request.Nid;
+                    UpdateablePerson.PhotoPath = request.PhotoPath;
+                    UpdateablePerson.DocumentTypeId = request.DocumentTypeId;
+
+
 
                     await _context.SaveChangesAsync();
 

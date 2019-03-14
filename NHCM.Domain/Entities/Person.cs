@@ -49,10 +49,21 @@ namespace NHCM.Domain.Entities
         public string Remark { get; set; }
         public int? BloodGroupId { get; set; }
 
+
+
+
+
+        public int? DocumentTypeId { get; set; }
+        public string PhotoPath { get; set; }
+        public string Nid { get; set; }
+
         //public virtual ICollection<Attendance> Attendance { get; set; }
         //public virtual ICollection<EmployeePromotion> EmployeePromotion { get; set; }
         //public virtual ICollection<IdCard> IdCard { get; set; }
         //public virtual ICollection<JudgesPromotion> JudgesPromotion { get; set; }
+
+
+         public virtual DocumentType DocumentType { get; set; }
         public virtual ICollection<MilitaryService> MilitaryService { get; set; }
         public virtual ICollection<PersonAsset> PersonAsset { get; set; }
         public virtual ICollection<PersonLanguage> PersonLanguage { get; set; }

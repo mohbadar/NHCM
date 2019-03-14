@@ -13,37 +13,34 @@ using Microsoft.AspNetCore.Http;
 using NHCM.Application.Document.Disk.FileManager;
 using NHCM.Application.Document.Disk;
 using NHCM.Application.Document.Disk.Cropper.Models;
+using Microsoft.AspNetCore.Mvc.Rendering;
 
 namespace NHCM.WebUI.Pages.Recruitment
 {
     public class PersonModel : BasePage
     {
-
         public string SubScreens { get; set; } = "";
         public string Title { get; set; } = "adfasdfadf";
-
         private string htmltemplate = @"
                          <li><a href='#' data='$id' page='$path' class='sidebar-items' action='subscreen'><i class='$icon'></i>$title</a></li>
                                     ";
-
         private readonly IConfiguration _configuration;
         public PersonModel(IConfiguration configuration)
         {
             _configuration = configuration;
         }
 
+      
 
         public async void OnGetAsync()
         {
-            // string screen = RijndaelManagedEncryption.RijndaelManagedEncryption.DecryptRijndael(HttpContext.Request.Query["p"], "P@33word");
-
-            //int ID = Convert.ToInt32(screen);
-
-            //  int ID = Convert.ToInt32(HttpContext.Request.Query["p"]);
+            string screen = RijndaelManagedEncryption.RijndaelManagedEncryption.DecryptRijndael(HttpContext.Request.Query["p"], "P@33word");
+            int ID = Convert.ToInt32(screen);
+            // int ID = Convert.ToInt32(HttpContext.Request.Query["p"]);
             try
             {
                 List<Screens> screens = new List<Screens>();
-                screens = await Mediator.Send(new GetSubScreens() { ID = 1 });
+                screens = await Mediator.Send(new GetSubScreens() { ID = ID });
                 string listout = "";
                 foreach (Screens s in screens)
                 {
@@ -55,6 +52,9 @@ namespace NHCM.WebUI.Pages.Recruitment
             {
 
             }
+
+           
+      
         }
 
         public async Task<IActionResult> OnPostSave([FromBody] CreatePersonCommand command)
@@ -65,14 +65,11 @@ namespace NHCM.WebUI.Pages.Recruitment
                 command.ModifiedBy = "TEST USER";
                 command.CreatedBy = 10;
                 command.CreatedOn = DateTime.Now;
-
                 List<SearchedPersonModel> SaveResult = new List<SearchedPersonModel>();
+
                 SaveResult = await Mediator.Send(command);
-
-
                 return new JsonResult(new NHCM.WebUI.Types.Result()
                 {
-
                     Data = new { list = SaveResult },
                     Status = NHCM.WebUI.Types.Status.Success,
                     Text = "اطلاعات مستخدم موفقانه ثبت سیستم شد",
@@ -81,16 +78,13 @@ namespace NHCM.WebUI.Pages.Recruitment
             }
             catch (Exception ex)
             {
-
                 return new JsonResult(new NHCM.WebUI.Types.Result()
                 {
-
                     Data = null,
                     Status = NHCM.WebUI.Types.Status.Failure,
                     Text = CustomMessages.InternalSystemException,
                     // Can be changed from app settings
-
-                    Description = ex.Message
+                    Description = ex.Message + "///" + ex.StackTrace
                 });
             }
         }
@@ -98,7 +92,6 @@ namespace NHCM.WebUI.Pages.Recruitment
         public async Task<IActionResult> OnPostSearch([FromBody]SearchPersonQuery searchQuery)
         {
             NHCM.WebUI.Types.Result result = new NHCM.WebUI.Types.Result();
-
             try
             {
                 List<SearchedPersonModel> SearchedResult = new List<SearchedPersonModel>();
@@ -115,7 +108,6 @@ namespace NHCM.WebUI.Pages.Recruitment
             {
                 return new JsonResult(new NHCM.WebUI.Types.Result()
                 {
-
                     Data = null,
                     Status = NHCM.WebUI.Types.Status.Failure,
                     Text = CustomMessages.InternalSystemException,

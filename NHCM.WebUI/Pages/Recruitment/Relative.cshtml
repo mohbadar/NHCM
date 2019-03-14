@@ -13,7 +13,7 @@
     </div>
     <div class="panel-body" style="padding-bottom:5px;">
         <legend class="text-bold">لطفاً شهرت اقارب کارمند را در فورم ذیل درج نمائید</legend>
-        <form id="dv_Recruitment_Relative" class="form sub-form page-component" type="form" prefix="uxrl" parent="dv_Recruitment_PersonProfile" parentcol="PersonID">
+        <form id="dv_Recruitment_Relative" class="form sub-form page-component" type="form" prefix="uxrl" parent="dv_Recruitment_Person" parentcol="PersonID">
             <fieldset class="content-group">
                 <div class="row">
                     <div class="col-md-3 col-sm-12 col-xs-12 pull-right">
@@ -22,7 +22,7 @@
                                 رابطه
                                 <span class="text-danger">&nbsp;*</span>
                             </label>
-                            <select id="uxrlRelationshipid" name="uxrlRelationshipid" asp-items="@Model.ListOfRelationShip" class="select" required>
+                            <select id="uxrlrelationshipid" name="uxrlrelationshipid" asp-items="@Model.ListOfRelationShip" class="select" required>
                                 <option></option>
                             </select>
                         </div>

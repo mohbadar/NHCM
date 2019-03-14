@@ -36,9 +36,10 @@ namespace NHCM.Application.Recruitment.Queries
         public short? ReligionId { get; set; }
         public int? BloodGroupId { get; set; }
 
+        public int? DocumentTypeId { get; set; }
+        public string PhotoPath { get; set; }
+        public string Nid { get; set; }
 
-
-       
 
     }
 

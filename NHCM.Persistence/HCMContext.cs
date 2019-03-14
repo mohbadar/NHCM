@@ -53,7 +53,7 @@ namespace NHCM.Persistence
         public virtual DbSet<HealthReport> HealthReport { get; set; }
         public virtual DbSet<Travel> Travel { get; set; }
         public virtual DbSet<PublicationType> PublicationType { get; set; }
-
+        public virtual DbSet<DocumentType> DocumentTypes { get; set; }
         public virtual DbSet<FolderPath> FolderPath { get; set; }
 
 
@@ -204,6 +204,9 @@ namespace NHCM.Persistence
             modelBuilder.HasSequence("skilltype_id_seq");
             modelBuilder.HasSequence("screens_id_seq");
             modelBuilder.HasSequence("educationlevel_id_seq");
+
+
+            modelBuilder.HasSequence<int>("DocumentType_ID_seq");
         }
     }
 }

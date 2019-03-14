@@ -3934,6 +3934,7 @@ select.bs-select-hidden, select.selectpicker {
 .validation-error-label, .validation-valid-label {
     color: red;
     position: relative;
+    direction:rtl !important;
 }
 
 .validation-valid-label {
