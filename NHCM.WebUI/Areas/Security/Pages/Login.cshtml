@@ -1,0 +1,52 @@
+﻿@page
+@model NHCM.WebUI.Areas.Security.Pages.LoginModel
+@{
+    ViewData["Title"] = "Login";
+    Layout = null;
+}
+
+
+<div class="panel">
+
+
+
+
+    <form id="loginform" method="post" >
+
+        <div class="panel-heading">
+            <h2>ورودی سیستم</h2>
+        </div>
+
+        <div class="row">
+            <div class="col-md-4">
+                <label>نام کاربری</label>
+                <input type="text" asp-for="@Model.UserName" />
+            </div>
+
+
+
+            <div class="col-md-4">
+                <label>رمز عبور</label>
+                <input type="password" asp-for="@Model.Password" />
+            </div>
+
+        </div>
+
+        <div class="row">
+            <div class="col-md-4">
+                <button type="submit" class="btn btn-primary">ورود به سیستم</button>
+            </div>
+        </div>
+    </form>
+
+
+
+</div>
+
+
+
+
+
+
+
+

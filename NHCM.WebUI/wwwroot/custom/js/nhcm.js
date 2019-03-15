@@ -295,23 +295,37 @@ var clean = window.clean = window.clean || {};
                     onError: function (errormessage) { console.log('onError:' + errormessage) }
                 }
                 self.uploaders.photo = new Croppic(self.prefix + 'Photo', croppicContainerModalOptions);
-            
+
             }
+            if (self.el.find('.file-attachment').length) {
+                
+                self.uploaders.document = self.el.find('.file-attachment').fileinput({
+                    uploadUrl: 'adsfasdfadfaf',
+                    browseLabel: '',
+                    browseClass: 'btn btn-primary btn-icon',
+                    removeLabel: '',
+                    uploadLabel: '',
+                    browseIcon: '<i class="icon-plus22"></i> ',
+                    removeClass: 'btn btn-remove btn-icon',
+                    removeIcon: '<i class="icon-cancel-square"></i> ',
+                    layoutTemplates: {
+                        caption: '<div tabindex="-1" class="form-control file-caption {class}">\n' + '<span class="icon-file-plus kv-caption-icon"></span><div class="file-caption-name"></div>\n' + '</div>'
+                    },
+                    initialCaption: "انتخاب نگردیده"
+                }).change(function (event, files) {
+                    // self.el.find('.file-attachment').fileinput("upload");
+                    alert(self.el.find('.file-attachment').defaults.uploadUrl);
+                });;
 
-            //$('.file-attachment').fileinput({
-            //    browseLabel: '',
-            //    browseClass: 'btn btn-primary btn-icon',
-            //    removeLabel: '',
-            //    uploadLabel: '',
-            //    browseIcon: '<i class="icon-plus22"></i> ',
-            //    removeClass: 'btn btn-remove btn-icon',
-            //    removeIcon: '<i class="icon-cancel-square"></i> ',
-            //    layoutTemplates: {
-            //        caption: '<div tabindex="-1" class="form-control file-caption {class}">\n' + '<span class="icon-file-plus kv-caption-icon"></span><div class="file-caption-name"></div>\n' + '</div>'
-            //    },
-            //    initialCaption: "انتخاب نگردیده"
-            //});
-
+                //if (!$.isEmptyObject(self.uploaders.document)) {
+                //    self.uploaders.document.change(function () {
+                //        var uploader = $(this);
+                //        if (uploader.val()) {
+                                             
+                //        }
+                //    });
+                //}
+            }
             self.validationrule = self.validation();
         },
         save: function () {
@@ -358,6 +372,7 @@ var clean = window.clean = window.clean || {};
                     var col = fld.attr('id').substring(self.prefix.length);
                     Object.defineProperty(data, col.toString(), { value: fld.val().toString(), enumerable: true });
                 });
+
                 clean.data.post({
                     async: false, url: path, data: clean.data.json.write(data), dataType: 'json',
                     success: function (msg) {

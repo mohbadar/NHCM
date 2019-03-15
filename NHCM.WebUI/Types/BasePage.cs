@@ -8,6 +8,7 @@ using NHCM.Domain.Entities;
 using NHCM.Application.Lookup.Queries;
 using Microsoft.AspNetCore.Mvc.Filters;
 using System.Threading.Tasks;
+using System;
 
 namespace NHCM.WebUI.Types
 {
@@ -43,6 +44,7 @@ namespace NHCM.WebUI.Types
         public List<SelectListItem> ListOfReferenceType = new List<SelectListItem>();
         public List<SelectListItem> ListOfDocumentTypes = new List<SelectListItem>();
 
+        public List<SelectListItem> ListOfDocumentTypesD = new List<SelectListItem>();
 
         public List<SelectListItem> ListOfPublicationType = new List<SelectListItem>();
 
@@ -185,10 +187,19 @@ namespace NHCM.WebUI.Types
                 ListOfPublicationType.Add(new SelectListItem() { Text = publicationType.Dari, Value = publicationType.Id.ToString() });
 
 
+
             List<DocumentType> documentTypes = new List<DocumentType>();
             documentTypes = await Mediator.Send(new GetDocumentTypeQuery() { ScreenID = 1, ID = null });
             foreach (DocumentType documentType in documentTypes)
                 ListOfDocumentTypes.Add(new SelectListItem() { Text = documentType.Name, Value = documentType.Id.ToString() });
+
+
+            List<DocumentType> documentTypesd = new List<DocumentType>();
+            documentTypesd = await Mediator.Send(new GetDocumentTypeQuery() { ScreenID = null, ID = null });
+            foreach (DocumentType documentType in documentTypesd)
+                ListOfDocumentTypesD.Add(new SelectListItem() { Text = documentType.Name, Value = documentType.Id.ToString() });
+
+
             await next.Invoke();
         }
     }

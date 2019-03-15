@@ -189,19 +189,13 @@
                             image.onload = function () {
                                 that.imgInitW = that.imgW = image.width;
                                 that.imgInitH = that.imgH = image.height;
-
                                 if (that.options.modal) { that.createModal(); }
                                 if (!$.isEmptyObject(that.croppedImg)) { that.croppedImg.remove(); }
-
                                 that.imgUrl = image.src;
-
                                 that.obj.append('<img src="' + image.src + '">');
-
                                 that.initCropper();
                                 that.hideLoader();
-
                                 if (that.options.onAfterImgUpload) that.options.onAfterImgUpload.call(that);
-
                             }
                         };
                         reader.readAsDataURL(that.form.find('input[type="file"]')[0].files[0]);

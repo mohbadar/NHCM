@@ -17,6 +17,8 @@ namespace NHCM.Application.Recruitment.Commands
     {
 
         public decimal? Id { get; set; }
+
+
         public string FatherName { get; set; }
         public string FirstName { get; set; }
         public string LastName { get; set; }
@@ -31,6 +33,7 @@ namespace NHCM.Application.Recruitment.Commands
         public string Village { get; set; }
         public int? LocationId { get; set; }
         public string Remark { get; set; }
+
         public DateTime? CreatedOn { get; set; }
         public string ModifiedBy { get; set; }
         public DateTime? ModifiedOn { get; set; }
@@ -47,12 +50,18 @@ namespace NHCM.Application.Recruitment.Commands
         public async Task<List<SearchedPersonRelative>> Handle(SavePersonRelatives request, CancellationToken cancellationToken)
         {
             List<SearchedPersonRelative> result = new List<SearchedPersonRelative>();
+
+           
+
             if (request.Id == null || request.Id == default(decimal))
             {
                 using (_context)
                 {
+
+
                     Relative relative = new Relative()
                     {
+
                         RelationShipId = request.RelationShipId,
                         FirstName = request.FirstName,
                         LastName = request.LastName,
@@ -67,15 +76,21 @@ namespace NHCM.Application.Recruitment.Commands
                         EmailAddress = request.EmailAddress,
                         Village = request.Village,
                         Remark = request.Remark,
+
                         CreatedOn = request.CreatedOn,
                         ModifiedBy = request.ModifiedBy,
+
                         ModifiedOn = request.ModifiedOn,
                         CreatedBy = request.CreatedBy
+
+
                     };
                     _context.Relative.Add(relative);
                     await _context.SaveChangesAsync(cancellationToken);
 
+
                     PersonCommon common = new PersonCommon(_context);
+
                     // Return Saved Relative
                     result = await common.SearchPersonRelative(new Queries.SearchPersonRelativeQuery() { Id = relative.Id }, cancellationToken);
                     
@@ -126,7 +141,9 @@ namespace NHCM.Application.Recruitment.Commands
                     Relative UpdateableRecord = await (from r in _context.Relative
                                                  where r.Id == request.Id
                                                  select r).FirstOrDefaultAsync(cancellationToken);
-               
+
+                   
+
                     UpdateableRecord.FatherName = request.FatherName;
                     UpdateableRecord.FirstName = request.FirstName;
                     UpdateableRecord.LastName = request.LastName;
@@ -142,9 +159,20 @@ namespace NHCM.Application.Recruitment.Commands
                     UpdateableRecord.Remark = request.Remark;
                     UpdateableRecord.ModifiedBy = request.ModifiedBy;
                     UpdateableRecord.ModifiedOn = request.ModifiedOn;
+
                     await _context.SaveChangesAsync(cancellationToken);
+
+
+                    PersonCommon common = new PersonCommon(_context);
+
+                    // Return Saved Relative
+                    result = await common.SearchPersonRelative(new Queries.SearchPersonRelativeQuery() { Id = UpdateableRecord.Id }, cancellationToken);
+
+
                 }
             }
+
+
             return result;
         }
     }
