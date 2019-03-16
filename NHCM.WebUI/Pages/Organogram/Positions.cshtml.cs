@@ -27,6 +27,7 @@ namespace NHCM.WebUI.Pages.Organogram
                 command.ModifiedBy = "Test";
                 command.CreatedOn = DateTime.Now;
                 command.ModifiedOn = DateTime.Now;
+                command.StatusId = 51;
 
                 List<SearchedPosition> dbResult = new List<SearchedPosition>();
                 dbResult = await Mediator.Send(command);

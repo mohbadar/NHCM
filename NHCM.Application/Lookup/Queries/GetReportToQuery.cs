@@ -19,35 +19,14 @@ namespace NHCM.Application.Lookup.Queries
 
     public class GetReportToHandler : IRequestHandler<GetReportToQuery, List<Position>>
     {
-         private readonly HCMContext _dbContext;
+        private readonly HCMContext _dbContext;
         public GetReportToHandler(HCMContext context)
         {
             _dbContext = context;
         }
         public async Task<List<Position>> Handle(GetReportToQuery request, CancellationToken cancellationToken)
         {
-
             List<Position> list = new List<Position>();
-
-            //if (request.Id == null || request.Id == default(short))
-            //{
-
-
-            //    list = await _dbContext.Position.ToListAsync(cancellationToken);
-
-            //    return list;
-
-
-            //}
-            //else
-            //{
-
-            //    list = await _dbContext.Position.Where(p => p.Id == request.Id).ToListAsync(cancellationToken);
-            //    return list;
-
-            //}
-
-             
 
             if (request.Id != null)
             {
@@ -63,14 +42,12 @@ namespace NHCM.Application.Lookup.Queries
             }
             else
             {
-
                 list = await _dbContext.Position.ToListAsync(cancellationToken);
                 return list;
-
             }
 
 
         }
     }
-    
+
 }

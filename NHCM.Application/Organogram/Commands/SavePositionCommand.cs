@@ -31,7 +31,7 @@ namespace NHCM.Application.Organogram.Commands
         public int? DirectorateId { get; set; }
         public string Profession { get; set; }
         public string Kadr { get; set; }
-        public string Remarks { get; set; }
+       // public string Remarks { get; set; }
         public int? SalaryTypeId { get; set; }
         public string Sorter { get; set; }
         public int? OrganoGramId { get; set; }
@@ -39,7 +39,7 @@ namespace NHCM.Application.Organogram.Commands
         public short? PlanTypeId { get; set; }
         public int? EducationLevelId { get; set; }
         public short? ExperienceNoOfYear { get; set; }
-        public string PositionResponsibilityAndPurpose { get; set; }
+        //public string PositionResponsibilityAndPurpose { get; set; }
     }
 
     public class SavePositionCommandHandler : IRequestHandler<SavePositionCommand, List<SearchedPosition>>
@@ -80,7 +80,7 @@ namespace NHCM.Application.Organogram.Commands
                         DirectorateId = request.DirectorateId,
                         Profession = request.Profession,
                         Kadr = request.Kadr,
-                        Remarks = request.Remarks,
+                        //Remarks = request.Remarks,
                         SalaryTypeId = request.SalaryTypeId,
                         Sorter = request.Sorter,
                         OrganoGramId = request.OrganoGramId,
@@ -88,7 +88,7 @@ namespace NHCM.Application.Organogram.Commands
                         PlanTypeId = request.PlanTypeId,
                         EducationLevelId = request.EducationLevelId,
                         ExperienceNoOfYear = request.ExperienceNoOfYear,
-                        PositionResponsibilityAndPurpose = request.PositionResponsibilityAndPurpose,
+                        //PositionResponsibilityAndPurpose = request.PositionResponsibilityAndPurpose,
 
                     };
 
@@ -125,7 +125,7 @@ namespace NHCM.Application.Organogram.Commands
                     toUpdateRecord.DirectorateId = request.DirectorateId;
                     toUpdateRecord.Profession = request.Profession;
                     toUpdateRecord.Kadr = request.Kadr;
-                    toUpdateRecord.Remarks = request.Remarks;
+                    //toUpdateRecord.Remarks = request.Remarks;
                     toUpdateRecord.SalaryTypeId = request.SalaryTypeId;
                     toUpdateRecord.Sorter = request.Sorter;
                     toUpdateRecord.OrganoGramId = request.OrganoGramId;
@@ -133,7 +133,7 @@ namespace NHCM.Application.Organogram.Commands
                     toUpdateRecord.PlanTypeId = request.PlanTypeId;
                     toUpdateRecord.EducationLevelId = request.EducationLevelId;
                     toUpdateRecord.ExperienceNoOfYear = request.ExperienceNoOfYear;
-                    toUpdateRecord.PositionResponsibilityAndPurpose = request.PositionResponsibilityAndPurpose;
+                    //toUpdateRecord.PositionResponsibilityAndPurpose = request.PositionResponsibilityAndPurpose;
 
                     await _context.SaveChangesAsync(cancellationToken);
 
