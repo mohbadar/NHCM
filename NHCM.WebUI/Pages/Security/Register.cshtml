@@ -1,6 +1,12 @@
 ﻿@page
 @model NHCM.WebUI.Areas.Security.Pages.RegisterModel
 
+@{ 
+    Layout = "Security/Shared/_SecuritySharedLayout";
+}
+
+
+
 
 <div class="row">
     <div class="col-md-4">
@@ -11,21 +17,21 @@
             <div class="form-group">
                 <label asp-for="@Model.UserName"></label>
                 <input asp-for="@Model.UserName" class="form-control" />
-                @*<span asp-validation-for="Input.Email" class="text-danger"></span>*@
+                <span asp-validation-for="@Model.UserName" class="text-danger"></span>
             </div>
             <div class="form-group">
                 <label asp-for="@Model.Password"></label>
                 <input asp-for="@Model.Password" class="form-control" />
-                @*<span asp-validation-for="Input.Password" class="text-danger"></span>*@
+                <span asp-validation-for="@Model.Password" class="text-danger"></span>
             </div>
             <div class="form-group">
                 <label asp-for="@Model.ConfirmPassword"></label>
                 <input asp-for="@Model.ConfirmPassword" class="form-control" />
-                @*<span asp-validation-for="Input.ConfirmPassword" class="text-danger"></span>*@
+                <span asp-validation-for="@Model.ConfirmPassword" class="text-danger"></span>
             </div>
 
             <div>
-                @if(Model.ErrorMessage != null)
+                @if(ModelState.ErrorCount > 0 )
                 {
                     <label>@Model.ErrorMessage</label>
             
@@ -35,3 +41,10 @@
         </form>
     </div>
 </div>
+
+
+
+@section Scripts{ 
+
+    <partial name="Security/Shared/_ValidationScriptsPartial" />
+}
