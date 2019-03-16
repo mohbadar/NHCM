@@ -20,18 +20,18 @@ namespace NHCM.Application.Common
             _context = context;
         }
 
-        public string ConvertJSONToString(String JSON, String Type)
-        {
-            dynamic item = JsonConvert.DeserializeObject(JSON);
-            string result = Type + " | ";
-            if (!String.IsNullOrEmpty(Convert.ToString(item["S"]))) result = result + "نمبر سند هویت: " + item["S"] + "، ";
-            if (!String.IsNullOrEmpty(Convert.ToString(item["J"]))) result = result + "جلد: " + item["J"] + "، ";
-            if (!String.IsNullOrEmpty(Convert.ToString(item["P"]))) result = result + "صفحه: " + item["P"] + "، ";
-            if (!String.IsNullOrEmpty(Convert.ToString(item["N"]))) result = result + "نمبر ثبت: " + item["N"] + "، ";
+        //public string ConvertJSONToString(String JSON, String Type)
+        //{
+        //    dynamic item = JsonConvert.DeserializeObject(JSON);
+        //    string result = Type + " | ";
+        //    if (!String.IsNullOrEmpty(Convert.ToString(item["S"]))) result = result + "نمبر سند هویت: " + item["S"] + "، ";
+        //    if (!String.IsNullOrEmpty(Convert.ToString(item["J"]))) result = result + "جلد: " + item["J"] + "، ";
+        //    if (!String.IsNullOrEmpty(Convert.ToString(item["P"]))) result = result + "صفحه: " + item["P"] + "، ";
+        //    if (!String.IsNullOrEmpty(Convert.ToString(item["N"]))) result = result + "نمبر ثبت: " + item["N"] + "، ";
 
-            int last = result.LastIndexOf('،');
-            return result.Remove(last);
-        }
+        //    int last = result.LastIndexOf('،');
+        //    return result.Remove(last);
+        //}
 
 
         public async Task<List<SearchedPersonModel>> SearchPerson(SearchPersonQuery request)
@@ -90,7 +90,7 @@ namespace NHCM.Application.Common
                                           BirthLocationText = resultPL.Name,
                                           MaritalStatusText = resultPM.Name,
                                           DocumentTypeText = resultPDT.Name,
-                                          NIDText = ConvertJSONToString(p.Nid, resultPDT.Name),
+                                         // NIDText = ConvertJSONToString(p.Nid, resultPDT.Name),
                                           DoBText = PersianLibrary.PersianDate.GetFormatedString(p.DateOfBirth)
                                       }).OrderBy(x => x.Id).ToListAsync();
             }
@@ -150,7 +150,7 @@ namespace NHCM.Application.Common
                                           BirthLocationText = resultPL.Name,
                                           MaritalStatusText = resultPM.Name,
                                           DocumentTypeText = resultPDT.Name,
-                                          NIDText = ConvertJSONToString(p.Nid, resultPDT.Name),
+                                          //NIDText = ConvertJSONToString(p.Nid, resultPDT.Name),
                                           DoBText = PersianLibrary.PersianDate.GetFormatedString(p.DateOfBirth)
                                       }).OrderBy(x => x.Id).Take((request.NoOfRecords == 0) ? 100 : request.NoOfRecords).ToListAsync();
             }

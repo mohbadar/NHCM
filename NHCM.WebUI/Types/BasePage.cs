@@ -47,6 +47,16 @@ namespace NHCM.WebUI.Types
         public List<SelectListItem> ListOfDocumentTypesD = new List<SelectListItem>();
 
         public List<SelectListItem> ListOfPublicationType = new List<SelectListItem>();
+         
+        public List<SelectListItem> ListOfOrganization = new List<SelectListItem>();
+        public List<SelectListItem> ListOfOrgUnit = new List<SelectListItem>();
+        public List<SelectListItem> ListOfSalaryType = new List<SelectListItem>();
+        public List<SelectListItem> ListOfReportTo = new List<SelectListItem>(); 
+        public List<SelectListItem> ListOfPlanType = new List<SelectListItem>();
+        public List<SelectListItem> ListOfPositionType = new List<SelectListItem>();
+        public List<EducationLevel> ListOfOrganoGram = new List<EducationLevel>();
+
+
 
         public override async Task OnPageHandlerExecutionAsync(PageHandlerExecutingContext context, PageHandlerExecutionDelegate next)
         {
@@ -70,6 +80,12 @@ namespace NHCM.WebUI.Types
             ethnicities = await Mediator.Send(new GetEthnicityQuery() { ID = null });
             foreach (Ethnicity ethnicity in ethnicities)
                 ListOfEthnicities.Add(new SelectListItem(ethnicity.Name, ethnicity.Id.ToString()));
+
+            //Get Organization
+            List<Organization> organizations = new List<Organization>();
+            organizations = await Mediator.Send(new GetOrganiztionQuery() { Id = null });
+            foreach (Organization organization in organizations)
+                ListOfOrganization.Add(new SelectListItem(organization.Dari, organization.Id.ToString()));
 
 
             //Get Religions
@@ -198,6 +214,31 @@ namespace NHCM.WebUI.Types
             documentTypesd = await Mediator.Send(new GetDocumentTypeQuery() { ScreenID = null, ID = null });
             foreach (DocumentType documentType in documentTypesd)
                 ListOfDocumentTypesD.Add(new SelectListItem() { Text = documentType.Name, Value = documentType.Id.ToString() });
+
+
+            
+
+            List<SalaryType> salaryTypes = new List<SalaryType>();
+            salaryTypes = await Mediator.Send(new GetSalaryTypeQuery() { Id = null });
+            foreach (SalaryType salary in salaryTypes)
+                ListOfSalaryType.Add(new SelectListItem() { Text = salary.Dari, Value = salary.Id.ToString() });
+
+
+          /// change organogramid to dynamic id 
+            List<Position> reportTo = new List<Position>();
+            reportTo = await Mediator.Send(new GetReportToQuery() { organogramid=3 });
+            foreach (Position reportto in reportTo)
+                ListOfReportTo.Add(new SelectListItem() { Text = reportto.Name, Value = reportto.Id.ToString() });
+
+            List<PlanType> plantype = new List<PlanType>();
+            plantype = await Mediator.Send(new GetPlanTypeQuery() { Id = null });
+            foreach (PlanType planT in plantype)
+                ListOfPlanType.Add(new SelectListItem() { Text = planT.Name, Value = planT.Id.ToString() });
+
+            List<PositionType> Positiontype = new List<PositionType>();
+            Positiontype = await Mediator.Send(new GetPositionTypeQuery() { Id = null });
+            foreach (PositionType planT in Positiontype)
+                ListOfPositionType.Add(new SelectListItem() { Text = planT.Name, Value = planT.Id.ToString() });
 
 
             await next.Invoke();

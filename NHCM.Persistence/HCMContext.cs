@@ -57,12 +57,27 @@ namespace NHCM.Persistence
         public virtual DbSet<FolderPath> FolderPath { get; set; }
 
 
+
+ 
+        public virtual DbSet<OrgUnit> OrgUnit { get; set; }
+        public virtual DbSet<OrganoGram> OrganoGram { get; set; }
+        public virtual DbSet<Organization> Organization { get; set; }
+       
+        public virtual DbSet<Characteristic> Characteristic { get; set; }
+        public virtual DbSet<Position> Position { get; set; }
+        public virtual DbSet<PositionType> PositionType { get; set; }
+        public virtual DbSet<PositionChange> PositionChange { get; set; }
+        public virtual DbSet<PlanType> PlanType { get; set; }
+        public virtual DbSet<SalaryType> SalaryType { get; set; }
+
+
+
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
             if (!optionsBuilder.IsConfigured)
             {
 
-                optionsBuilder.UseNpgsql("Server=localhost; Database =HCM; Username=postgres; Password=kasperskyantigeral");
+                optionsBuilder.UseNpgsql("Server=localhost; Database =HCM; Username=postgres; Password=root");
             }
         }
 
