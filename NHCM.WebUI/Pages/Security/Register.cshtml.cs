@@ -35,10 +35,12 @@ namespace NHCM.WebUI.Areas.Security.Pages
         [Required]
         public string Password { get; set; }
 
-        [Required]
+       
         [DataType(DataType.Password)]
         [Display(Name = "تایید رمز عبور")]
         [Compare("Password", ErrorMessage = "رمز عبور و تاییدی آن مطابقت ندارد")]
+       
+        [Required]
         public string ConfirmPassword { get; set; }
 
 
