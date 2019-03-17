@@ -1,0 +1,33 @@
+﻿
+
+
+@using Microsoft.AspNetCore.Identity
+@using NHCM.WebUI.Areas.Security
+@using NHCM.Persistence.Infrastructure.Identity
+@inject SignInManager<HCMUser> SignInManager
+@inject UserManager<HCMUser> UserManager
+
+
+
+    @if (SignInManager.IsSignedIn(User))
+    {
+
+            @UserManager.GetUserName(User);
+      
+        
+            <form id="logoutForm"  asp-page="/Security/Logout" asp-route-returnUrl="@Url.Page("Security/Login") ">
+
+                <button id="logout" type="submit">خروج از سیستم</button>
+            </form>
+    
+
+    }
+
+    else
+    {
+      
+            <a asp-page="/Security/Login">ورود به سیستم</a>
+       
+        
+    }
+
