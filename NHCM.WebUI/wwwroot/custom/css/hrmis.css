@@ -383,10 +383,46 @@ td .label {
     font-weight: bold;
     padding-bottom: 5px;
     padding-top: 15px;
-    margin-bottom:5px;
+    margin-bottom: 5px;
 }
 
 .btn-link:hover, .btn-link:active, .btn-link:focus {
     color: #1b3b62;
     text-decoration: none;
+}
+
+.dropdown-menu-right {
+    right: auto;
+    left: 0;
+}
+
+.navbar-nav {
+    text-align: right;
+    margin-left:10px;
+
+}
+
+.dropdown-user, .dropdown-user a {
+    text-align: right;
+    color: #1b3b62;
+    font-weight: bold;
+}
+
+    .dropdown-user a:hover, .dropdown-user a:active, .dropdown-user a:focus {
+        text-align: right;
+        color: #1b3b62;
+        font-weight: bold;
+        text-decoration: none;
+    }
+
+
+.dropdown-menu > li > a, .dropdown-menu > li > a:focus, .dropdown-menu > li > a:hover {
+    text-align: right;
+    color: #1b3b62;
+    font-weight: bold;
+    text-decoration: none;
+}
+
+.nav .open > a, .nav .open > a:hover, .nav .open > a:focus {
+    color: #1b3b62;
 }
