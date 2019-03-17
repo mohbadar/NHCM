@@ -11,7 +11,7 @@ using Microsoft.AspNetCore.Mvc.RazorPages;
 using NHCM.Persistence.Identity.Infrastructure;
 using NHCM.Persistence.Infrastructure.Identity;
 
-namespace NHCM.WebUI.Areas.Security.Pages
+namespace NHCM.WebUI.Pages.Security
 {
 
 

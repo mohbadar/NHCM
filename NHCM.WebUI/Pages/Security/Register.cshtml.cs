@@ -8,11 +8,11 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using NHCM.Persistence.Infrastructure.Identity;
-
+using NHCM.WebUI.Types;
 namespace NHCM.WebUI.Areas.Security.Pages
 {
     [AllowAnonymous]
-    public class RegisterModel : PageModel
+    public class RegisterModel : BasePage
     {
 
 
@@ -23,24 +23,37 @@ namespace NHCM.WebUI.Areas.Security.Pages
 
         public string ReturnUrl { get; set; }
 
+
         [BindProperty]
         [Required]
+        public string OrganizationID { get; set; }
+
+
+        [BindProperty]
+        [DataType(DataType.EmailAddress, ErrorMessage = "لطفا ایمل درست را وارد کنید")]
+        [Display(Name = "ایمیل")]
+        [Required(ErrorMessage = "ایمیل فرد ضروری میباشد")]
+        public string Email { get; set; }
+
+
+        [BindProperty]
+        [Display(Name = "نام کاربری")]
+        [Required(ErrorMessage = "نام کاربری ضروری میباشد")]
         public string UserName { get; set; }
 
-        
-        [StringLength(100, ErrorMessage = "The {0} must be at least {2} and at max {1} characters long.", MinimumLength = 6)]
+
+        [BindProperty]
+        [StringLength(100, ErrorMessage = "رمز عبور باید حد اقل دارای 6 حرف باشد", MinimumLength = 6)]
         [DataType(DataType.Password)]
         [Display(Name = "رمز عبور")]
-        [BindProperty]
-        [Required]
+        [Required(ErrorMessage = "رمز عبور ضروری میباشد")]
         public string Password { get; set; }
 
        
         [DataType(DataType.Password)]
         [Display(Name = "تایید رمز عبور")]
         [Compare("Password", ErrorMessage = "رمز عبور و تاییدی آن مطابقت ندارد")]
-       
-        [Required]
+        [Required(ErrorMessage = "تایید رمز عبور ضروری میباشد")]
         public string ConfirmPassword { get; set; }
 
 
@@ -67,7 +80,7 @@ namespace NHCM.WebUI.Areas.Security.Pages
 
             if (ModelState.IsValid)
             {
-                HCMUser user = new HCMUser { UserName = UserName };
+                HCMUser user = new HCMUser { UserName = UserName, Email = Email, OrganizationID = Convert.ToInt32(OrganizationID) };
                 IdentityResult result = await _userManager.CreateAsync(user, Password);
 
                 if (result.Succeeded)
@@ -79,7 +92,7 @@ namespace NHCM.WebUI.Areas.Security.Pages
                 foreach(var error in result.Errors)
                 {
                     ModelState.AddModelError(string.Empty, error.Description);
-                    ErrorMessage += error.Description;
+                    ErrorMessage +="\n " +error.Description;
                 }
             }
 

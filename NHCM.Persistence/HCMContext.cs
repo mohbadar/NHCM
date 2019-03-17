@@ -62,7 +62,6 @@ namespace NHCM.Persistence
         public virtual DbSet<OrgUnit> OrgUnit { get; set; }
         public virtual DbSet<OrganoGram> OrganoGram { get; set; }
         public virtual DbSet<Organization> Organization { get; set; }
-       
         public virtual DbSet<Characteristic> Characteristic { get; set; }
         public virtual DbSet<Position> Position { get; set; }
         public virtual DbSet<PositionType> PositionType { get; set; }

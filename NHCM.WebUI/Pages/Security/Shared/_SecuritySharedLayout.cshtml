@@ -1,16 +1,131 @@
 ﻿<!DOCTYPE html>
-
 <html>
 <head>
     <meta name="viewport" content="width=device-width" />
-    <title>@ViewBag.Title</title>
+    <link rel="apple-touch-icon" sizes="57x57" href="~/assets/favicon/apple-icon-57x57.png">
+    <link rel="apple-touch-icon" sizes="60x60" href="~/assets/favicon/apple-icon-60x60.png">
+    <link rel="apple-touch-icon" sizes="72x72" href="~/assets/favicon/apple-icon-72x72.png">
+    <link rel="apple-touch-icon" sizes="76x76" href="~/assets/favicon/apple-icon-76x76.png">
+    <link rel="apple-touch-icon" sizes="114x114" href="~/assets/favicon/apple-icon-114x114.png">
+    <link rel="apple-touch-icon" sizes="120x120" href="~/assets/favicon/apple-icon-120x120.png">
+    <link rel="apple-touch-icon" sizes="144x144" href="~/assets/favicon/apple-icon-144x144.png">
+    <link rel="apple-touch-icon" sizes="152x152" href="~/assets/favicon/apple-icon-152x152.png">
+    <link rel="apple-touch-icon" sizes="180x180" href="~/assets/favicon/apple-icon-180x180.png">
+    <link rel="icon" type="image/png" sizes="192x192" href="~/assets/favicon/android-icon-192x192.png">
+    <link rel="icon" type="image/png" sizes="32x32" href="~/assets/favicon/favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="96x96" href="~/assets/favicon/favicon-96x96.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="~/assets/favicon/favicon-16x16.png">
+    <link rel="manifest" href="/manifest.json">
+    <meta name="msapplication-TileColor" content="#ffffff">
+    <meta name="msapplication-TileImage" content="~/assets/favicon/ms-icon-144x144.png">
+    <meta name="theme-color" content="#ffffff">
+
+    <title>IARCSC - HRMIS</title>
+    @* Template css references *@
+    <link href="https://fonts.googleapis.com/css?family=Roboto:400,300,100,500,700,900" rel="stylesheet" type="text/css">
+    <link href="~/assets/css/icons/icomoon/styles.css" rel="stylesheet" type="text/css">
+    <link href="~/assets/css/minified/bootstrap.min.css" rel="stylesheet" type="text/css">
+    <link href="~/assets/css/minified/core.min.css" rel="stylesheet" type="text/css">
+    <link href="~/assets/css/minified/components.min.css" rel="stylesheet" type="text/css">
+    <link href="~/assets/css/minified/colors.min.css" rel="stylesheet" type="text/css">
+    <link href="~/assets/css/croppic.css" rel="stylesheet" />
+
+
+    @* CSS for the persian datepicker *@
+    <link href="~/custom/css/jquery.md.bootstrap.datetimepicker.style.css" rel="stylesheet" />
+    @* Overriden other classes*@
+    <link href="~/custom/css/overridenclasses.css" rel="stylesheet" />
+    <link href="~/custom/css/hrmis.css" rel="stylesheet" />
 </head>
-<body>
-    <div>
-        from master
-        @RenderBody()
+<body class="rtl" dir="rtl">
+    <!-- Main navbar -->
+    <div class="navbar" style="background: #fff; box-shadow: 0 0 0.5cm rgba(0, 0, 0, 0.5); color: #444;">
+        <div class="navbar-header">
+
+            <div class="pull-left">
+                <partial name="_LoginPartial" />
+            </div>
+
+            <a class="navbar-brand" href="../index">
+                <img src="~/assets/img/iarcsc.png" />
+                <span>
+                    کمیسیون مستقل اصلاحات اداری و خدمات ملکی
+                </span>
+            </a>
+            <ul class="nav navbar-nav pull-right visible-xs-block">
+                <li><a data-toggle="collapse" data-target="#navbar-mobile"><i class="icon-tree5"></i></a></li>
+                <li><a class="sidebar-mobile-main-toggle"><i class="icon-paragraph-justify3"></i></a></li>
+            </ul>
+        </div>
+
     </div>
+
+
+
+    <!-- /main navbar -->
+    <!-- /main navbar -->
+    <!-- Page container -->
+    <div class="page-container">
+        <!-- Page content -->
+        <div class="page-content">
+            <div class="content-wrapper">
+                <!-- Content area -->
+                <div class="content">
+                    <div class="row">
+                        <div class="col-md-12 pull-right">
+                            <div class="col-md-2 pull-right">
+                                <div class="sidebar sidebar-secondary sidebar-default">
+                                    <div class="sidebar-content">
+                                        <div class="sidebar-category">
+                                            <div class="category-content no-padding page-component" type="actionmenu">
+
+                                                <ul class="navigation navigation-alt navigation-accordion">
+
+                                                    <li><a asp-page="/Security/Roles"><i class="icon-user"></i>ایجاد نام کاربری</a></li>
+                                                    <li><a asp-page="/Security/Register"><i class="glyphicon glyphicon-user"></i>حقوق و نقش ها</a></li>
+
+
+
+
+                                                </ul>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-10 pull-right">
+                                <div class="panel panel-flat" style="direction: rtl;">
+                                    @RenderBody()
+                                </div>
+                                <div class="dependent-screens">
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <environment include="Development">
+        <script type="text/javascript" src="~/assets/js/plugins/loaders/pace.min.js"></script>
+        <script type="text/javascript" src="~/assets/js/core/libraries/jquery.min.js"></script>
+        <script type="text/javascript" src="~/assets/js/core/libraries/bootstrap.min.js"></script>
+        <script type="text/javascript" src="~/assets/js/plugins/tables/datatables/datatables.min.js"></script>
+        <script type="text/javascript" src="~/assets/js/plugins/notifications/jgrowl.min.js"></script>
+        <script type="text/javascript" src="~/assets/js/plugins/forms/validation/validate.min.js"></script>
+
+        <script src="~/assets/js/plugins/forms/selects/select2.min.js"></script>
+        <script src="~/custom/js/jquery.md.bootstrap.datetimepicker.js"></script>
+        <script src="~/assets/js/plugins/forms/validation/localization/messages_fa.js"></script>
+        <script src="~/assets/js/plugins/croppic/croppic.js"></script>
+
+        @*<script src="~/custom/js/nhcm.js"></script>*@
+    </environment>
+    @*<script>
+        $(document).ready(function () {
+            clean.init();
+        });
+    </script>*@
+    @RenderSection("Scripts", required: false)
 </body>
 </html>
-
-@RenderSection("Scripts", false)

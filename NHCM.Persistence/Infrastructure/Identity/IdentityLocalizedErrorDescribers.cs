@@ -5,7 +5,7 @@ using System.Text;
 
 namespace NHCM.Persistence.Infrastructure.Identity
 {
-    public class IdentityLocalizedErrorDescribers : IdentityErrorDescriber
+   public class IdentityLocalizedErrorDescribers : IdentityErrorDescriber
     {
 
 
@@ -14,16 +14,15 @@ namespace NHCM.Persistence.Infrastructure.Identity
             return new IdentityError()
             {
                 Code = nameof(DefaultError),
-                Description = "کاربر محترم درخواست شما با مشکل تخنیکی مواجه میباشد لطفا با مدیر سیستم به تماس شوید"
+                Description = " درخواست شما با مشکل تخنیکی مواجه میباشد لطفا با مدیر سیستم به تماس شوید"
             };
         }
 
         public override IdentityError DuplicateEmail(string email)
         {
-            return new IdentityError()
-            {
+            return new IdentityError() {
                 Code = nameof(DuplicateEmail),
-                Description = $" قبلا استفاده شده لطفا ایمیل متفاوت را استفاده کنید {email} کاربر محترم"
+                Description = $" قبلا استفاده شده لطفا ایمیل متفاوت را استفاده کنید {email} "
             };
         }
 
@@ -32,7 +31,7 @@ namespace NHCM.Persistence.Infrastructure.Identity
             return new IdentityError()
             {
                 Code = nameof(DuplicateRoleName),
-                Description = $" قبلا استفاده شده لطفا نام متفاوت را استفاده کنید {role} کاربر محترم"
+                Description = $" قبلا استفاده شده لطفا نام متفاوت را استفاده کنید {role} "
             };
         }
 
@@ -41,7 +40,7 @@ namespace NHCM.Persistence.Infrastructure.Identity
             return new IdentityError()
             {
                 Code = nameof(DuplicateUserName),
-                Description = $" قبلا استفاده شده لطفا نام کاربری متفاوت را استفاده کنید {userName} کاربر محترم"
+                Description = $" قبلا استفاده شده لطفا نام کاربری متفاوت را استفاده کنید {userName} "
             };
         }
 
@@ -50,7 +49,7 @@ namespace NHCM.Persistence.Infrastructure.Identity
             return new IdentityError()
             {
                 Code = nameof(InvalidEmail),
-                Description = $" نادرست میباشد  لطفا  ایمیل درست را استفاده کنید {email} کاربر محترم"
+                Description = $" نادرست میباشد  لطفا  ایمیل درست را استفاده کنید {email} "
             };
         }
 
@@ -60,7 +59,7 @@ namespace NHCM.Persistence.Infrastructure.Identity
             return new IdentityError()
             {
                 Code = nameof(InvalidRoleName),
-                Description = $" نادرست میباشد  لطفا  نام درست را استفاده کنید {role} کاربر محترم"
+                Description = $" نادرست میباشد  لطفا  نام درست را استفاده کنید {role} "
             };
         }
 
@@ -69,7 +68,7 @@ namespace NHCM.Persistence.Infrastructure.Identity
             return new IdentityError()
             {
                 Code = nameof(InvalidUserName),
-                Description = $" نادرست میباشد  لطفا  نام   کاربری درست را استفاده کنید {userName} کاربر محترم"
+                Description = $" نادرست میباشد  لطفا  نام   کاربری درست را استفاده کنید {userName} "
             };
         }
 
@@ -79,7 +78,7 @@ namespace NHCM.Persistence.Infrastructure.Identity
             return new IdentityError()
             {
                 Code = nameof(PasswordMismatch),
-                Description = $" کاربر محترم رمز عبور نوشته شده با تاییدی آن مطابقت ندارد لطفا هر دو رمز عبور را یکسان وارد کنید"
+                Description = $"  رمز عبور نوشته شده با تاییدی آن مطابقت ندارد لطفا هر دو رمز عبور را یکسان وارد کنید"
             };
         }
 
@@ -88,7 +87,7 @@ namespace NHCM.Persistence.Infrastructure.Identity
             return new IdentityError()
             {
                 Code = nameof(PasswordRequiresDigit),
-                Description = $" کاربر محترم رمز عبور نوشته شده  ضرورت به ارقام دارد لطفا حد اقل یک رقم را شامل رمز عبور خود بسازید       "
+                Description = $"  رمز عبور نوشته شده  ضرورت به ارقام دارد لطفا حد اقل یک رقم را شامل رمز عبور خود بسازید       "
             };
         }
 
@@ -98,7 +97,7 @@ namespace NHCM.Persistence.Infrastructure.Identity
             return new IdentityError()
             {
                 Code = nameof(PasswordRequiresLower),
-                Description = $" کاربر محترم رمز عبور نوشته شده  ضرورت به حد اقل یک حرف کوچک انگلیسی دارد"
+                Description = $"  رمز عبور نوشته شده  ضرورت به حد اقل یک حرف کوچک انگلیسی دارد"
             };
         }
 
@@ -107,7 +106,7 @@ namespace NHCM.Persistence.Infrastructure.Identity
             return new IdentityError()
             {
                 Code = nameof(PasswordRequiresNonAlphanumeric),
-                Description = $" کاربر محترم رمز عبور نوشته شده  ضرورت به حد اقل یک سمبول خاص میباشد    "
+                Description = $"  رمز عبور نوشته شده  ضرورت به حد اقل یک سمبول خاص میباشد    "
             };
         }
 
@@ -116,7 +115,7 @@ namespace NHCM.Persistence.Infrastructure.Identity
             return new IdentityError()
             {
                 Code = nameof(PasswordTooShort),
-                Description = $" کاربر محترم رمز عبور نوشته دارای تعداد حروف کمتر میباشد"
+                Description = $"  رمز عبور نوشته دارای تعداد حروف کمتر میباشد"
             };
         }
         public override IdentityError PasswordRequiresUpper()
@@ -124,7 +123,7 @@ namespace NHCM.Persistence.Infrastructure.Identity
             return new IdentityError()
             {
                 Code = nameof(PasswordRequiresUpper),
-                Description = $" کاربر محترم رمز عبور نوشته شده  ضرورت به حد اقل یک حرف بزرگ انگلیسی دارد"
+                Description = $"  رمز عبور نوشته شده  ضرورت به حد اقل یک حرف بزرگ انگلیسی دارد"
             };
         }
         public override IdentityError UserNotInRole(string role)

@@ -8,7 +8,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using NHCM.Persistence.Infrastructure.Identity;
 
-namespace NHCM.WebUI.Areas.Security.Pages
+namespace NHCM.WebUI.Pages.Security
 {
     [AllowAnonymous]
     public class LogoutModel : PageModel
