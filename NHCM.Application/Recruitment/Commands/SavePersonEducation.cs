@@ -101,11 +101,9 @@ namespace NHCM.Application.Recruitment.Commands
                     };
 
                     _context.Education.Add(education);
-
                     dbResult = await _mediator.Send(new SearchPersonEducationQuery() { Id = education.Id });
                     return dbResult;
-    
-              
+            
 
                    
                 }

@@ -11684,9 +11684,9 @@ a.plupload_disabled, a.plupload_disabled:hover, a.plupload_disabled:focus {
 
 .file-caption > span {
     display: inline-block;
-    float: left;
+    float: right;
     margin-top: 3px;
-    margin-right: 6px;
+    margin-left: 6px;
 }
 
 .file-caption [class*=icon-] {

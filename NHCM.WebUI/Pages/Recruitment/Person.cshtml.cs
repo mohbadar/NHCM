@@ -20,7 +20,6 @@ namespace NHCM.WebUI.Pages.Recruitment
     public class PersonModel : BasePage
     {
         public string SubScreens { get; set; } = "";
-        public string Title { get; set; } = "adfasdfadf";
         private string htmltemplate = @"
                          <li><a href='#' data='$id' page='$path' class='sidebar-items' action='subscreen'><i class='$icon'></i>$title</a></li>
                                     ";

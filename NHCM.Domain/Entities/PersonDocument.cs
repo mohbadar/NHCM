@@ -3,7 +3,7 @@ using System.Collections.Generic;
 
 namespace NHCM.Domain.Entities
 {
-    public  class PersonDocument
+    public partial class PersonDocument
     {
         public int Id { get; set; }
         public int? DocumentTypeId { get; set; }

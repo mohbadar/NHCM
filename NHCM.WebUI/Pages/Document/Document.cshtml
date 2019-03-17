@@ -1,5 +1,5 @@
 ﻿@page "{handler?}/{id?}"
-@model NHCM.WebUI.Pages.Recruitment.DocumentModel
+@model NHCM.WebUI.Pages.Document.DocumentModel
 @{
     Layout = null;
 }
@@ -10,11 +10,11 @@
     </div>
     <div class="panel-body" style="padding-bottom:5px;">
         <legend class="text-bold">اسناد و ضمایم کارمند را ثبت، تغیر و حذف نمائید</legend>
-        <form id="dv_Recruitment_Document" class="form sub-form page-component" type="form" prefix="uxpd" parent="dv_Recruitment_Person" parentcol="PersonID">
+        <form id="dv_Document_Document" class="form sub-form page-component" type="form" prefix="uxpd" parentcol="recordid">
             <fieldset class="content-group">
                 <div class="row">
-                    <div class="col-md-2 col-sm-12 col-xs-12 pull-right">
-                        <div class="form-group">
+                    <div class="col-md-4 col-sm-12 col-xs-12 pull-right">
+                        <div class="form-group" style="direction:rtl;">
                             <label class="text-bold">
                                 نوع سند/ضمیمه
                                 <span class="text-danger">&nbsp;*</span>
@@ -24,21 +24,21 @@
                             </select>
                         </div>
                     </div>
-                    <div class="col-md-6 col-sm-12 col-xs-12 pull-right">
+                    <div class="col-md-8 col-sm-12 col-xs-12 pull-right file-parent">
                         <label class="text-bold">
                             سند/ضمیمه را انتخاب نمائید
                             <span class="text-danger">&nbsp;*</span>
                         </label>
                         <div class="form-group">
-                            <input type="file" id="uxattachement" name="attachement" class="file-attachment" data-show-upload="false" data-show-preview="false" />
+                            <input type="file" id="uxpdattachement" name="attachement" class="file-attachment" data-show-upload="false" data-show-preview="false" required />
                         </div>
                     </div>
                 </div>
                 <div class="row">
-                    <div class="col-md-8 col-sm-12 col-xs-12 pull-right">
+                    <div class="col-md-12 col-sm-12 col-xs-12 pull-right">
                         <div class="form-group has-feedback has-feedback-left">
                             <label class="text-bold">ملاحضات </label>
-                            <textarea id="uxpdremarks" name="uxpdRemarks" rows="2" cols="2" class="form-control remarks"></textarea>
+                            <textarea id="uxpddescription" name="uxpddescription" rows="2" cols="2" class="form-control remarks"></textarea>
                         </div>
                     </div>
                 </div>
@@ -46,9 +46,10 @@
             <hr />
             <div class="row div-form-control">
                 <div class="col-md-12">
-                    <div class="form-group">
+                    <div class="form-group actions">
                         <button type="button" class="btn btn-primary" action="save"><i class="icon-floppy-disk position-right"></i>ثبت معلومات</button>
                         <button type="button" class="btn btn-primary" action="new"><i class="icon-new-tab position-right"></i>صفحه جدید </button>
+                        <button type="button" class="btn btn-primary" action="search"><i class="icon-new-tab position-right"></i>جستجو </button>
                     </div>
                 </div>
             </div>
@@ -56,13 +57,12 @@
                 <table style="direction: rtl;" bindonclick="true">
                     <thead>
                         <tr>
-                            <th colname="countrytext">کشور</th>
-                            <th colname="place">محل</th>
-                            <th colname="traveldate">تاریخ سفر</th>
-                            <th colname="returndate">تاریخ برگشت</th>
+                            <th colname="DocumentTypeText">نوع سند/ضمیمه</th>
+                            <th colname="UploadDateText">تاریخ ثبت سند/ضمیمه</th>
+                            <th colname="DownloadDateText">آخرین تاریخ دانلود</th>
+                            <th colname="path">فایل ثبت شده</th>
                         </tr>
                     </thead>
-
                     <tbody></tbody>
                 </table>
             </div>

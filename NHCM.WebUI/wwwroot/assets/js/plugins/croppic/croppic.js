@@ -236,7 +236,6 @@
         },
         loadExistingImage: function () {
             var that = this;
-
             if ($.isEmptyObject(that.croppedImg)) {
                 if (that.options.onBeforeImgUpload) that.options.onBeforeImgUpload.call(that);
 

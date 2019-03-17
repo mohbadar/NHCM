@@ -20,7 +20,7 @@
     <meta name="msapplication-TileImage" content="~/assets/favicon/ms-icon-144x144.png">
     <meta name="theme-color" content="#ffffff">
 
-    <title>IARCSC - HRMIS</title>
+    <title>سیستم ملی منابع بشری دولت افغانستان</title>
     @* Template css references *@
     <link href="~/assets/css/icons/icomoon/styles.css" rel="stylesheet" type="text/css">
     <link href="~/assets/css/minified/bootstrap.min.css" rel="stylesheet" type="text/css">
@@ -36,6 +36,11 @@
     <link href="~/custom/css/hrmis.css" rel="stylesheet" />
 </head>
 <body class="rtl" dir="rtl">
+    <div id="overlay">
+        <div class="centered">
+            <img src="~/custom/images/iarcsc.gif" class="centered" style="margin-left: auto; margin-right: auto;" />
+        </div>
+    </div>
     <!-- Main navbar -->
     <div class="navbar" style="background: #fff; box-shadow: 0 0 0.5cm rgba(0, 0, 0, 0.5); color: #444;">
         <div class="navbar-header">
@@ -108,11 +113,14 @@
         <script type="text/javascript" src="~/assets/js/plugins/tables/datatables/datatables.min.js"></script>
         <script type="text/javascript" src="~/assets/js/plugins/notifications/jgrowl.min.js"></script>
         <script type="text/javascript" src="~/assets/js/plugins/forms/validation/validate.min.js"></script>
-        <script type="text/javascript" src="~/assets/js/plugins/uploaders/fileinput.min.js"></script>
+
+        <script src="~/assets/js/plugins/uploaders/fileinput.min.js"></script>
+
         <script src="~/assets/js/plugins/forms/selects/select2.min.js"></script>
         <script src="~/custom/js/jquery.md.bootstrap.datetimepicker.js"></script>
         <script src="~/assets/js/plugins/forms/validation/localization/messages_fa.js"></script>
         <script src="~/assets/js/plugins/croppic/croppic.js"></script>
+
         <script src="~/custom/js/nhcm.js"></script>
     </environment>
     <script>
