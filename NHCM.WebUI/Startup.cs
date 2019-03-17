@@ -60,11 +60,16 @@ namespace NHCM.WebUI
 
             services.AddDbContext<HCMIdentityDbContext>();
 
-
-            services.AddIdentity<HCMUser, HCMRole>()
+            services.AddIdentity<HCMUser, HCMRole>(options => { options.User.RequireUniqueEmail = true; })
+                .AddErrorDescriber<IdentityLocalizedErrorDescribers>()
                 .AddEntityFrameworkStores<HCMIdentityDbContext>()
-                
                 .AddDefaultTokenProviders();
+
+            services.Configure<IdentityOptions>(options => {
+                options.Password.RequireNonAlphanumeric = false;
+                options.Password.RequiredLength = 6;
+               
+            });
 
 
           
@@ -76,24 +81,22 @@ namespace NHCM.WebUI
             // Add MVC with fluent validation, Razor pages option
             services.AddMvc()
                 .AddFluentValidation(fv => fv.RegisterValidatorsFromAssemblyContaining<SearchPersonQueryValidator>())
-                //.AddRazorPagesOptions
-                //(
-                //    options => 
-                //    {
-                //        options.AllowAreas = true;
-
-                //        options.Conventions.AuthorizeAreaFolder("Security", "/");
-                //        // Comment this after creating the admin user
-                //        options.Conventions.AllowAnonymousToAreaPage("Security", "/Register");
+                .AddRazorPagesOptions
+                (
+                    options => 
+                    {
+                       
+                        // Comment it in production
+                        options.Conventions.AllowAnonymousToPage("/Security/Register");
 
 
+                       // options.Conventions.AuthorizeFolder("/Security");
+                        options.Conventions.AuthorizeFolder("/Recruitment");
+                        options.Conventions.AuthorizeFolder("/Shared");
+                        options.Conventions.AuthorizePage("/index");
 
-                //        options.Conventions.AuthorizeFolder("/Recruitment");
-                //        options.Conventions.AuthorizeFolder("/Shared");
-                //        options.Conventions.AuthorizePage("/index");
-
-                //    }
-                //)
+                    }
+                )
                 .SetCompatibilityVersion(CompatibilityVersion.Version_2_2);
 
             services.ConfigureApplicationCookie
