@@ -135,7 +135,7 @@
     border-radius: 0;
 }
 
-    .btn:hover {
+    .btn:hover, .btn:focus, .btn:active {
         box-shadow: 0px 4px 5px #808080;
     }
 
@@ -331,4 +331,98 @@ td .label {
         color: #1b3b62;
     }
 
+.file-caption-name {
+    direction: rtl;
+}
 
+.file-caption .error-upload {
+    color: red;
+}
+
+.file-input .input-group {
+    direction: rtl;
+    overflow: hidden !important;
+}
+
+.file-input .file-caption-name {
+    float: right;
+    direction: rtl;
+}
+
+.file-caption > span {
+    display: inline-block;
+    float: right;
+    margin-top: 3px;
+    margin-left: 6px;
+}
+
+.file-caption-name {
+    display: inline-block;
+    float: left;
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+    width: 90%;
+}
+
+
+.close-bttn {
+    background: #eee;
+    float: left;
+    color: #1b3b62;
+}
+
+    .close-bttn:hover, .close-bttn:active, .close-bttn:focus {
+        background: #e5e5e5;
+        text-decoration: none;
+        color: #1b3b62;
+    }
+
+.form-section {
+    font-size: 14px;
+    font-weight: bold;
+    padding-bottom: 5px;
+    padding-top: 15px;
+    margin-bottom: 5px;
+}
+
+.btn-link:hover, .btn-link:active, .btn-link:focus {
+    color: #1b3b62;
+    text-decoration: none;
+}
+
+.dropdown-menu-right {
+    right: auto;
+    left: 0;
+}
+
+.navbar-nav {
+    text-align: right;
+    margin-left:10px;
+
+}
+
+.dropdown-user, .dropdown-user a {
+    text-align: right;
+    color: #1b3b62;
+    font-weight: bold;
+}
+
+    .dropdown-user a:hover, .dropdown-user a:active, .dropdown-user a:focus {
+        text-align: right;
+        color: #1b3b62;
+        font-weight: bold;
+        text-decoration: none;
+    }
+
+
+.dropdown-menu > li > a, .dropdown-menu > li > a:focus, .dropdown-menu > li > a:hover {
+    text-align: right;
+    color: #1b3b62;
+    font-weight: bold;
+    text-decoration: none;
+}
+
+.nav .open > a, .nav .open > a:hover, .nav .open > a:focus {
+    color: #1b3b62;
+}

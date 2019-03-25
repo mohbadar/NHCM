@@ -34,11 +34,11 @@ namespace NHCM.Application.Recruitment.Commands
         public int? LocationId { get; set; }
         public string RelationShip { get; set; }
         public short? ReferenceTypeId { get; set; }
-        //public string Amount { get; set; }
-        //public int? BankId { get; set; }
-        //public string ReceiptNumber { get; set; }
-        //public string DocumentNumber { get; set; }
-        //public DateTime? DocumentDate { get; set; }
+        public string Amount { get; set; }
+        public int? BankId { get; set; }
+        public string ReceiptNumber { get; set; }
+        public string DocumentNumber { get; set; }
+        public DateTime? DocumentDate { get; set; }
         public string Remark { get; set; }
     }
     public class SavePersonReferenceCommandHandler : IRequestHandler<SavePersonReferenceCommand, List<SearchedPersonReference>>
@@ -83,22 +83,21 @@ namespace NHCM.Application.Recruitment.Commands
                         LocationId = request.LocationId,
                         RelationShip = request.RelationShip,
                         ReferenceTypeId = request.ReferenceTypeId,
-                        //Amount = request,
-                        //BankId = request.PersonId,
-                        //ReceiptNumber = request.PersonId,
-                        //DocumentNumber = request.PersonId,
-                        //DocumentDate = request.PersonId,
+
+                        Amount = request.Amount,
+                        BankId = request.BankId,
+                        ReceiptNumber = request.ReceiptNumber,
+                        DocumentNumber = request.DocumentNumber,
+                        DocumentDate = request.DocumentDate,
                         Remark = request.Remark
                     };
 
-                  
+
 
                     _context.Reference.Add(reference);
-
-                    await _context.SaveChangesAsync(cancellationToken);
-
-
+                   await _context.SaveChangesAsync(cancellationToken);
                     result = await _mediator.Send(new Queries.SearchPersonReferenceQuery() { Id = reference.Id });
+                    
 
 
                 }
@@ -131,11 +130,12 @@ namespace NHCM.Application.Recruitment.Commands
                     reference.RelationShip = request.RelationShip;
                     reference.ReferenceTypeId = request.ReferenceTypeId;
                     reference.Remark = request.Remark;
-                    //reference. Amount = request;
-                    //reference.BankId = request.PersonId;
-                    //reference.ReceiptNumber = request.PersonId;
-                    //reference. DocumentNumber = request.PersonId;
-                    //reference. DocumentDate = request.PersonId;
+                    reference.Amount = request.Amount;
+                    reference.BankId = request.BankId;
+                    reference.ReceiptNumber = request.ReceiptNumber;
+                    reference.DocumentNumber = request.DocumentNumber;
+                    reference.DocumentDate = request.DocumentDate;
+                    reference.Remark = request.Remark;
 
                     await _context.SaveChangesAsync(cancellationToken);
 

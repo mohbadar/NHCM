@@ -28,7 +28,7 @@ namespace NHCM.Persistence.Configurations
 
                 builder.Property(e => e.EducationLevelId).HasColumnName("EducationLevelID");
 
-                builder.Property(e => e.Enddate).HasColumnType("date");
+            builder.Property(e => e.EndDate).HasColumnName("Enddate").HasColumnType("date");
 
                 builder.Property(e => e.Faculty).HasMaxLength(200);
 
@@ -40,7 +40,7 @@ namespace NHCM.Persistence.Configurations
 
                 builder.Property(e => e.MigratedLocation).HasMaxLength(100);
 
-                builder.Property(e => e.ModifiedBy)
+                builder.Property(e => e.ModifiedBy).HasColumnName("ModidfiedBy")
                     .IsRequired()
                     .HasMaxLength(200);
 

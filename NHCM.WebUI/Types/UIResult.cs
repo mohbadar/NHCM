@@ -5,7 +5,7 @@ using System.Threading.Tasks;
 
 namespace NHCM.WebUI.Types
 {
-    public class Result
+    public class UIResult
     {
 
         public int? Status { get; set; }

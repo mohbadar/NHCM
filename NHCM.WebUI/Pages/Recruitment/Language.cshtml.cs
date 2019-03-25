@@ -8,6 +8,9 @@ using NHCM.WebUI.Types;
 using NHCM.Application.Recruitment.Commands;
 using NHCM.Application.Recruitment.Models;
 using NHCM.Application.Recruitment.Queries;
+using NHCM.Domain.Entities;
+using NHCM.Application.Lookup.Queries;
+using Microsoft.AspNetCore.Mvc.Rendering;
 
 namespace NHCM.WebUI.Pages.Recruitment
 {
@@ -18,10 +21,20 @@ namespace NHCM.WebUI.Pages.Recruitment
        
 
 
-        // Currently Taken the id from the route. Alternative would be be using FromBody. By providing data for the ajax request.
-        public  void OnGet()
+       
+        public  async Task  OnGetAsync()
         {
-            
+            ListOfLanguages = new List<Microsoft.AspNetCore.Mvc.Rendering.SelectListItem>();
+            List<Language> languages = new List<Language>();
+            languages = await Mediator.Send(new GetLanguageQuery() { ID = null });
+            foreach (Language language in languages)
+                ListOfLanguages.Add(new SelectListItem(language.Name, language.ID.ToString()));
+
+            ListOfExpertise = new List<SelectListItem>();
+            List<Expertise> expertises = new List<Expertise>();
+            expertises = await Mediator.Send(new GetExpertiseQuery() { ID = null });
+            foreach (Expertise expertise in expertises)
+                ListOfExpertise.Add(new SelectListItem() { Text = expertise.Name, Value = expertise.Id.ToString() });
 
         }
 
@@ -33,10 +46,10 @@ namespace NHCM.WebUI.Pages.Recruitment
                 List<SearchedPersonLanguage> dbResult = new List<SearchedPersonLanguage>();
                 dbResult = await Mediator.Send(command);
 
-                return new JsonResult(new Result() {
+                return new JsonResult(new UIResult() {
 
                     Data = new { list = dbResult },
-                    Status = Status.Success,
+                    Status = UIStatus.Success,
                     Text = "اطلاعات زبان فرد موفقانه ثبت سیستم شد",
                     Description = string.Empty
 
@@ -46,11 +59,11 @@ namespace NHCM.WebUI.Pages.Recruitment
             }
             catch(Exception ex)
             {
-                return new JsonResult(new Result()
+                return new JsonResult(new UIResult()
                 {
 
                     Data = null,
-                    Status = Status.Failure,
+                    Status = UIStatus.Failure,
                     Text = CustomMessages.InternalSystemException ,
                     Description = ex.Message + " \n StackTrace : "+ ex.StackTrace
 
@@ -68,11 +81,11 @@ namespace NHCM.WebUI.Pages.Recruitment
                 string dbResult= string.Empty;
                 dbResult = await Mediator.Send(command);
 
-                return new JsonResult(new Result()
+                return new JsonResult(new UIResult()
                 {
 
                     Data = new { list = dbResult },
-                    Status = Status.Success,
+                    Status = UIStatus.Success,
                     Text = "زبان انتخاب شده موفقانه حذف گردید",
                     Description = string.Empty
 
@@ -82,11 +95,11 @@ namespace NHCM.WebUI.Pages.Recruitment
             }
             catch (Exception ex)
             {
-                return new JsonResult(new Result()
+                return new JsonResult(new UIResult()
                 {
 
                     Data = null,
-                    Status = Status.Failure,
+                    Status = UIStatus.Failure,
                     Text = CustomMessages.InternalSystemException,
                     Description = ex.Message + " \n StackTrace : " + ex.StackTrace
 
@@ -101,11 +114,11 @@ namespace NHCM.WebUI.Pages.Recruitment
                 List<SearchedPersonLanguage> dbResult = new List<SearchedPersonLanguage>();
                 dbResult = await Mediator.Send(command);
 
-                return new JsonResult(new Result()
+                return new JsonResult(new UIResult()
                 {
 
                     Data = new { list = dbResult },
-                    Status = Status.Success,
+                    Status = UIStatus.Success,
                     Text =string.Empty,
                     Description = string.Empty
 
@@ -115,11 +128,11 @@ namespace NHCM.WebUI.Pages.Recruitment
             }
             catch (Exception ex)
             {
-                return new JsonResult(new Result()
+                return new JsonResult(new UIResult()
                 {
 
                     Data = null,
-                    Status = Status.Failure,
+                    Status = UIStatus.Failure,
                     Text = CustomMessages.InternalSystemException,
                     Description = ex.Message + " \n StackTrace : " + ex.StackTrace
 

@@ -1,4 +1,4 @@
-﻿@page
+﻿@page 
 @model NHCM.WebUI.Pages.Security.LoginModel
 @{
     ViewData["Title"] = "Login";
@@ -48,10 +48,22 @@
     <script type="text/javascript" src="~/assets/js/core/libraries/jquery.min.js"></script>
     <script type="text/javascript" src="~/assets/js/core/libraries/bootstrap.min.js"></script>
     <script type="text/javascript" src="~/assets/js/plugins/loaders/blockui.min.js"></script>
-
-    <script src="~/assets/js/core/app.js"></script>
     <link href="~/custom/css/hrmis.css" rel="stylesheet" />
 
+    <script>
+        $(function () {
+            function containerHeight() {
+                var availableHeight = $(window).height() - $('body > .navbar').outerHeight() - $('body > .navbar + .navbar').outerHeight() - $('body > .navbar + .navbar-collapse').outerHeight();
+                $('.page-container').attr('style', 'min-height:' + availableHeight + 'px');
+            }
+            $(window).on('resize', function () {
+                setTimeout(function () {
+                    containerHeight();
+                }
+                    , 100);
+            }).resize();
+        })();
+    </script>
 
 </head>
 <body class="rtl" dir="rtl">
@@ -67,7 +79,7 @@
                 <div class="content">
 
                     <!-- Simple login form -->
-                    <form id="loginform" method="post" >
+                    <form id="loginform" method="post">
                         <div class="panel panel-body login-form" style="border-radius:2px;">
                             <div class="text-center">
                                 @*<div class="icon-object border-slate-300 text-slate-300"><i class="icon-reading"></i></div>*@
@@ -100,8 +112,29 @@
                             <div class="form-group">
                                 <button type="submit" class="btn btn-primary btn-block">سیسټم ته ننوتل<i class="icon-circle-left2 position-left"></i></button>
                             </div>
-                            <div class="text-center">
-                                <a href="#">آیا تاسو خپل پټنوم هیر کړی؟</a>
+
+
+                            @*<div class="text-center">
+                                    <a href="#">آیا تاسو خپل پټنوم هیر کړی؟</a>
+                                </div>*@
+
+                            <div>
+                                @if (ModelState.ErrorCount > 0)
+                                {
+
+                                    @foreach (var error in ViewData.ModelState.Values)
+                                    {
+                                        foreach (var item in error.Errors)
+                                        {
+                                            <lable class="pull-right text-danger control-label">
+                                                @item.ErrorMessage
+                                            </lable>
+                                            <br />
+                                        }
+
+                                    }
+
+                                }
                             </div>
                         </div>
                     </form>

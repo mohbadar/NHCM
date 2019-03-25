@@ -29,9 +29,11 @@ namespace NHCM.Application.Recruitment.Models
         public string RankText { get; set; }
         public string PromotionText { get; set; }
         public string JobStatusText { get; set; }
-        public string ExperienceTypeText { get; set; }
-
+        public string ExperienceTypeText { get; set; } 
         public string Duration { get; set; }
+
+        public String StartDateText { get; set; }
+        public String EndDateText { get; set; }
 
     }
 }

@@ -15,12 +15,9 @@ namespace NHCM.Application.Recruitment.Queries
     {
         public decimal? Id { get; set; }
         public decimal? PersonId { get; set; }
-
-
-
+        
         public string ReferenceNo { get; set; }
-
-
+         
         public string FirstName { get; set; }
         public string LastName { get; set; }
         public string FatherName { get; set; }
@@ -34,6 +31,8 @@ namespace NHCM.Application.Recruitment.Queries
         public short? ReferenceTypeId { get; set; }
 
         public string Remark { get; set; }
+
+         
     }
 
 
@@ -64,17 +63,10 @@ namespace NHCM.Application.Recruitment.Queries
                               
                                 where pr.Id == request.Id
                                 select new SearchedPersonReference
-                                {
-
-
-
-
+                                { 
                                     Id = pr.Id, 
-                                     PersonId = pr.PersonId,
-
-                                    ReferenceNo = pr.ReferenceNo,
-
-
+                                    PersonId = pr.PersonId, 
+                                    ReferenceNo = pr.ReferenceNo,  
                                     FirstName = pr.FirstName,
                                     LastName = pr.LastName,
                                     FatherName = pr.FatherName,
@@ -89,8 +81,7 @@ namespace NHCM.Application.Recruitment.Queries
                                     Remark = pr.Remark,
 
                                     ReferenceTypeText = resultReferenceType.Name,
-                                    LocationText = resultLocation.Dari,
-
+                                    LocationText = resultLocation.Dari 
 
 
                                 }).ToListAsync(cancellationToken);
@@ -109,17 +100,10 @@ namespace NHCM.Application.Recruitment.Queries
 
                                 where pr.PersonId == request.PersonId
                                 select new SearchedPersonReference
-                                {
-
-
-
-
+                                { 
                                     Id = pr.Id,
-                                    PersonId = pr.PersonId,
-
-                                    ReferenceNo = pr.ReferenceNo,
-
-
+                                    PersonId = pr.PersonId, 
+                                    ReferenceNo = pr.ReferenceNo,  
                                     FirstName = pr.FirstName,
                                     LastName = pr.LastName,
                                     FatherName = pr.FatherName,
@@ -134,8 +118,8 @@ namespace NHCM.Application.Recruitment.Queries
                                     Remark = pr.Remark,
 
                                     ReferenceTypeText = resultReferenceType.Name,
-                                    LocationText = resultLocation.Dari,
-
+                                    LocationText = resultLocation.Dari
+                                     
 
 
                                 }).ToListAsync(cancellationToken);

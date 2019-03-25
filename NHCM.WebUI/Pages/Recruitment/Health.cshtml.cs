@@ -20,9 +20,13 @@ namespace NHCM.WebUI.Pages.Recruitment
 
        
 
-        public void OnGet()
+        public async Task  OnGetAsync()
         {
-
+            ListOfStatus = new List<SelectListItem>();
+            List<Status> statuses = new List<NHCM.Domain.Entities.Status>();
+            statuses = await Mediator.Send(new GetStatusQuery() { category = "HL" });
+            foreach (NHCM.Domain.Entities.Status status in statuses)
+                ListOfStatus.Add(new SelectListItem() { Text = status.Dari, Value = status.Id.ToString() });
         }
 
         public async Task<IActionResult> OnPostSave([FromBody]SavePersonHealthReportCommand command)
@@ -37,10 +41,10 @@ namespace NHCM.WebUI.Pages.Recruitment
                 List<SearchedPersonHealthReport> dbResult = new List<SearchedPersonHealthReport>();
                 dbResult = await Mediator.Send(command);
 
-                return new JsonResult(new NHCM.WebUI.Types. Result()
+                return new JsonResult(new UIResult()
                 {
                     Data = new { list = dbResult },
-                    Status = NHCM.WebUI.Types.Status.Success,
+                    Status = UIStatus.Success,
                     Text = "راپور صحی فرد موفقانه ثبت سیستم شد",
                     Description = string.Empty
 
@@ -49,11 +53,11 @@ namespace NHCM.WebUI.Pages.Recruitment
             }
             catch (Exception ex)
             {
-                return new JsonResult(new NHCM.WebUI.Types.Result()
+                return new JsonResult(new UIResult()
                 {
 
                     Data = null,
-                    Status = NHCM.WebUI.Types.Status.Failure,
+                    Status = NHCM.WebUI.Types.UIStatus.Failure,
                     Text = CustomMessages.InternalSystemException,
                     Description = ex.Message + " \n StackTrace : " + ex.StackTrace
 
@@ -70,10 +74,10 @@ namespace NHCM.WebUI.Pages.Recruitment
                 List<SearchedPersonHealthReport> result = new List<SearchedPersonHealthReport>();
                 result = await Mediator.Send(command);
 
-                return new JsonResult(new NHCM.WebUI.Types.Result()
+                return new JsonResult(new NHCM.WebUI.Types.UIResult()
                 {
                     Data = new { list = result },
-                    Status = NHCM.WebUI.Types.Status.Success,
+                    Status = NHCM.WebUI.Types.UIStatus.Success,
                     Text = string.Empty,
                     Description = string.Empty
 
@@ -82,11 +86,11 @@ namespace NHCM.WebUI.Pages.Recruitment
             }
             catch (Exception ex)
             {
-                return new JsonResult(new NHCM.WebUI.Types.Result()
+                return new JsonResult(new NHCM.WebUI.Types.UIResult()
                 {
 
                     Data = null,
-                    Status = NHCM.WebUI.Types.Status.Failure,
+                    Status = NHCM.WebUI.Types.UIStatus.Failure,
                     Text = CustomMessages.InternalSystemException,
 
                     Description = ex.Message

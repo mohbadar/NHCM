@@ -6,7 +6,7 @@ namespace NHCM.Persistence.NewModels
     public partial class Education
     {
         public decimal Id { get; set; }
-        public decimal PersonId { get; set; }
+        public decimal? PersonId { get; set; }
         public short EducationLevelId { get; set; }
         public DateTime ModifiedOn { get; set; }
         public string ModidfiedBy { get; set; }
@@ -25,5 +25,7 @@ namespace NHCM.Persistence.NewModels
         public string Remarks { get; set; }
         public string MigratedLocation { get; set; }
         public string Faculty { get; set; }
+
+        public virtual EducationLevel EducationLevel { get; set; }
     }
 }

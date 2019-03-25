@@ -25,5 +25,7 @@ namespace NHCM.Persistence.NewModels
         public string PresidentialOrderNo { get; set; }
         public DateTime? PresidentialOrderDate { get; set; }
         public string Remarks { get; set; }
+
+        public virtual Person Person { get; set; }
     }
 }

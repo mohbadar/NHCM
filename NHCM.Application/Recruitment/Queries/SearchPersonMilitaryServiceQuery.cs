@@ -24,6 +24,9 @@ namespace NHCM.Application.Recruitment.Queries
         public int ModifiedBy { get; set; }
         public DateTime ModifiedOn { get; set; }
         public string Remark { get; set; }
+
+        public String StartDateText { get; set; }
+        public String EndDateText { get; set; }
     }
 
 
@@ -56,9 +59,11 @@ namespace NHCM.Application.Recruitment.Queries
                                     EndDate = ms.EndDate,
                                     Remark = ms.Remark,
 
+
+                                    StartDateText = PersianLibrary.PersianDate.GetFormatedString(ms.StartDate),
+                                    EndDateText = PersianLibrary.PersianDate.GetFormatedString(ms.EndDate),
                                     // CHANGE : apply join when look.MilitaryServiceType table is added and scaffolded in system
                                     MilitaryServiceTypeText = request.MilitaryServiceTypeId ==1 ? "مکلفیت"  : "احتیاط"
-
 
 
 
@@ -81,6 +86,9 @@ namespace NHCM.Application.Recruitment.Queries
                                     EndDate = ms.EndDate,
                                     Remark = ms.Remark,
 
+
+                                    StartDateText = PersianLibrary.PersianDate.GetFormatedString(ms.StartDate),
+                                    EndDateText = PersianLibrary.PersianDate.GetFormatedString(ms.EndDate),
                                     // CHANGE : apply join when look.MilitaryServiceType table is added and scaffolded in system
                                     MilitaryServiceTypeText = request.MilitaryServiceTypeId == 1 ? "مکلفیت" : "احتیاط"
 

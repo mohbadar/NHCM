@@ -29,5 +29,7 @@ namespace NHCM.Application.Recruitment.Models
 
         public string ReferenceTypeText { get; set; }
         public string LocationText { get; set; }
+
+         
     }
 }

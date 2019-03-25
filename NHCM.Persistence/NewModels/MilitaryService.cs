@@ -16,6 +16,7 @@ namespace NHCM.Persistence.NewModels
         public DateTime ModifiedOn { get; set; }
         public string Remark { get; set; }
 
+        public virtual MilitaryServiceType MilitaryServiceType { get; set; }
         public virtual Person Person { get; set; }
     }
 }

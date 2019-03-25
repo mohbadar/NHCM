@@ -78,22 +78,35 @@ namespace NHCM.WebUI
 
 
 
+            
+
+
+
+
+            // Add MediatR
+            services.AddTransient(typeof(IPipelineBehavior<,>), typeof(RequestPreProcessorBehavior<,>));
+             services.AddTransient(typeof(IPipelineBehavior<,>), typeof(RequestValidationBehavior<,>));
+            services.AddMediatR(typeof(CreatePersonCommandHandler).GetTypeInfo().Assembly);
+
+
+
             // Add MVC with fluent validation, Razor pages option
             services.AddMvc()
-                .AddFluentValidation(fv => fv.RegisterValidatorsFromAssemblyContaining<SearchPersonQueryValidator>())
+                .AddFluentValidation(fv => fv.RegisterValidatorsFromAssemblyContaining<CreatePersonCommandValidator>())
                 .AddRazorPagesOptions
                 (
-                    options => 
+                    options =>
                     {
-                       
+
                         // Comment it in production
-                        options.Conventions.AllowAnonymousToPage("/Security/Register");
+                         options.Conventions.AllowAnonymousToPage("/Security/Register");
 
-
-                       // options.Conventions.AuthorizeFolder("/Security");
+                        options.Conventions.AuthorizeFolder("/Security");
                         options.Conventions.AuthorizeFolder("/Recruitment");
                         options.Conventions.AuthorizeFolder("/Shared");
                         options.Conventions.AuthorizePage("/index");
+
+                        options.AllowMappingHeadRequestsToGetHandler = true;
 
                     }
                 )
@@ -110,14 +123,6 @@ namespace NHCM.WebUI
 
 
 
-
-
-
-
-            // Add MediatR
-            services.AddTransient(typeof(IPipelineBehavior<,>), typeof(RequestPreProcessorBehavior<,>));
-          //  services.AddTransient(typeof(IPipelineBehavior<,>), typeof(RequestValidationBehavior<,>));
-            services.AddMediatR(typeof(CreatePersonCommandHandler).GetTypeInfo().Assembly);
         }
 
 

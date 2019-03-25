@@ -24,5 +24,8 @@ namespace NHCM.Persistence.NewModels
         public string ReferenceNo { get; set; }
         public DateTime? CreatedOn { get; set; }
         public int? CreatedBy { get; set; }
+
+        public virtual OrgUnit Organization { get; set; }
+        public virtual Position Position { get; set; }
     }
 }

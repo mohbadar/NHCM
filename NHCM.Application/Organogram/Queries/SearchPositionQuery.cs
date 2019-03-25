@@ -147,8 +147,7 @@ namespace NHCM.Application.Organogram.Queries
                                      
                                 }).ToListAsync(cancellationToken);
             }
-            
-            else
+            else if(request.OrganoGramId != null)
             {
                 result = await (from position in _context.Position
 
@@ -167,7 +166,7 @@ namespace NHCM.Application.Organogram.Queries
                                 join salarytype in _context.SalaryType on position.SalaryTypeId equals salarytype.Id into pst
                                 from resultpst in pst.DefaultIfEmpty()
 
-                                where position.OrganoGramId == request.OrganoGramId 
+                                   where position.OrganoGramId == request.OrganoGramId 
                                 select new SearchedPosition
                                 {
                                     Id = position.Id,
@@ -175,13 +174,13 @@ namespace NHCM.Application.Organogram.Queries
                                     OrgunitId = position.OrgunitId,
                                     PositionTypeId = position.PositionTypeId,
                                     RankId = position.RankId,
-                                   // StatusId = position.StatusId,
+                                    // StatusId = position.StatusId,
                                     Code = position.Code,
                                     LocationId = position.LocationId,
                                     DirectorateId = position.DirectorateId,
                                     Profession = position.Profession,
                                     Kadr = position.Kadr,
-                                   // Remarks = position.Remarks,
+                                    // Remarks = position.Remarks,
                                     SalaryTypeId = position.SalaryTypeId,
                                     Sorter = position.Sorter,
                                     OrganoGramId = position.OrganoGramId,
@@ -203,6 +202,64 @@ namespace NHCM.Application.Organogram.Queries
 
 
                                 }).ToListAsync(cancellationToken);
+            }
+
+            // Used in tayenat
+            else
+            { 
+                result = await (from position in _context.Position
+
+                                join pt in _context.PositionType on position.PositionTypeId equals pt.Id into pot
+                                from resultpot in pot.DefaultIfEmpty()
+                                join locatin in _context.Location on position.LocationId equals locatin.Id into poslo
+                                from resultposlo in poslo.DefaultIfEmpty()
+                                join rank in _context.Rank on position.RankId equals rank.Id into posr
+                                from resultposr in posr.DefaultIfEmpty()
+                                join parent in _context.Position on position.ParentId equals parent.Id into posp
+                                from resultposp in posp.DefaultIfEmpty()
+                                join status in _context.Status on position.StatusId equals status.Id into PS
+                                from resultPS in PS.DefaultIfEmpty()
+                                join plantype in _context.PlanType on position.PlanTypeId equals plantype.Id into ppt
+                                from resultppt in ppt.DefaultIfEmpty()
+                                join salarytype in _context.SalaryType on position.SalaryTypeId equals salarytype.Id into pst
+                                from resultpst in pst.DefaultIfEmpty()
+
+                              //  where position.OrganoGramId == request.OrganoGramId
+                                select new SearchedPosition
+                                {
+                                    Id = position.Id,
+                                    ParentId = position.ParentId,
+                                    OrgunitId = position.OrgunitId,
+                                    PositionTypeId = position.PositionTypeId,
+                                    RankId = position.RankId,
+                                    // StatusId = position.StatusId,
+                                    Code = position.Code,
+                                    LocationId = position.LocationId,
+                                    DirectorateId = position.DirectorateId,
+                                    Profession = position.Profession,
+                                    Kadr = position.Kadr,
+                                    // Remarks = position.Remarks,
+                                    SalaryTypeId = position.SalaryTypeId,
+                                    Sorter = position.Sorter,
+                                    OrganoGramId = position.OrganoGramId,
+                                    TransferPositionId = position.TransferPositionId,
+                                    PlanTypeId = position.PlanTypeId,
+                                    EducationLevelId = position.EducationLevelId,
+                                    ExperienceNoOfYear = position.ExperienceNoOfYear,
+                                    //PositionResponsibilityAndPurpose = position.PositionResponsibilityAndPurpose,
+
+                                    Name = position.Name,
+                                    PlanTypeText = resultppt.Name,
+                                    PositionTypeText = resultpot.Name,
+                                    LocationText = resultposlo.Dari,
+                                    RankText = resultposr.Name,
+                                    ParentText = resultposp.Name,
+                                    StatusText = resultPS.Dari,
+                                    SalaryTypeText = resultpst.Dari
+
+
+
+                                }).Take(100).ToListAsync(cancellationToken);
             }
 
             return result;

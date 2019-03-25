@@ -5,8 +5,15 @@ namespace NHCM.Persistence.NewModels
 {
     public partial class Language
     {
+        public Language()
+        {
+            PersonLanguage = new HashSet<PersonLanguage>();
+        }
+
         public short Id { get; set; }
         public string Name { get; set; }
         public string Category { get; set; }
+
+        public virtual ICollection<PersonLanguage> PersonLanguage { get; set; }
     }
 }

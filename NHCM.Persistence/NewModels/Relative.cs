@@ -30,5 +30,7 @@ namespace NHCM.Persistence.NewModels
         public string ReferenceNo { get; set; }
         public DateTime? CreatedOn { get; set; }
         public int? CreatedBy { get; set; }
+
+        public virtual Religion Religion { get; set; }
     }
 }

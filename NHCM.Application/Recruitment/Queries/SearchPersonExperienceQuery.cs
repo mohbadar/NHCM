@@ -32,6 +32,17 @@ namespace NHCM.Application.Recruitment.Queries
         public bool? Approved { get; set; }
         public string Remarks { get; set; }
         public int? ExperienceTypeId { get; set; }
+
+        public string LocationText { get; set; }
+        public string RankText { get; set; }
+        public string PromotionText { get; set; }
+        public string JobStatusText { get; set; }
+        public string ExperienceTypeText { get; set; }
+
+        public String StartDateText { get; set; }
+        public String EndDateText { get; set; }
+
+        public string Duration { get; set; }
     }
 
     public class SearchPersonExperienceQueryHandler : IRequestHandler<SearchPersonExperienceQuery, List<SearchedPersonExperience>>
@@ -87,12 +98,14 @@ namespace NHCM.Application.Recruitment.Queries
                                     ExperienceTypeId = pe.ExperienceTypeId,
 
 
-                                    LocationText =resultLocation.Name,
+                                    LocationText =resultLocation.Dari,
                                     RankText =  resultRank.Name,
-                                    
-                                    PromotionText = resultPromotion.Name,
+                                    PromotionText = resultPromotion.Dari,
                                     JobStatusText =resultJobStatus.Name,
-                                    ExperienceTypeText = resultExperienceType.Name
+                                    ExperienceTypeText = resultExperienceType.Dari,
+
+                                    StartDateText = PersianLibrary.PersianDate.GetFormatedString(pe.StartDate.Value),
+                                    EndDateText = PersianLibrary.PersianDate.GetFormatedString(pe.EndDate.Value)
 
                                 }).ToListAsync();
             }
@@ -139,12 +152,15 @@ namespace NHCM.Application.Recruitment.Queries
                                     ExperienceTypeId = pe.ExperienceTypeId,
 
 
-                                    LocationText = resultLocation.Name,
-                                    RankText = resultRank.Name,
-                                  
-                                    PromotionText = resultPromotion.Name,
+                                    LocationText = resultLocation.Dari,
+                                    RankText = resultRank.Name, 
+                                    PromotionText = resultPromotion.Dari,
                                     JobStatusText = resultJobStatus.Name,
-                                    ExperienceTypeText = resultExperienceType.Name
+                                    ExperienceTypeText = resultExperienceType.Dari,
+
+
+                                    StartDateText = PersianLibrary.PersianDate.GetFormatedString(pe.StartDate.Value),
+                                    EndDateText = PersianLibrary.PersianDate.GetFormatedString(pe.EndDate.Value)
 
                                 }).ToListAsync();
             }

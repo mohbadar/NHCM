@@ -5,7 +5,14 @@ namespace NHCM.Persistence.NewModels
 {
     public partial class Bank
     {
+        public Bank()
+        {
+            Reference = new HashSet<Reference>();
+        }
+
         public int Id { get; set; }
         public string Name { get; set; }
+
+        public virtual ICollection<Reference> Reference { get; set; }
     }
 }

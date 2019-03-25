@@ -1,4 +1,15 @@
-﻿var clean = window.clean = {};
+﻿$(document)
+    .ajaxStart(function () {
+        $("#overlay").show();
+    })
+    .ajaxStop(function () {
+        $("#overlay").hide();
+    });
+
+
+
+
+var clean = window.clean = {};
 (function () {
     clean = {
         init: function (opt) {
@@ -6,6 +17,9 @@
             var page = {};
             page.el = $('body');
             new clean.page(page);
+        },
+        isEmpty: function (value) {
+            return typeof value == 'string' && !value.trim() || typeof value == 'undefined' || value === null;
         },
         format: function (s, row, indexes) {
             if (!indexes) return s;
@@ -59,26 +73,20 @@
                     window.JSON.stringify = JSON2.stringify;
                 },
 
-                /**
-                 * Read JSON data from the given string by by parsing it returning a javascript value.
-                 * @param {string} s
-                 */
-                read: function (s) { return JSON.parse(s); },
-
-                /**
-                 * Converts the given value into string containing data in JSON format.
-                 * @param {Object} v
-                 */
+                
                 write: function (v) { return JSON.stringify(v); }
             },
             ajax: function (opt) {
                 var url = opt.url || opt.service;
+                
                 if (!opt.url) $.extend(opt, { url: url });
                 var complete1 = opt.complete, success1 = opt.success, ui = clean.widget;
                 opt.contentType = opt.contentType === undefined ? 'application/json; charset=utf-8' : opt.contentType;
                 opt.dataType = opt.dataType === undefined ? 'json' : opt.dataType; // we may require to get list
                 return $.ajax($.extend(opt, {
                     timeout: 300000,
+
+                    type : opt.type,
                     beforeSend: function (xhr) {
                         xhr.setRequestHeader("XSRF-TOKEN",
                             $('input:hidden[name="__RequestVerificationToken"]').val());
@@ -157,12 +165,21 @@ var clean = window.clean = window.clean || {};
                     self.mainform = new clean[this.el.attr('type')](this);
                 }
                 else if (this.el.attr('type') == 'form' && this.el.hasClass('sub-form')) {
+
                     var sub = new clean[this.el.attr('type')](this);
                     self.subforms.push(sub);
                 }
-                else {
-                    new clean[this.el.attr('type')](this);
+                else if (this.el.attr('type') == 'actionmenu') {
+                    var side = $('.page-sidebar');
+                    if (side.length && side.attr('display') == 'false') {
+                        $('.sidebar').parent().remove();
+                        $('.main-content').addClass('col-md-offset-1').removeClass('pull-right');
+                    }
+                    else {
+                        new clean[this.el.attr('type')](this);
+                    }
                 }
+
             });
         }
     };
@@ -175,6 +192,7 @@ var clean = window.clean = window.clean || {};
         this.el = opt.el;
         this.path = "";
         this.page = opt.page;
+        this.parent = opt.parent || {};
         this.prefix = this.el.attr('prefix') || "ux";
         this.record = {};
         this.uploaders = {};
@@ -184,6 +202,7 @@ var clean = window.clean = window.clean || {};
         this.tazkira = {};
         this.actions = this.el.find('.div-form-control [action]');
         this.fields = [];
+        this.modal = {};
         this.grid = {};
         this.grid.template = this.el.find('.form-grid');
         this.grid.table = this.el.attr('id').replace('dv', 'gv');
@@ -202,6 +221,10 @@ var clean = window.clean = window.clean || {};
                 return false;
             });
         },
+        getactions: function () {
+            var self = this;
+            self.actions = this.el.find('.div-form-control [action]');
+        },
         getfields: function () {
             var self = this;
             self.fields = self.el.find(':text, :radio, :checkbox, input:hidden, select, textarea').not(":button, :submit");
@@ -212,17 +235,25 @@ var clean = window.clean = window.clean || {};
         },
         construct: function () {
             var self = this;
-
-
             var path = self.el.attr('id');
             self.path = '/' + path.substring(path.indexOf("_") + 1).replace('_', '/');
 
+            if (self.el.attr('attachment')) {
+                self.el.find('.actions').append(' <button type="button" class="btn btn-primary" action="attach" style="float:left;"><i class="icon-attachment position-right"></i>اسناد و ضمایم </button>');
+                self.getactions();
+            }
+
+            if (self.el.hasClass('sub-form')) {
+                if (!$.isEmptyObject(self.el.find('#' + self.prefix + self.el.attr('parentcol')))) {
+                    self.el.append("<input type='hidden' class='auto-gen-hidden search' id='" + self.prefix + self.el.attr('parentcol') + "' value = '" + self.parent.record.id + "' /> ");
+                }
+            }
             self.getfields();
+
             self.el.find('select').select2({
                 placeholder: "--",
                 allowClear: true
             });
-
             self.el.find('select').on('change', function (evt) {
                 $thisVal = $(this).val();
                 if ($thisVal != '') {
@@ -231,8 +262,8 @@ var clean = window.clean = window.clean || {};
                     }, 100);
                 }
             });
-            // Configuring the datepicker on inputs
 
+            // Configuring the datepicker on inputs
             $('.Shamsi').each(function () {
                 var el = $(this);
                 var sib = el.attr('sibling');
@@ -266,10 +297,11 @@ var clean = window.clean = window.clean || {};
                 self.tazkira = new clean.Tazkira(opt);
             });
 
+
             $(self.grid.template.find('thead').find('th')).each(function (index) {
                 self.grid.cols.push($(this).attr('colname'));
             });
-            $(self.grid.template).find('table').addClass('table table-bordered table-hover datatable-highlight').attr('id', self.grid.table);
+            $(self.grid.template).find('table').addClass('table table-bordered table-hover').attr('id', self.grid.table);
             self.el.parents('.panel').append(self.grid.template);
 
             if (self.el.find('.img-uploader').length) {
@@ -295,46 +327,77 @@ var clean = window.clean = window.clean || {};
                     onError: function (errormessage) { console.log('onError:' + errormessage) }
                 }
                 self.uploaders.photo = new Croppic(self.prefix + 'Photo', croppicContainerModalOptions);
-
             }
             if (self.el.find('.file-attachment').length) {
-                
-                self.uploaders.document = self.el.find('.file-attachment').fileinput({
-                    uploadUrl: 'adsfasdfadfaf',
-                    browseLabel: '',
-                    browseClass: 'btn btn-primary btn-icon',
-                    removeLabel: '',
-                    uploadLabel: '',
-                    browseIcon: '<i class="icon-plus22"></i> ',
-                    removeClass: 'btn btn-remove btn-icon',
-                    removeIcon: '<i class="icon-cancel-square"></i> ',
-                    layoutTemplates: {
-                        caption: '<div tabindex="-1" class="form-control file-caption {class}">\n' + '<span class="icon-file-plus kv-caption-icon"></span><div class="file-caption-name"></div>\n' + '</div>'
-                    },
-                    initialCaption: "انتخاب نگردیده"
-                }).change(function (event, files) {
-                    // self.el.find('.file-attachment').fileinput("upload");
-                    alert(self.el.find('.file-attachment').defaults.uploadUrl);
-                });;
-
-                //if (!$.isEmptyObject(self.uploaders.document)) {
-                //    self.uploaders.document.change(function () {
-                //        var uploader = $(this);
-                //        if (uploader.val()) {
-                                             
-                //        }
-                //    });
-                //}
+                var el = self.el.find('.file-attachment');
+                self.initiateFileUpload(el);
             }
+
             self.validationrule = self.validation();
+        },
+        initiateFileUpload: function (e) {
+            var self = this;
+            self.uploaders.document = e.fileinput({
+                uploadUrl: 'adsfasdfadfaf',
+                showCancel: false,
+                browseLabel: '',
+                browseClass: 'btn btn-primary btn-icon',
+                removeLabel: '',
+                uploadLabel: 'aaa',
+                browseIcon: '<i class="icon-plus22"></i> ',
+                removeClass: 'btn btn-remove btn-icon',
+                removeIcon: '<i class="icon-cancel-square"></i> ',
+                layoutTemplates: {
+                    caption: '<div tabindex="-1" class="form-control file-caption {class}">\n' + '<span class="icon-file-plus kv-caption-icon"></span><div class="file-caption-name"></div>\n' + '</div>'
+                },
+                initialCaption: "فایل انتخاب نگردیده"
+            }).on('fileselect', function (event, numFiles, label) {
+                setTimeout(function () {
+                    self.el.valid();
+                }, 100);
+                var formData = new FormData(self.el[0]);
+                $.ajax({
+                    url: self.path + '/Upload',
+                    data: formData,
+                    beforeSend: function (xhr) {
+                        xhr.setRequestHeader("XSRF-TOKEN",
+                            $('input:hidden[name="__RequestVerificationToken"]').val());
+                    },
+                    context: document.body,
+                    cache: false,
+                    contentType: false,
+                    processData: false,
+                    type: 'POST'
+                }).always(function (data) {
+                    if (data.status > 0) {
+                        if (!self.el.find($('#' + self.prefix + 'path')).length)
+                            self.el.append("<input type='hidden' class='auto-gen-hidden' id='" + self.prefix + "path' value='" + data.url + "' />");
+                        else
+                            self.el.find($('#' + self.prefix + 'path')).val(data.url);
+                        self.getfields();
+                        clean.widget.success(data.text, data.description);
+                        self.el.find('.file-caption-name').removeClass('error-upload');
+                    }
+                    else {
+                        self.el.find('.file-caption-name').addClass('error-upload');
+                        clean.widget.error(data.text, data.description);
+                    }
+                    self.el.find('.file-caption-name').html(data.text + "، " + data.description);
+                });
+            });
         },
         save: function () {
             var self = this;
-            //self.el.find('.auto-gen-hidden').remove();
-            self.getfields();
+            if (self.el.hasClass('sub-form')) {
+                if (!self.el.find($('#' + self.prefix + self.el.attr('parentcol'))).length) {
+                    self.el.append("<input type='hidden' class='auto-gen-hidden search' id='" + self.prefix + self.el.attr('parentcol') + "' value = '" + self.parent.record.id + "' /> ");
+                }
+                self.getfields();
+            }
 
+            self.getfields();
             var _tazkira = false;
-            if (self.tazkira.hasOwnProperty('serialNo')) {
+            if (!$.isEmptyObject(self.tazkira)) {
                 _tazkira = self.tazkira.validate();
                 if (_tazkira) {
                     $('#uxnid').val(self.tazkira.val());
@@ -347,7 +410,6 @@ var clean = window.clean = window.clean || {};
                 var fld = $(this);
                 var col = fld.attr('id').substring(self.prefix.length);
             });
-
             var _photovalid = false;
             if (self.uploaders.photo.hasOwnProperty('options')) {
                 _photovalid = self.uploaders.photo.validate();
@@ -358,21 +420,14 @@ var clean = window.clean = window.clean || {};
             else {
                 _photovalid = true;
             }
-
-
             if (self.el.valid() && _photovalid && _tazkira) {
                 var path = self.path + '/save';
-                if (self.el.hasClass('sub-form')) {
-                    self.el.append("<input type='hidden' class='auto-gen-hidden' id='" + self.prefix + self.el.attr('parentcol') + "' value = '" + self.page.mainform.record.id + "' /> ");
-                    self.getfields();
-                }
                 var data = {};
                 self.fields.each(function () {
                     var fld = $(this);
                     var col = fld.attr('id').substring(self.prefix.length);
                     Object.defineProperty(data, col.toString(), { value: fld.val().toString(), enumerable: true });
                 });
-
                 clean.data.post({
                     async: false, url: path, data: clean.data.json.write(data), dataType: 'json',
                     success: function (msg) {
@@ -386,17 +441,19 @@ var clean = window.clean = window.clean || {};
                         }
                     }
                 });
-
             }
         },
         search: function (r) {
             var self = r || this;
             var path = self.path + '/search';
-            self.el.find('.auto-gen-hidden').remove();
+
             if (self.el.hasClass('sub-form')) {
-                self.el.append("<input type='hidden' class='auto-gen-hidden search' id='" + self.prefix + self.el.attr('parentcol') + "' value = '" + self.page.mainform.record.id + "' /> ");
+                if (!self.el.find($('#' + self.prefix + self.el.attr('parentcol'))).length) {
+                    self.el.append("<input type='hidden' class='auto-gen-hidden search' id='" + self.prefix + self.el.attr('parentcol') + "' value = '" + self.parent.record.id + "' /> ");
+                }
                 self.getfields();
             }
+
             var data = {};
             if (r) {
                 data = self.record;
@@ -404,8 +461,7 @@ var clean = window.clean = window.clean || {};
             else {
                 self.el.find('input.search, textarea.search, select.search').each(function () {
                     var fld = $(this), col = fld.attr('id').substring(self.prefix.length);
-                    if (col.indexOf('_auto') === -1)
-                        Object.defineProperty(data, col.toString(), { value: fld.val().toString(), enumerable: true });
+                    Object.defineProperty(data, col.toString(), { value: fld.val().toString(), enumerable: true });
                 });
             }
             clean.data.post({
@@ -424,13 +480,22 @@ var clean = window.clean = window.clean || {};
         new: function (opt) {
             var self = this;
             self.fields.each(function () {
-                var fld = $(this), v = "";
-                fld.val(null).change();
+                var fld = $(this);
+                if (fld.attr('placeholder', 'درج نگردیده')) fld.attr('placeholder', '');
+
+                if (!fld.attr('default'))
+                    fld.val(null).change();
             });
             self.el.find('.auto-gen-hidden').remove();
             if (!$.isEmptyObject(self.uploaders.photo)) {
                 self.uploaders.photo.destroy();
                 self.uploaders.photo.init();
+            }
+            if (!$.isEmptyObject(self.uploaders.document)) {
+                if (self.el.find('.file-attachment').length) {
+                    self.el.find('.file-attachment').attr('required', 'required');
+                    self.el[0].reset();
+                }
             }
             self.getfields();
         },
@@ -446,9 +511,15 @@ var clean = window.clean = window.clean || {};
         bindtoform: function (d) {
             var self = this;
             self.record = d;
+            self.new();
             for (var key in d) {
                 var control = $('#' + (self.prefix + key).toLowerCase());
-                control.val(d[key]).change();
+                if (clean.isEmpty(d[key]))
+                    control.attr('placeholder', 'درج نگردیده')
+                else
+                    if (!control.attr('default'))
+                        control.val(d[key]).change();
+
                 if (control.hasClass("Miladi")) {
                     control.MdPersianDateTimePicker('setDate', new Date(d[key]));
                 }
@@ -461,9 +532,13 @@ var clean = window.clean = window.clean || {};
                 if (key == 'nid') {
                     self.tazkira.val(d[key]);
                 }
-
                 if (key == 'photoPath') {
                     self.uploaders.photo.bind(d[key]);
+                }
+                if (key == 'path') {
+                    if (!self.el.find($('#' + self.prefix + key)).length)
+                        self.el.append("<input type='hidden' class='auto-gen-hidden' id='" + self.prefix + "path' value='" + d[key] + "' />");
+                    self.el.find('.file-attachment').removeAttr('required');
                 }
             }
             $('.sub-form').each(function () {
@@ -478,6 +553,31 @@ var clean = window.clean = window.clean || {};
                 }
             });
         },
+        download: function (e) {
+            var self = this;
+            var file = {};
+
+            file.Name = e;
+            var xhr = new XMLHttpRequest();
+
+            xhr.open('POST', self.path + '/Download', true);
+
+            xhr.setRequestHeader("XSRF-TOKEN",
+                $('input:hidden[name="__RequestVerificationToken"]').val());
+            xhr.setRequestHeader("Content-Type", 'application/json; charset=utf-8');
+            xhr.onreadystatechange = function () {
+                if (xhr.readyState == 4 && xhr.status == 200) {
+                    var blob = new Blob([xhr.response], {
+                        type: xhr.getResponseHeader("Content-Type")
+                    });
+                    var url = window.URL.createObjectURL(blob);
+                    window.open(url, url, "directories=0,titlebar=0,toolbar=0,location=0,status=0,menubar=0,scrollbars=no,resizable=no,width=400,height=400");
+
+                }
+            }
+            xhr.responseType = "arraybuffer";
+            xhr.send(JSON.stringify(file));
+        },
         bindtogrid: function (d) {
             var self = this;
             var row = "";
@@ -489,7 +589,17 @@ var clean = window.clean = window.clean || {};
                     var colname = self.grid.cols[i].toLowerCase();
                     for (var key in ob) {
                         if (key.toLowerCase() == colname) {
-                            column = column + "<td col='" + key.toLowerCase() + "'>" + ob[key] + "</td>";
+                            if (colname != 'path') {
+                                var va = ob[key];
+                                if (clean.isEmpty(ob[key]))
+                                    va = 'درج نگردیده';
+                                column = column + "<td col='" + key.toLowerCase() + "'>" + va + "</td>";
+                            }
+
+                            else {
+                                var temp = '<button type="button" downloadpath="$path" class="btn-link download-on-click"><i class="icon-download position-right"></i>دریافت فایل</button>'
+                                column = column + "<td col='" + key.toLowerCase() + "'>" + temp.replace('$path', ob[key]) + "</td>";
+                            }
                         }
                     }
                 }
@@ -511,7 +621,94 @@ var clean = window.clean = window.clean || {};
                 self.record.id = $(this).attr('data');
                 self.fetch(self);
             });
+
+            $('#' + self.grid.table).find('.download-on-click').click(function () {
+                self.download($(this).attr('downloadpath'));
+            });
+
             self.bindtoform(d[0]);
+        },
+        attach: function () {
+            var self = this;
+            if (!$.isEmptyObject(self.record)) {
+                path = "/Document/Document/Get";
+                var modalid = self.prefix + self.el.attr('id') + '_Modal';
+                if ($.isEmptyObject(self.modal)) {
+                    var modal = '<div id="' + modalid + '" class="modal fade"><div class="modal-dialog modal-lg"><div class="modal-content"></div></div></div>';
+                    var close = '<button type="button" class="btn btn-link close-bttn" data-dismiss="modal"><i class="icon-close2 position-right"></i>صرف نظر</button>'
+                    $('.dependent-screens').append(modal);
+                    self.modal = $('#' + modalid);
+                    var data = {};
+                    clean.data.post({
+                        async: false, url: path, data: clean.data.json.write(data), dataType: 'html',
+                        success: function (msg) {
+                            var html = msg;
+                            self.modal.find('.modal-content').html(html);
+                            var subform = {};
+                            subform.el = $('#' + $(html).find('form').attr('id'));
+                            subform.el.attr('parent', self.el.attr('id'));
+                            var items = self.path.split('/');
+                            subform.el.append("<input type='hidden'  id='" + subform.el.attr('prefix') + "module' value='" + items[1] + "' default='" + items[1] + "' />");
+                            subform.el.append("<input type='hidden'  id='" + subform.el.attr('prefix') + "item' value='" + items[2] + "' default='" + items[2] + "' />");
+                            subform.el.find('.actions').append(close);
+                            subform.parent = self;
+                            subform.page = self.page;
+                            if (subform.el.hasClass('page-component')) {
+                                if (subform.el.attr('type') == 'form' && subform.el.hasClass('sub-form')) {
+                                    var sub = new clean[subform.el.attr('type')](subform);
+                                    self.page.subforms.push(sub);
+                                }
+                            }
+                        }
+                    });
+                }
+                self.modal.modal();
+            }
+            else {
+                var title = 'فورم $formname خالی میباشد';
+                var des = 'برای اینکه اسناد و ضمایم مربوط به فورم $formname را مشاهده نمائید، لطفاً ریکارد این فورم را مشخص سازید';
+                var heading = self.el.parents('.panel-body').siblings('.panel-heading').find('h1');
+                title = title.replace('$formname', $(heading).text());
+                des = des.replace('$formname', $(heading).text());
+                clean.widget.error(title, des);
+            }
+        },
+        others: function (v) {
+
+           
+           var self = r || this;
+            
+            var path = self.path + '/' + v.name;
+            self.fields.each(function () {
+                var fld = $(this);
+                var col = fld.attr('id').substring(self.prefix.length);
+                Object.defineProperty(data, col.toString(), { value: fld.val().toString(), enumerable: true });
+            });
+            clean.data.post({
+                async: false, url: path, data: clean.data.json.write(data), dataType: 'json',
+                success: function (msg) {
+                    if (msg.status > 0) {
+                        var list = msg.data.list;
+                        clean.widget.success(msg.text, msg.description);
+                        self.bindtogrid(list);
+                    }
+                    else {
+                        clean.widget.warn(msg.text, msg.description);
+                    }
+                }
+            });
+        },
+        next: function () {
+        
+            
+            var v = {};
+            v.name = 'next';
+            self.others(v);
+        },
+        previous: function () {
+            var v = {};
+            v.name = 'previous';
+            self.others(v);
         },
         validation: function () {
             var self = this;
@@ -521,18 +718,28 @@ var clean = window.clean = window.clean || {};
                 successClass: 'validation-valid-label',
                 highlight: function (element, errorClass) {
                     $(element).addClass("hrmis-error");
+                    if ($(element).hasClass('file-attachment')) {
+                        $(element).parents('.input-group').find('.form-control').addClass('hrmis-error');
+                    }
                 },
                 unhighlight: function (element, errorClass) {
                     setTimeout(function () {
                         $(element).removeClass("hrmis-error");
+                        if ($(element).hasClass('file-attachment')) {
+                            $(element).parents('.input-group').find('.form-control').removeClass('hrmis-error');
+                        }
                     }, 50);
                 },
                 errorPlacement: function (error, element) {
-                    if (element.parents('div').hasClass('input-group')) {
+                    if (element.parents('div').hasClass('input-group') && element.siblings('span').hasClass('input-group-addon')) {
                         error.insertBefore(element.parent());
                     }
                     else if (element.siblings('div').hasClass('select2-container')) {
                         error.insertAfter(element.siblings('label'));
+                    }
+                    else if (element.hasClass('file-attachment')) {
+                        error.insertAfter(element.parents('.file-parent').find('label'));
+
                     }
                     else {
                         error.insertBefore(element);
@@ -601,27 +808,27 @@ var clean = window.clean = window.clean || {};
             var formname = action.attr('page');
             var path = '/' + formname.substring(formname.indexOf("_") + 1).replace('_', '/') + '/Get';
             var data = {};
-            if (self.page.mainform.record.id) {
-                clean.data.post({
+            if (!$.isEmptyObject(self.page.mainform.record)) {
+                clean.data.get({
                     async: false, url: path, data: clean.data.json.write(data), dataType: 'html',
                     success: function (msg) {
                         var html = msg;
                         $('.dependent-screens').html(html);
                         var subform = {};
                         subform.el = $('#' + formname);
+                        subform.parent = self.page.mainform;
                         subform.page = self.page;
                         if (subform.el.hasClass('page-component')) {
                             if (subform.el.attr('type') == 'form' && subform.el.hasClass('sub-form')) {
                                 var sub = new clean[subform.el.attr('type')](subform);
                                 self.page.subforms.push(sub);
-                                // self.page.mainform.el.parents('.panel').find('.main-form-details').hide();
-                                //self.page.mainform.el.find('.main-form-details').hide();
                             }
                         }
                     }
                 });
             }
             else {
+
                 clean.widget.error('فورم اصلی خالی میباشد', 'لطفاً برای اینکه صفحه های فرعی را مشاهده نمائید، ریکارد فورم اصلی را مشخص سازید');
             }
         }
@@ -677,11 +884,12 @@ var clean = window.clean = window.clean || {};
             if (v == 'تذکره ورقی') {
                 $('.old').show();
                 $('.alt-tazkira').val("");
-                // self.validator();
             }
             else {
                 $('.old').hide();
+
             }
+
         },
         getExpr: function (col) {
             var v = "{S:'%" + (this.serialNo.val().trim() != "" ? this.serialNo.val().trim() : "") + "'," +
@@ -728,8 +936,6 @@ var clean = window.clean = window.clean || {};
             // get
             v = clean.format("{S: '{serialNoID}', J:'{JuldID}',P:'{PageID}',N:'{NoID}'}", vals, { serialNoID: 0, JuldID: 1, PageID: 2, NoID: 3 });
             return v;
-
-
         }
     }
 })();

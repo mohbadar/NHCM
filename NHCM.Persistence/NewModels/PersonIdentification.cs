@@ -26,5 +26,7 @@ namespace NHCM.Persistence.NewModels
         public DateTime? TazkraIssueDate { get; set; }
         public int? TazkraLocation { get; set; }
         public string Remarks { get; set; }
+
+        public virtual IdentificationType Type { get; set; }
     }
 }

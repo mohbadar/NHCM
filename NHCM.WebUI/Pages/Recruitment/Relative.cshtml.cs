@@ -4,46 +4,59 @@ using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
+using Microsoft.AspNetCore.Mvc.Rendering;
+using NHCM.Application.Lookup.Queries;
 using NHCM.Application.Recruitment.Commands;
 using NHCM.Application.Recruitment.Models;
 using NHCM.Application.Recruitment.Queries;
+using NHCM.Domain.Entities;
 using NHCM.WebUI.Types;
 
 namespace NHCM.WebUI.Pages.Recruitment
 {
     public class PersonRelativeModel : BasePage
     {
-        public async Task<IActionResult> OnGetAsync([FromBody] decimal? PersonId)
+        public async Task OnGetAsync()
         {
-            try
-            {
+
+            ListOfRelationShip = new List<SelectListItem>();
+            List<Relationship> relationships = new List<Relationship>();
+            relationships = await Mediator.Send(new GetRelationshipQuery() { ID = null });
+            foreach (Relationship relationship in relationships)
+                ListOfRelationShip.Add(new SelectListItem() { Text = relationship.Name, Value = relationship.Id.ToString() });
+
+
+
+
+            //try
+            //{
 
                 
-                List<SearchedPersonRelative> result = new List<SearchedPersonRelative>();
-                result = await Mediator.Send(new SearchPersonRelativeQuery() { PersonId = PersonId });
+            //    List<SearchedPersonRelative> result = new List<SearchedPersonRelative>();
+            //    result = await Mediator.Send(new SearchPersonRelativeQuery() { PersonId = PersonId });
 
-                return new JsonResult(new Result()
-                {
-                    Data = new { list = result },
-                    Status = Status.Success,
-                    Text = string.Empty,
-                    Description = string.Empty
+            //    return new JsonResult(new UIResult()
+            //    {
+            //        Data = new { list = result },
+            //        Status = UIStatus.Success,
+            //        Text = string.Empty,
+            //        Description = string.Empty
 
-                });
+            //    });
 
-            }
-            catch (Exception ex)
-            {
-                return new JsonResult(new Result()
-                {
+            //}
+            //catch (Exception ex)
+            //{
+            //    return new JsonResult(new UIResult()
+            //    {
 
-                    Data = null,
-                    Status = Status.Failure,
-                    Text = CustomMessages.InternalSystemException,
+            //        Data = null,
+            //        Status = UIStatus.Failure,
+            //        Text = CustomMessages.InternalSystemException,
 
-                    Description = ex.Message
-                });
-            }
+            //        Description = ex.Message
+            //    });
+            //}
         }
         public async Task<IActionResult> OnPostSearch([FromBody] SearchPersonRelativeQuery command)
         {
@@ -58,10 +71,10 @@ namespace NHCM.WebUI.Pages.Recruitment
                 List<SearchedPersonRelative> result = new List<SearchedPersonRelative>();
                 result = await Mediator.Send(command);
 
-                return new JsonResult(new Result()
+                return new JsonResult(new UIResult()
                 {
                     Data = new { list = result },
-                    Status = Status.Success,
+                    Status = UIStatus.Success,
                     Text = string.Empty,
                     Description = string.Empty
 
@@ -70,11 +83,11 @@ namespace NHCM.WebUI.Pages.Recruitment
             }
             catch (Exception ex)
             {
-                return new JsonResult(new Result()
+                return new JsonResult(new UIResult()
                 {
 
                     Data = null,
-                    Status = Status.Failure,
+                    Status = UIStatus.Failure,
                     Text = CustomMessages.InternalSystemException,
                    
                     Description = ex.Message
@@ -94,10 +107,10 @@ namespace NHCM.WebUI.Pages.Recruitment
                 List<SearchedPersonRelative> result = new List<SearchedPersonRelative>();
                 result = await Mediator.Send(command);
 
-                return new JsonResult(new Result()
+                return new JsonResult(new UIResult()
                 {
                     Data = new { list = result },
-                    Status = Status.Success,
+                    Status = UIStatus.Success,
                     Text = "شهرت اقارب کارمند موفقانه ثبت سیستم شد",
                     Description = string.Empty
 
@@ -106,11 +119,11 @@ namespace NHCM.WebUI.Pages.Recruitment
             }
             catch (Exception ex)
             {
-                return new JsonResult(new Result()
+                return new JsonResult(new UIResult()
                 {
 
                     Data = null,
-                    Status = Status.Failure,
+                    Status = UIStatus.Failure,
                     Text = CustomMessages.InternalSystemException,
                     // Can be changed from app settings
                     Description = ex.Message 
@@ -121,27 +134,27 @@ namespace NHCM.WebUI.Pages.Recruitment
 
         public async Task<IActionResult> OnPostDeleteRelative([FromBody]DeletePersonRelativesCommand deleteCommand)
         {
-            Result result = new Result();
+            UIResult result = new UIResult();
 
             try
             {
                 string dbResult;
                 dbResult = await Mediator.Send(deleteCommand);
-                return new JsonResult(new Result()
+                return new JsonResult(new UIResult()
                 {
                     Data = new { list = dbResult },
-                    Status = Status.Success,
+                    Status = UIStatus.Success,
                     Text = "شهرت اقارب کارمند موفقانه حذف شد",
                     Description = string.Empty
                 });
             }
             catch (Exception ex)
             {
-                return new JsonResult(new Result()
+                return new JsonResult(new UIResult()
                 {
 
                     Data = null,
-                    Status = Status.Failure,
+                    Status = UIStatus.Failure,
                     Text = CustomMessages.InternalSystemException,
                     // Can be changed from app settings
                     Description = ex.Message

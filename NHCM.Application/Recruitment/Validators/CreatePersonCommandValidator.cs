@@ -12,6 +12,7 @@ namespace NHCM.Application.Recruitment.Validators
         {
             
             RuleFor(p => p.FirstName).NotEmpty().MinimumLength(2).WithMessage("نام باید حد اقل دارای یک حرف باشد");
+            RuleFor(p => p.FirstName).MaximumLength(5).WithMessage("نام باید حد اکثر دارای 5 حرف باشد");
            
         }
 

@@ -6,7 +6,7 @@ namespace NHCM.Persistence.NewModels
     public partial class Reference
     {
         public decimal Id { get; set; }
-        public decimal PersonId { get; set; }
+        public decimal? PersonId { get; set; }
         public DateTime ModifiedOn { get; set; }
         public string ModifiedBy { get; set; }
         public string ReferenceNo { get; set; }
@@ -29,5 +29,8 @@ namespace NHCM.Persistence.NewModels
         public string DocumentNumber { get; set; }
         public DateTime? DocumentDate { get; set; }
         public string Remark { get; set; }
+
+        public virtual Bank Bank { get; set; }
+        public virtual ReferenceType ReferenceType { get; set; }
     }
 }

@@ -19,5 +19,6 @@ namespace NHCM.Persistence.NewModels
         public int? NoofPages { get; set; }
 
         public virtual Person Person { get; set; }
+        public virtual PublicationType PublicationType { get; set; }
     }
 }

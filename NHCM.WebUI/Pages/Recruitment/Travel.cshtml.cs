@@ -19,12 +19,14 @@ namespace NHCM.WebUI.Pages.Recruitment
     {
 
        // public List<SelectListItem> ListOfLocations = new List<SelectListItem>();
-        public  void OnGet()
+        public  async Task  OnGetAsync()
         {
-            //List<Location> locations = new List<Location>();
-            //locations = await Mediator.Send(new GetLocationQuery() { ID = null, TypeID = 1 }); // 1 for countries
-            //foreach (Location l in locations)
-            //    ListOfLocations.Add(new SelectListItem(l.Dari, l.Id.ToString()));
+            //Get Locations
+            ListOfLocations = new List<SelectListItem>();
+            List<Location> locations = new List<Location>();
+            locations = await Mediator.Send(new GetLocationQuery() { ID = null });
+            foreach (Location l in locations)
+                ListOfLocations.Add(new SelectListItem(l.Dari, l.Id.ToString()));
         }
         public async Task<IActionResult> OnPostSave([FromBody]SavePersonTravelCommand command)
         {
@@ -35,11 +37,11 @@ namespace NHCM.WebUI.Pages.Recruitment
                 List<SearchedPersonTravel> dbResult = new List<SearchedPersonTravel>();
                 dbResult = await Mediator.Send(command);
 
-                return new JsonResult(new Types.Result()
+                return new JsonResult(new Types.UIResult()
                 {
 
                     Data = new { list = dbResult },
-                    Status = Types.Status.Success,
+                    Status = Types.UIStatus.Success,
                     Text = "اطلاعات سفرهای فرد موفقانه ثبت سیستم شد",
                     Description = string.Empty
 
@@ -48,11 +50,11 @@ namespace NHCM.WebUI.Pages.Recruitment
             }
             catch (Exception ex)
             {
-                return new JsonResult(new Types.Result()
+                return new JsonResult(new Types.UIResult()
                 {
 
                     Data = null,
-                    Status = Types.Status.Failure,
+                    Status = Types.UIStatus.Failure,
                     Text = CustomMessages.InternalSystemException,
                     Description = ex.Message + " \n StackTrace : " + ex.StackTrace
 
@@ -68,11 +70,11 @@ namespace NHCM.WebUI.Pages.Recruitment
                 List<SearchedPersonTravel> dbResult = new List<SearchedPersonTravel>();
                 dbResult = await Mediator.Send(command);
 
-                return new JsonResult(new Types.Result()
+                return new JsonResult(new Types.UIResult()
                 {
 
                     Data = new { list = dbResult },
-                    Status = Types.Status.Success,
+                    Status = Types.UIStatus.Success,
                     Text = string.Empty,
                     Description = string.Empty
 
@@ -82,11 +84,11 @@ namespace NHCM.WebUI.Pages.Recruitment
             }
             catch (Exception ex)
             {
-                return new JsonResult(new Types.Result()
+                return new JsonResult(new Types.UIResult()
                 {
 
                     Data = null,
-                    Status = Types.Status.Failure,
+                    Status = Types.UIStatus.Failure,
                     Text = CustomMessages.InternalSystemException,
                     Description = ex.Message + " \n StackTrace : " + ex.StackTrace
 
@@ -103,11 +105,11 @@ namespace NHCM.WebUI.Pages.Recruitment
                 
                 string dbResult  = await Mediator.Send(command);
 
-                return new JsonResult(new Types.Result()
+                return new JsonResult(new Types.UIResult()
                 {
 
                     Data = new { list = dbResult },
-                    Status = Types.Status.Success,
+                    Status = Types.UIStatus.Success,
                     Text = "اطلاعات مرتبط به سفر کارمند موفقانه حذف گردید",
                     Description = string.Empty
 
@@ -117,11 +119,11 @@ namespace NHCM.WebUI.Pages.Recruitment
             }
             catch (Exception ex)
             {
-                return new JsonResult(new Types.Result()
+                return new JsonResult(new Types.UIResult()
                 {
 
                     Data = null,
-                    Status = Types.Status.Failure,
+                    Status = Types.UIStatus.Failure,
                     Text = CustomMessages.InternalSystemException,
                     Description = ex.Message + " \n StackTrace : " + ex.StackTrace
 

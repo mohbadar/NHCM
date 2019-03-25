@@ -94,6 +94,8 @@ namespace NHCM.Application.Recruitment.Commands
                        toUpdateRecord.Remarks = request.Remarks;
 
                     await _context.SaveChangesAsync(cancellationToken);
+
+                    result = await _mediator.Send(new Queries.SearchPersonHealthReportQuery() { Id = toUpdateRecord.Id });
                 }
             }
             return result;

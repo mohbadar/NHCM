@@ -281,9 +281,20 @@ namespace PersianLibrary
 
         public static string GetFormatedString(DateTime? Date)
         {
-            PersianLibrary.PersianDate PD = PersianLibrary.PersianDate.Convert(Date.Value);
-            String PDString = PD.DayOfWeek + "، " + PD.Day + " " + PD.MonthString + " " + PD.Year;
-            return PDString;
+
+            // Changed for presentation
+            if(Date != null)
+            {
+                PersianLibrary.PersianDate PD = PersianLibrary.PersianDate.Convert(Date.Value);
+                String PDString = PD.DayOfWeek + "، " + PD.Day + " " + PD.MonthString + " " + PD.Year;
+                return PDString;
+            }
+            else
+            {
+                return null;
+            }
+
+           
         }
 
         public static System.Collections.Generic.List<object> GetPersianMonths()

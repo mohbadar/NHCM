@@ -8,15 +8,21 @@ namespace NHCM.Application.Exceptions
 {
     public class ValidationException : Exception
     {
-        public ValidationException()
-            : base("Validation Exception occured in Application layer")
-        {
-            Failures = new Dictionary<string, string[]>();
-        }
+        //public ValidationException()
+        //    : base("Validation Exception occured in Application layer")
+        //{
+
+        //}
+
+
 
         public ValidationException(List<ValidationFailure> failures)
-            : this()
+            : base(ErrorMessageBuilder(failures))
         {
+
+
+            Failures = new Dictionary<string, string[]>();
+
             var propertyNames = failures
                 .Select(e => e.PropertyName)
                 .Distinct();
@@ -28,10 +34,29 @@ namespace NHCM.Application.Exceptions
                     .Select(e => e.ErrorMessage)
                     .ToArray();
 
+
+
+
+
                 Failures.Add(propertyName, propertyFailures);
+
             }
+
+
         }
 
         public IDictionary<string, string[]> Failures { get; }
+
+
+
+        private static string ErrorMessageBuilder(List<ValidationFailure> failures)
+        {
+            string Message = string.Empty;
+            foreach (ValidationFailure vf in failures)
+            {
+                Message +="\n" + vf.ErrorMessage;
+            }
+            return Message;
+        }
     }
 }

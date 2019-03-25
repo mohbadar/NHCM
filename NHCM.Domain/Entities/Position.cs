@@ -43,6 +43,7 @@ namespace NHCM.Domain.Entities
         public virtual Position Parent { get; set; }
         public virtual ICollection<Position> InverseParent { get; set; }
         public virtual ICollection<PositionChange> PositionChange { get; set; }
+        public virtual ICollection<Selection> Selection { get; set; }
         //public virtual ICollection<PositionResponsibility> PositionResponsibility { get; set; }
     }
 }
