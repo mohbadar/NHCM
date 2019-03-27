@@ -75,7 +75,7 @@ namespace NHCM.WebUI.Pages.Organogram
                 return new JsonResult(new NHCM.WebUI.Types.UIResult()
                 {
                     Data = new { list = dbResult },
-                    Status = NHCM.WebUI.Types.UIStatus.Success,
+                    Status = UIStatus.Success,
                     Text = "تشکیل موفقانه ثبت سیستم شد",
                     Description = string.Empty
 

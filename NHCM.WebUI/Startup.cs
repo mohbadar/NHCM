@@ -21,6 +21,7 @@ using NHCM.Persistence;
 using NHCM.Persistence.Identity.Infrastructure;
 using NHCM.Persistence.Infrastructure.Identity;
 using NHCM.WebUI.Areas.Security;
+using NHCM.WebUI.Types;
 
 namespace NHCM.WebUI
 {
@@ -133,7 +134,7 @@ namespace NHCM.WebUI
 
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
-        public async void Configure(IApplicationBuilder app, IHostingEnvironment env)
+        public async void Configure(IApplicationBuilder app, IHostingEnvironment env, IServiceProvider serviceProvider)
         {
             if (env.IsDevelopment())
             {
@@ -147,15 +148,12 @@ namespace NHCM.WebUI
             }
 
 
+            // User type extension method used for providing configuration from config file in static methods.
+            serviceProvider.SetConfigurationProvider(Configuration);
 
-           
             app.UseHttpsRedirection();
             app.UseStaticFiles();
             app.UseAuthentication();
-
-           
-         //  await UserInitializer.SeedUser(userManager);
-
             app.UseCookiePolicy();
             app.UseMvc();
         }

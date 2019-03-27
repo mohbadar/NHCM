@@ -7,6 +7,9 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
+using Microsoft.AspNetCore.Mvc.Rendering;
+using NHCM.Application.Lookup.Queries;
+using NHCM.Domain.Entities;
 using NHCM.Persistence.Infrastructure.Identity;
 using NHCM.WebUI.Types;
 namespace NHCM.WebUI.Areas.Security.Pages
@@ -66,9 +69,17 @@ namespace NHCM.WebUI.Areas.Security.Pages
             _signInManager = signInManager;
            
         }
-        public void OnGetAsync(string url = null)
+        public async Task OnGetAsync(string url = null)
         {
             ReturnUrl = url;
+
+
+            //Get Organization
+            ListOfOrganization = new List<SelectListItem>();
+            List<Organization> organizations = new List<Organization>();
+            organizations = await Mediator.Send(new GetOrganiztionQuery() { Id = null });
+            foreach (Organization organization in organizations)
+                ListOfOrganization.Add(new SelectListItem(organization.Dari, organization.Id.ToString()));
         }
 
 

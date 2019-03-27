@@ -52,7 +52,6 @@ namespace NHCM.Application.Recruitment.Queries
             if (request.Id != null)
             {
 
-
                 result = await (from pr in _context.Reference
                                 join l in _context.Location on pr.LocationId equals l.Id into prL
                                 from resultLocation in prL.DefaultIfEmpty()
@@ -60,20 +59,20 @@ namespace NHCM.Application.Recruitment.Queries
                                 join rt in _context.ReferenceType on pr.ReferenceTypeId equals rt.Id into prRt
                                 from resultReferenceType in prRt.DefaultIfEmpty()
 
-                              
+
                                 where pr.Id == request.Id
                                 select new SearchedPersonReference
-                                { 
-                                    Id = pr.Id, 
-                                    PersonId = pr.PersonId, 
-                                    ReferenceNo = pr.ReferenceNo,  
+                                {
+                                    Id = pr.Id,
+                                    PersonId = pr.PersonId,
+                                    ReferenceNo = pr.ReferenceNo,
                                     FirstName = pr.FirstName,
                                     LastName = pr.LastName,
                                     FatherName = pr.FatherName,
                                     GrandFatherName = pr.GrandFatherName,
                                     Occupation = pr.Occupation,
                                     Organization = pr.Organization,
-                                    TelephoneNo = pr.TelephoneNo, 
+                                    TelephoneNo = pr.TelephoneNo,
                                     District = pr.District,
                                     LocationId = pr.LocationId,
                                     RelationShip = pr.RelationShip,
@@ -81,7 +80,8 @@ namespace NHCM.Application.Recruitment.Queries
                                     Remark = pr.Remark,
 
                                     ReferenceTypeText = resultReferenceType.Name,
-                                    LocationText = resultLocation.Dari 
+                                    LocationText = resultLocation.Dari
+
 
 
                                 }).ToListAsync(cancellationToken);

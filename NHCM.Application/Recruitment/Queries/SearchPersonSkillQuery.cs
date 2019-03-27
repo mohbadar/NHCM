@@ -23,8 +23,9 @@ namespace NHCM.Application.Recruitment.Queries
         public DateTime? CertificationDate { get; set; }
         public DateTime? StartDate { get; set; }
         public DateTime? EndDate { get; set; }
-         
 
+        public string ExpertiseText { get; set; }
+        public string CertificationText { get; set; } 
         public String StartDateText { get; set; }
         public String EndDateText { get; set; }
 
@@ -69,11 +70,13 @@ namespace NHCM.Application.Recruitment.Queries
                                         ExpertiseText = resultse.Name, 
                                         CertificationText = resultCert.Name, 
                                         Remarks=ps.Remarks,
+                                        
+
                                         StartDateText = PersianLibrary.PersianDate.GetFormatedString(ps.StartDate.Value),
                                         EndDateText = PersianLibrary.PersianDate.GetFormatedString(ps.EndDate.Value)
 
 
-                                    }).ToListAsync(cancellationToken);
+                                    }).OrderBy(s => s.EndDate).ToListAsync(cancellationToken);
                 }
             }
 
@@ -113,7 +116,7 @@ namespace NHCM.Application.Recruitment.Queries
                                         EndDateText = PersianLibrary.PersianDate.GetFormatedString(ps.EndDate.Value)
 
 
-                                    }).ToListAsync(cancellationToken);
+                                    }).OrderBy(s => s.EndDate).ToListAsync(cancellationToken);
                 } 
             } 
             return result ;

@@ -125,30 +125,24 @@ namespace NHCM.WebUI.Pages.Recruitment
                 List<SearchedPersonModel> SaveResult = new List<SearchedPersonModel>();
 
                 SaveResult = await Mediator.Send(command);
-                return new JsonResult(new NHCM.WebUI.Types.UIResult()
+                return new JsonResult(new UIResult()
                 {
                     Data = new { list = SaveResult },
-                    Status = NHCM.WebUI.Types.UIStatus.Success,
+                    Status = UIStatus.Success,
                     Text = "اطلاعات مستخدم موفقانه ثبت سیستم شد",
-                    Description = ""
+                    Description = string.Empty
                 });
             }
             catch (Exception ex)
             {
-
-
                 return new JsonResult(new UIResult()
                 {
-                    Data = null,
-                    Status = NHCM.WebUI.Types.UIStatus.Failure,
-                    Text = ex.GetType().Equals(typeof(Application.Exceptions.ValidationException)) ? CustomMessages.ValidationException : CustomMessages.InternalSystemException,
-                    Description = Convert.ToBoolean(_configuration["ShowStackTrace"]) == true ? ex.Message + ex.StackTrace : ex.Message
-
+                    Data =          null,
+                    Status =        UIStatus.Failure,
+                    Text =          CustomMessages.StateExceptionTitle(ex),
+                    Description =   CustomMessages.DescribeException(ex)
 
                 });
-
-
-
             }
         }
 

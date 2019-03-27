@@ -5,7 +5,7 @@ using System.Collections.Generic;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using System.Threading;
 using NHCM.Domain.Entities;
-
+using Microsoft.Extensions.Configuration;
 
 namespace NHCM.WebUI.Types
 {
@@ -15,12 +15,11 @@ namespace NHCM.WebUI.Types
         private IMediator _mediator;
         protected IMediator Mediator => _mediator ?? (_mediator = HttpContext.RequestServices.GetService<IMediator>());
 
-
-
-
-
-
-
+        //private IConfiguration _configuration;
+        //public BasePage(IConfiguration configuration)
+        //{
+        //    _configuration = configuration;
+        //}
 
         public List<SelectListItem> ListOfMaritalStatus;
         public List<SelectListItem> ListOfGenders;
@@ -60,20 +59,6 @@ namespace NHCM.WebUI.Types
 
 
 
-        //public override async Task OnPageHandlerExecutionAsync(PageHandlerExecutingContext context, PageHandlerExecutionDelegate next)
-        //{
-
-        //    List<NHCM.Domain.Entities.Result> results = new List<NHCM.Domain.Entities.Result>();
-        //    results = await Mediator.Send(new GetResultQuery() { ID = null });
-        //    foreach (NHCM.Domain.Entities.Result result in results)
-        //        ListOfResult.Add(new SelectListItem() { Text = result.Name, Value = result.Id.ToString() });
-
-
-          
-
-
-
-        //    await next.Invoke();
-        //}
+       
     }
 }

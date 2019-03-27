@@ -30,6 +30,7 @@
                         <div class="form-group has-feedback has-feedback-left">
                             <label class="text-bold">
                                 نوع اداره
+                                <span class="text-danger">&nbsp;*</span>
                             </label>
                             <select id="uxexorganizationtypeid" asp-items="@Model.ListOfOrganizationType" name="uxexOrganizationTypeID" class="select" required>
                                 <option></option>
@@ -86,8 +87,7 @@
                             <label class="text-bold">
                                 قدم/رتبه
                             </label>
-                            @*this list should show only spacific list or Rank table "Qadam"*@
-                            <select id="uxexpromotionIid" asp-items="@Model.ListOfRanks" name="uxexPromotionID" class="select">
+                            <select id="uxexpromotionid" asp-items="@Model.ListOfRanks" name="uxexPromotionID" class="select">
                                 <option></option>
                             </select>
                         </div>
@@ -111,19 +111,18 @@
                             </label>
                             <div class="input-group">
                                 <span class="input-group-addon"><i class="icon-calendar3"></i></span>
-                                <input type="text" id="uxexstartdate1" name="uxexStartDate" sibling="uxexstartdate" class="form-control Shamsi" placeholder="تاریخ آغاز" aria-label="date1" aria-describedby="date1" required />
+                                <input type="text" id="uxexstartdate1" name="uxexstartdate1" sibling="uxexstartdate" class="form-control Shamsi" placeholder="تاریخ آغاز" aria-label="date1" aria-describedby="date1" required />
                             </div>
                         </div>
                     </div>
                     <div class="col-md-3 col-sm-12 col-xs-12 pull-right">
                         <div class="form-group">
                             <label class="text-bold">
-
                                 <span class="text-danger">&nbsp;*</span>
                             </label>
                             <div class="input-group">
                                 <span class="input-group-addon"><i class="icon-calendar3"></i></span>
-                                <input type="text" id="uxexstartdate" name="uxexstartDate" sibling="uxexstartdate1" class="form-control Miladi" placeholder="معادل" aria-label="date1" aria-describedby="date1" required />
+                                <input type="text" id="uxexstartdate" name="uxexstartdate" sibling="uxexstartdate1" class="form-control Miladi" placeholder="معادل" aria-label="date1" aria-describedby="date1" required />
                             </div>
                         </div>
                     </div>
@@ -136,7 +135,7 @@
                             </label>
                             <div class="input-group">
                                 <span class="input-group-addon"><i class="icon-calendar3"></i></span>
-                                <input type="text" id="uxexenddate1" name="uxexendDate" sibling="uxexenddate" class="form-control Shamsi" placeholder="تاریخ ختم" aria-label="date1" aria-describedby="date1" required />
+                                <input type="text" id="uxexenddate1" name="uxexenddate1" sibling="uxexenddate" class="form-control Shamsi" placeholder="تاریخ ختم" aria-label="date1" aria-describedby="date1" required />
                             </div>
                         </div>
                     </div>
@@ -144,12 +143,11 @@
                     <div class="col-md-3 col-sm-12 col-xs-12 pull-right">
                         <div class="form-group">
                             <label class="text-bold">
-
                                 <span class="text-danger">&nbsp;*</span>
                             </label>
                             <div class="input-group">
                                 <span class="input-group-addon"><i class="icon-calendar3"></i></span>
-                                <input type="text" id="uxexenddate" name="uxexEndDate" sibling="uxexenddate1" class="form-control Miladi" placeholder="معادل" aria-label="date1" aria-describedby="date1" required />
+                                <input type="text" id="uxexenddate" name="uxexenddate" sibling="uxexenddate1" class="form-control Miladi" placeholder="معادل" aria-label="date1" aria-describedby="date1" required />
                             </div>
                         </div>
                     </div>
@@ -192,8 +190,8 @@
                         <tr>
                             <th colname="organization">موسسه</th>
                             <th colname="Designation">وظیفه</th>
-                            <th colname="RankText">بست</th>
-                            <th colname="RankText">قدم/رتبه</th>
+                            <th colname="RankText">بست</th> 
+                            <th colname="PromotionText">قدم/رتبه</th>
                             <th colname="LocationText">محل</th>
                             <th colname="ContactInfo">معلومات تماس</th> >
                             <th colname="StartDateText">تاریخ آغاز</th>

@@ -10,7 +10,7 @@ using NHCM.Persistence.Extensions;
 using NHCM.Persistence;
 using System.Linq;
 using Microsoft.EntityFrameworkCore;
-
+using NHCM.Application.Exceptions;
 using NHCM.Application.Recruitment.Queries;
 using NHCM.Application.Recruitment.Models;
 using NHCM.Application.Common;
@@ -80,6 +80,9 @@ namespace NHCM.Application.Recruitment.Commands
            
 
             List<SearchedPersonModel> result = new List<SearchedPersonModel>();
+
+            //  throw new BusinessRulesException("این استثنا به شکل امتحانی از لایه سیستم");
+
 
             // Save
             if (request.Id == null || request.Id == default(decimal))
@@ -152,7 +155,7 @@ namespace NHCM.Application.Recruitment.Commands
 
                     // Search and Return the saved object
                     //PersonCommon common = new PersonCommon(_context);
-                    
+
                     result = await _personCommon.SearchPerson(new SearchPersonQuery() { Id = person.Id });
                     return result;
                 }

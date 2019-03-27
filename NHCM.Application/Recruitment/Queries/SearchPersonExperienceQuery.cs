@@ -13,7 +13,7 @@ namespace NHCM.Application.Recruitment.Queries
 {
   public   class SearchPersonExperienceQuery : IRequest<List<SearchedPersonExperience>>
     {
-        
+         
         public decimal? Id { get; set; }
         public decimal? PersonId { get; set; }
 
@@ -22,8 +22,8 @@ namespace NHCM.Application.Recruitment.Queries
         public short? RequestNo { get; set; }
         public int? LocationId { get; set; }
         public string DocumentNo { get; set; }
-        public short? RankId { get; set; }
-        public short? PromotionId { get; set; }
+        public short RankId { get; set; }
+        public short PromotionId { get; set; }
         public DateTime? StartDate { get; set; }
         public DateTime? EndDate { get; set; }
         public string ContactInfo { get; set; }
@@ -32,6 +32,8 @@ namespace NHCM.Application.Recruitment.Queries
         public bool? Approved { get; set; }
         public string Remarks { get; set; }
         public int? ExperienceTypeId { get; set; }
+
+         
 
         public string LocationText { get; set; }
         public string RankText { get; set; }
@@ -72,8 +74,8 @@ namespace NHCM.Application.Recruitment.Queries
                                 join exT in _context.ExperienceType on pe.ExperienceTypeId equals exT.Id into peExT
                                 from resultExperienceType in peExT.DefaultIfEmpty()
 
-                                join pro in _context.Result on pe.PromotionId equals pro.Id into pePro
-                                from resultPromotion in pePro.DefaultIfEmpty()
+                                join pr in _context.Result on pe.PromotionId equals pr.Id into promotion
+                                from resultpromotion in promotion.DefaultIfEmpty()
 
                                 where pe.Id == request.Id
                                 select new SearchedPersonExperience
@@ -100,14 +102,14 @@ namespace NHCM.Application.Recruitment.Queries
 
                                     LocationText =resultLocation.Dari,
                                     RankText =  resultRank.Name,
-                                    PromotionText = resultPromotion.Dari,
+                                    PromotionText = resultpromotion.Dari,
                                     JobStatusText =resultJobStatus.Name,
                                     ExperienceTypeText = resultExperienceType.Dari,
 
                                     StartDateText = PersianLibrary.PersianDate.GetFormatedString(pe.StartDate.Value),
                                     EndDateText = PersianLibrary.PersianDate.GetFormatedString(pe.EndDate.Value)
 
-                                }).ToListAsync();
+                                }).OrderByDescending(e => e.EndDate).ToListAsync(cancellationToken);
             }
 
             // Serach based on PersonID
@@ -126,8 +128,9 @@ namespace NHCM.Application.Recruitment.Queries
                                 join exT in _context.ExperienceType on pe.ExperienceTypeId equals exT.Id into peExT
                                 from resultExperienceType in peExT.DefaultIfEmpty()
 
-                                join pro in _context.Result on pe.PromotionId equals pro.Id into pePro
-                                from resultPromotion in pePro.DefaultIfEmpty()
+                                join pr in _context.Result on pe.PromotionId equals pr.Id into promotion
+                                from resultpromotion in promotion.DefaultIfEmpty()
+
 
                                 where pe.PersonId == request.PersonId
                                 select new SearchedPersonExperience
@@ -150,19 +153,17 @@ namespace NHCM.Application.Recruitment.Queries
                                     Approved = pe.Approved,
                                     Remarks = pe.Remarks,
                                     ExperienceTypeId = pe.ExperienceTypeId,
-
-
+                                     
                                     LocationText = resultLocation.Dari,
-                                    RankText = resultRank.Name, 
-                                    PromotionText = resultPromotion.Dari,
+                                    RankText = resultRank.Name,
+                                    PromotionText = resultpromotion.Dari,
                                     JobStatusText = resultJobStatus.Name,
                                     ExperienceTypeText = resultExperienceType.Dari,
-
 
                                     StartDateText = PersianLibrary.PersianDate.GetFormatedString(pe.StartDate.Value),
                                     EndDateText = PersianLibrary.PersianDate.GetFormatedString(pe.EndDate.Value)
 
-                                }).ToListAsync();
+                                }).OrderByDescending(e => e.EndDate).ToListAsync(cancellationToken);
             }
 
             

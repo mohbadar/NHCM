@@ -63,7 +63,7 @@ namespace NHCM.Application.Recruitment.Queries
                                         StatusText = resulths.Dari
                                        
 
-                                    }).ToListAsync(cancellationToken);
+                                    }).OrderBy(h => h.ReportDate).ToListAsync(cancellationToken);
                 }
             }
 
@@ -93,7 +93,7 @@ namespace NHCM.Application.Recruitment.Queries
                                         StatusText = resulths.Dari
 
 
-                                    }).ToListAsync(cancellationToken);
+                                    }).OrderBy(h => h.ReportDate).ToListAsync(cancellationToken);
                 }
             }
             return result;

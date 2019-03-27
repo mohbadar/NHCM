@@ -63,7 +63,7 @@ namespace NHCM.Application.Recruitment.Queries
                                         ReturnDateText = PersianLibrary.PersianDate.GetFormatedString(pt.ReturnDate.Value)
 
 
-                                    }).ToListAsync(cancellationToken);
+                                    }).OrderByDescending(t => t.TravelDate).ToListAsync(cancellationToken);
                 }
             }
 
@@ -93,7 +93,7 @@ namespace NHCM.Application.Recruitment.Queries
                                         ReturnDateText = PersianLibrary.PersianDate.GetFormatedString(pt.ReturnDate.Value)
 
 
-                                    }).ToListAsync(cancellationToken);
+                                    }).OrderByDescending(t => t.TravelDate).ToListAsync(cancellationToken);
                 }
             }
             return result;

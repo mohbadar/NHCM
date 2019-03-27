@@ -66,7 +66,7 @@ namespace NHCM.Application.Recruitment.Queries
                                     PublicationTypeText = pt.Dari
 
 
-                                }).ToListAsync(cancellationToken);
+                                }).OrderBy(p => p.PublishDate).ToListAsync(cancellationToken);
             }
 
 
@@ -94,7 +94,7 @@ namespace NHCM.Application.Recruitment.Queries
                                     PublicationTypeText = pt.Dari
 
 
-                                }).ToListAsync(cancellationToken);
+                                }).OrderBy(p => p.PublishDate).ToListAsync(cancellationToken);
             }
 
 
