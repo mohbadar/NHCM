@@ -6,9 +6,6 @@
         $("#overlay").hide();
     });
 
-
-
-
 var clean = window.clean = {};
 (function () {
     clean = {
@@ -557,6 +554,7 @@ var clean = window.clean = window.clean || {};
             var self = this;
             var file = {};
 
+
             file.Name = e;
             var xhr = new XMLHttpRequest();
 
@@ -589,12 +587,14 @@ var clean = window.clean = window.clean || {};
                     var colname = self.grid.cols[i].toLowerCase();
                     for (var key in ob) {
                         if (key.toLowerCase() == colname) {
+
                             if (colname != 'path') {
                                 var va = ob[key];
                                 if (clean.isEmpty(ob[key]))
                                     va = 'درج نگردیده';
                                 column = column + "<td col='" + key.toLowerCase() + "'>" + va + "</td>";
                             }
+
 
                             else {
                                 var temp = '<button type="button" downloadpath="$path" class="btn-link download-on-click"><i class="icon-download position-right"></i>دریافت فایل</button>'
@@ -675,9 +675,11 @@ var clean = window.clean = window.clean || {};
         },
         others: function (v) {
 
+
            
            var self = r || this;
             
+
             var path = self.path + '/' + v.name;
             self.fields.each(function () {
                 var fld = $(this);
@@ -699,8 +701,10 @@ var clean = window.clean = window.clean || {};
             });
         },
         next: function () {
+
         
             
+
             var v = {};
             v.name = 'next';
             self.others(v);
@@ -809,7 +813,9 @@ var clean = window.clean = window.clean || {};
             var path = '/' + formname.substring(formname.indexOf("_") + 1).replace('_', '/') + '/Get';
             var data = {};
             if (!$.isEmptyObject(self.page.mainform.record)) {
+
                 clean.data.get({
+
                     async: false, url: path, data: clean.data.json.write(data), dataType: 'html',
                     success: function (msg) {
                         var html = msg;

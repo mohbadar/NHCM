@@ -10,12 +10,10 @@ namespace NHCM.Persistence
         public HCMContext()
         {
         }
-
         public HCMContext(DbContextOptions<HCMContext> options)
             : base(options)
         {
         }
-
         public virtual DbSet<Address> Address { get; set; }
         public virtual DbSet<AssetType> AssetType { get; set; }
         public virtual DbSet<Gender> Gender { get; set; }
@@ -58,6 +56,7 @@ namespace NHCM.Persistence
         public virtual DbSet<Documents> Document { get; set; }
 
 
+
         public virtual DbSet<Selection> Selection { get; set; }
         public virtual DbSet<EventType> EventType { get; set; }
 
@@ -73,142 +72,77 @@ namespace NHCM.Persistence
 
 
 
+
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
             if (!optionsBuilder.IsConfigured)
             {
-
                 optionsBuilder.UseNpgsql("Server=localhost; Database =HCM; Username=postgres; Password=kasperskyantigeral");
             }
         }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
-
             modelBuilder.ApplyConfigurationsFromAssembly(typeof(HCMContext).Assembly);
-
-
-
-
             modelBuilder.HasSequence("expertise_id_seq");
             modelBuilder.HasSequence("documentlog_id_seq");
-
             modelBuilder.HasSequence("documents_id_seq");
-
             modelBuilder.HasSequence("organization_id_seq");
-
             modelBuilder.HasSequence("photo_id_seq");
-
             modelBuilder.HasSequence("processtracking_id_seq");
-
          //   modelBuilder.HasSequence("trainingparticipant_id_seq");
-
             modelBuilder.HasSequence("evaluation_id_seq");
-
             modelBuilder.HasSequence("workplan_id_seq");
-
             modelBuilder.HasSequence("addresstype_id_seq");
-
             modelBuilder.HasSequence("assettype_id_seq");
-
             modelBuilder.HasSequence("gender_id_seq");
-
             modelBuilder.HasSequence("institutetype_id_seq");
-
             modelBuilder.HasSequence("jobstatus_id_seq");
-
             modelBuilder.HasSequence("language_id_seq");
-
             modelBuilder.HasSequence("leavetype_id_seq");
-
             modelBuilder.HasSequence("location_id_seq");
-
             modelBuilder.HasSequence("major_id_seq");
-
             modelBuilder.HasSequence("maritalstatus_id_seq");
-
             modelBuilder.HasSequence("nationality_id_seq");
-
             modelBuilder.HasSequence("offdutyreason_id_seq");
-
             modelBuilder.HasSequence("organizationtype_id_seq");
-
             modelBuilder.HasSequence("orgunittype_id_seq");
-
             modelBuilder.HasSequence("politicalrelation_id_seq");
-
             modelBuilder.HasSequence("positiontype_id_seq");
-
             modelBuilder.HasSequence("rank_id_seq");
-
             modelBuilder.HasSequence("relationship_id_seq");
-
             modelBuilder.HasSequence("religion_id_seq");
-
             modelBuilder.HasSequence("salarytype_id_seq");
-
             modelBuilder.HasSequence("status_id_seq");
-
             modelBuilder.HasSequence("organogram_id_seq");
-
             modelBuilder.HasSequence("orgunit_id_seq");
-
             modelBuilder.HasSequence("position_id_seq");
-
             modelBuilder.HasSequence("positionrequirements_id_seq");
-
             modelBuilder.HasSequence("positionresponsibility_id_seq");
-
             modelBuilder.HasSequence("complain_id_seq");
-
             modelBuilder.HasSequence("event_id_seq");
-
             modelBuilder.HasSequence("governmenthelp_id_seq");
-
             modelBuilder.HasSequence("owner_id_seq");
-
             modelBuilder.HasSequence("promotion_id_seq");
-
             modelBuilder.HasSequence("punishment_id_seq");
-
             modelBuilder.HasSequence("retirement_id_seq");
 
-           
-
             modelBuilder.HasSequence("attendance_id_seq");
-
             modelBuilder.HasSequence("education_id_seq");
-
             modelBuilder.HasSequence("employeepormotion_id_seq");
-
             modelBuilder.HasSequence("experience_id_seq");
-
             modelBuilder.HasSequence("healthreport_id_seq");
-
             modelBuilder.HasSequence("idcard_id_seq");
-
             modelBuilder.HasSequence("judgespromotion_id_seq");
-
             modelBuilder.HasSequence("militaryservice_id_seq");
-
             modelBuilder.HasSequence("person_id_seq");
-
             modelBuilder.HasSequence("personasset_id_seq");
-
             modelBuilder.HasSequence("personcharacteristic_id_seq");
-
             modelBuilder.HasSequence("personidentification_id_seq");
-
             modelBuilder.HasSequence("personlanguage_id_seq");
-
             modelBuilder.HasSequence("personskill_id_seq");
-
             modelBuilder.HasSequence("publication_id_seq");
-
-       
-
             modelBuilder.HasSequence("result_id_seq");
-
             modelBuilder.HasSequence<int>("FolderPath_ID_seq");
             modelBuilder.HasSequence("relative_id_seq");
             modelBuilder.HasSequence("publicationtype_id_seq");
@@ -220,8 +154,10 @@ namespace NHCM.Persistence
             modelBuilder.HasSequence("skilltype_id_seq");
             modelBuilder.HasSequence("screens_id_seq");
             modelBuilder.HasSequence("educationlevel_id_seq");
+
             modelBuilder.HasSequence("selection_id_seq");
             modelBuilder.HasSequence("eventtype_id_seq");
+
             modelBuilder.HasSequence<int>("DocumentType_ID_seq");
         }
     }

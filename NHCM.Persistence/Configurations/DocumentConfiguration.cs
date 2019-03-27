@@ -12,12 +12,13 @@ namespace NHCM.Persistence.Configurations
         public void Configure(EntityTypeBuilder<Documents> builder)
         {
 
-          
                 builder.ToTable("Documents", "dbo");
 
                 builder.Property(e => e.Id)
                     .HasColumnName("ID")
+
                     .HasDefaultValueSql("nextval('dbo.\"Documents_ID_seq\"'::regclass)");
+
 
                 builder.Property(e => e.ContentType)
                     .IsRequired()
@@ -31,6 +32,7 @@ namespace NHCM.Persistence.Configurations
 
                 builder.Property(e => e.EncryptionKey).HasMaxLength(120);
 
+
                 builder.Property(e => e.Item).HasMaxLength(50);
 
                 builder.Property(e => e.LastDownloadDate).HasColumnType("timestamp with time zone");
@@ -43,7 +45,9 @@ namespace NHCM.Persistence.Configurations
                     .HasColumnType("timestamp with time zone")
                     .HasDefaultValueSql("now()");
 
+
                 builder.Property(e => e.Module).HasMaxLength(50);
+
 
                 builder.Property(e => e.Path)
                     .IsRequired()
@@ -56,12 +60,13 @@ namespace NHCM.Persistence.Configurations
 
                 builder.Property(e => e.ReferenceNo).HasMaxLength(14);
 
+
                 builder.Property(e => e.Root).HasMaxLength(100);
+
 
                 builder.Property(e => e.StatusId).HasColumnName("StatusID");
 
                 builder.Property(e => e.UploadDate).HasColumnType("timestamp with time zone");
-          
 
         }
     }

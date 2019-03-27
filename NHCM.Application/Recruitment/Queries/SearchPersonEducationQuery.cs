@@ -60,6 +60,7 @@ namespace NHCM.Application.Recruitment.Queries
                                     EducationLevelId = e.EducationLevelId,
                                     EducationLevelText = resultElv.Name,
                                     StartDate = e.StartDate,
+
                                     EndDate = e.EndDate,
                                     StartDateText = PersianLibrary.PersianDate.GetFormatedString(e.StartDate.Value),
                                     EndDateText = PersianLibrary.PersianDate.GetFormatedString(e.EndDate.Value),
@@ -72,6 +73,7 @@ namespace NHCM.Application.Recruitment.Queries
                                     Major = e.Major,
                                     Remarks = e.Remarks,
                                     OfficialDocumentNo = e.OfficialDocumentNo,
+
                                 }).OrderByDescending(c => c.EndDate).ToListAsync(cancellationToken);
             }
             else if (request.PersonId != null)
@@ -89,6 +91,7 @@ namespace NHCM.Application.Recruitment.Queries
                                     EducationLevelId = e.EducationLevelId,
                                     EducationLevelText = resultElv.Name,
                                     StartDate = e.StartDate,
+
                                     EndDate = e.EndDate,
                                     StartDateText = PersianLibrary.PersianDate.GetFormatedString(e.StartDate.Value),
                                     EndDateText = PersianLibrary.PersianDate.GetFormatedString(e.EndDate.Value),
@@ -101,6 +104,7 @@ namespace NHCM.Application.Recruitment.Queries
                                     Major = e.Major,
                                     Remarks = e.Remarks,
                                     OfficialDocumentNo = e.OfficialDocumentNo,
+
                                 }).OrderByDescending(c=>c.EndDate).ToListAsync(cancellationToken);
             }
             return result;
