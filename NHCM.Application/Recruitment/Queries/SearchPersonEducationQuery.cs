@@ -20,7 +20,7 @@ namespace NHCM.Application.Recruitment.Queries
         public decimal? PersonId { get; set; }
         public short EducationLevelId { get; set; }
         public DateTime? StartDate { get; set; }
-        public DateTime? Enddate { get; set; }
+        public DateTime? EndDate { get; set; }
         public string OfficialDocumentNo { get; set; }
         public int? LocationId { get; set; }
         public string Institute { get; set; }
@@ -60,18 +60,20 @@ namespace NHCM.Application.Recruitment.Queries
                                     EducationLevelId = e.EducationLevelId,
                                     EducationLevelText = resultElv.Name,
                                     StartDate = e.StartDate,
-                                    EndDate = e.Enddate,
+
+                                    EndDate = e.EndDate,
                                     StartDateText = PersianLibrary.PersianDate.GetFormatedString(e.StartDate.Value),
-                                    EndDateText = PersianLibrary.PersianDate.GetFormatedString(e.Enddate.Value),
+                                    EndDateText = PersianLibrary.PersianDate.GetFormatedString(e.EndDate.Value),
                                     LocationId = e.LocationId,
                                     LocationText = resultEL.Dari,
-                                    Institute = StringCleaner.CleanValue(e.Institute),
-                                    Faculty = StringCleaner.CleanValue(e.Faculty),
-                                    Department = StringCleaner.CleanValue(e.Department),
-                                    Course = StringCleaner.CleanValue(e.Course),
-                                    Major = StringCleaner.CleanValue(e.Major),
-                                    Remarks = StringCleaner.CleanValue(e.Remarks),
-                                    OfficialDocumentNo = StringCleaner.CleanValue(e.OfficialDocumentNo),
+                                    Institute = e.Institute,
+                                    Faculty = e.Faculty,
+                                    Department = e.Department,
+                                    Course = e.Course,
+                                    Major = e.Major,
+                                    Remarks = e.Remarks,
+                                    OfficialDocumentNo = e.OfficialDocumentNo,
+
                                 }).OrderByDescending(c => c.EndDate).ToListAsync(cancellationToken);
             }
             else if (request.PersonId != null)
@@ -89,18 +91,20 @@ namespace NHCM.Application.Recruitment.Queries
                                     EducationLevelId = e.EducationLevelId,
                                     EducationLevelText = resultElv.Name,
                                     StartDate = e.StartDate,
-                                    EndDate = e.Enddate,
+
+                                    EndDate = e.EndDate,
                                     StartDateText = PersianLibrary.PersianDate.GetFormatedString(e.StartDate.Value),
-                                    EndDateText = PersianLibrary.PersianDate.GetFormatedString(e.Enddate.Value),
-                                    LocationId =  e.LocationId,
+                                    EndDateText = PersianLibrary.PersianDate.GetFormatedString(e.EndDate.Value),
+                                    LocationId = e.LocationId,
                                     LocationText = resultEL.Dari,
-                                    Institute = StringCleaner.CleanValue(e.Institute),
-                                    Faculty = StringCleaner.CleanValue(e.Faculty),
-                                    Department = StringCleaner.CleanValue(e.Department),
-                                    Course = StringCleaner.CleanValue(e.Course),
-                                    Major = StringCleaner.CleanValue(e.Major), 
-                                    Remarks = StringCleaner.CleanValue(e.Remarks), 
-                                    OfficialDocumentNo = StringCleaner.CleanValue(e.OfficialDocumentNo),
+                                    Institute = e.Institute,
+                                    Faculty = e.Faculty,
+                                    Department = e.Department,
+                                    Course = e.Course,
+                                    Major = e.Major,
+                                    Remarks = e.Remarks,
+                                    OfficialDocumentNo = e.OfficialDocumentNo,
+
                                 }).OrderByDescending(c=>c.EndDate).ToListAsync(cancellationToken);
             }
             return result;

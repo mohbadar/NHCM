@@ -1,0 +1,158 @@
+﻿@page
+@model NHCM.WebUI.Areas.Security.Pages.RegisterModel
+
+@{ 
+    Layout = "Security/Shared/_SecuritySharedLayout";
+}
+
+
+
+
+
+<div class="panel-heading">
+    <h1 class="panel-title">ایجاد نام کاربری</h1>
+</div>
+
+<div class="panel-body">
+    <form asp-route-returnUrl="@Model.ReturnUrl" method="post" class="form main-form page-component" type="form">
+        <fieldset class="content-group">
+            <legend>برای ایجاد حساب کاربری لطفا از فورم ذیل استفاده کنید</legend>
+            <div class="row">
+                <div class="col-md-6 pull-right" >
+
+                    <div class="row">
+                        <div class="col-md-12 col-sm-12 col-xs-12 pull-right">
+                            <div class="form-group">
+                                <label class="text-bold">
+                                    موسسه
+                                    <span class="text-danger"></span>
+                                </label>
+                               <select asp-for="@Model.OrganizationID" asp-items="@Model.ListOfOrganization" class="form-control select"></select>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-12 col-sm-12 col-xs-12 pull-right">
+                            <div class="form-group has-feedback has-feedback-left">
+                                <label asp-for="@Model.Email" class="text-bold">
+
+
+                                </label>
+
+                                <span asp-validation-for="@Model.Email" class="text-danger"></span>
+                                <input asp-for="@Model.Email" class="form-control" />
+                                <div class="form-control-feedback">
+                                    <i class="icon-mail5 text-size-base">
+
+                                    </i>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-12 col-sm-12 col-xs-12 pull-right">
+                            <div class="form-group has-feedback has-feedback-left">
+                                <label asp-for="@Model.UserName" class="text-bold">
+
+
+                                </label>
+
+                                <span asp-validation-for="@Model.UserName" class="text-danger"></span>
+                                <input asp-for="@Model.UserName" class="form-control" />
+                                <div class="form-control-feedback">
+                                    <i class="icon-user text-size-base">
+
+                                    </i>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-12 col-sm-12 col-xs-12 pull-right">
+                            <div class="form-group has-feedback has-feedback-left">
+                                <label asp-for="@Model.Password" class="text-bold">
+
+
+                                </label>
+
+                                <span asp-validation-for="@Model.Password" class="text-danger"></span>
+                                <input asp-for="@Model.Password" class="form-control" />
+                                <div class="form-control-feedback">
+                                    <i class="icon-lock text-size-base">
+
+                                    </i>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-12 col-sm-12 col-xs-12 pull-right">
+                            <div class="form-group has-feedback has-feedback-left">
+                                <label asp-for="@Model.ConfirmPassword" class="text-bold">
+
+                                </label>
+
+
+                                <span asp-validation-for="@Model.ConfirmPassword" class="text-danger"></span>
+                                <input asp-for="@Model.ConfirmPassword" class="form-control" />
+                                <div class="form-control-feedback">
+                                    <i class="icon-lock text-size-base"></i>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-md-5 pull-right" >
+                    <div class="row">
+                        <div class="col-md-12">
+
+
+                            @if (ModelState.ErrorCount > 0)
+                            {
+                                <label class="control-label text-bold text-danger">
+                                   لطفا دقت نماید
+                                </label>
+                                <ul>
+                                    @foreach (var item in ViewData.ModelState.Values)
+                                    {
+                                        foreach (var error in item.Errors)
+                                        {
+                                            <li style="color:red">@error.ErrorMessage</li>
+                                        }
+                                    }
+                                </ul>
+                            }
+
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </fieldset>
+     
+
+
+
+
+        <div class="row div-form-control">
+            <div class="col-md-12">
+                <div class="form-group">
+                    <button type="submit" class="btn btn-primary" action="save"><i class="icon-floppy-disk position-right"></i>ثبت کاربر</button>
+
+                </div>
+            </div>
+        </div>
+    </form>
+</div>
+
+
+
+
+
+
+
+@section Scripts{ 
+
+    <partial name="Security/Shared/_ValidationScriptsPartial" />
+}

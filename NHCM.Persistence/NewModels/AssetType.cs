@@ -8,6 +8,7 @@ namespace NHCM.Persistence.NewModels
         public AssetType()
         {
             InverseParent = new HashSet<AssetType>();
+            PersonAsset = new HashSet<PersonAsset>();
         }
 
         public short Id { get; set; }
@@ -16,5 +17,6 @@ namespace NHCM.Persistence.NewModels
 
         public virtual AssetType Parent { get; set; }
         public virtual ICollection<AssetType> InverseParent { get; set; }
+        public virtual ICollection<PersonAsset> PersonAsset { get; set; }
     }
 }

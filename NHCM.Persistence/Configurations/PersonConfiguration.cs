@@ -30,7 +30,6 @@ namespace NHCM.Persistence.Configurations
                 builder.Property(e => e.Comments).HasMaxLength(400);
 
                 builder.Property(e => e.CreatedOn)
-                    .HasColumnName("createdOn")
                     .HasColumnType("timestamp with time zone")
                     .HasDefaultValueSql("now()");
 
@@ -60,6 +59,10 @@ namespace NHCM.Persistence.Configurations
 
                 builder.Property(e => e.HashKey).HasMaxLength(32);
 
+                builder.Property(e => e.Hiringofficenumber)
+                    .HasColumnName("hiringofficenumber")
+                    .HasMaxLength(50);
+
                 builder.Property(e => e.Hrcode).HasMaxLength(90);
 
                 builder.Property(e => e.LastName).HasMaxLength(90);
@@ -78,7 +81,7 @@ namespace NHCM.Persistence.Configurations
 
                 builder.Property(e => e.Nid)
                     .HasColumnName("NID")
-                    .HasMaxLength(60);
+                    .HasMaxLength(50);
 
                 builder.Property(e => e.PhotoPath).HasMaxLength(200);
 
@@ -96,7 +99,7 @@ namespace NHCM.Persistence.Configurations
                     .WithMany(p => p.Person)
                     .HasForeignKey(d => d.DocumentTypeId)
                     .HasConstraintName("Person_DocumentTypeID_fkey");
-            
+         
 
 
         }

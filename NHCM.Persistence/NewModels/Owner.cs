@@ -22,6 +22,7 @@ namespace NHCM.Persistence.NewModels
         public string ReferenceNo { get; set; }
 
         public virtual Owner Parent { get; set; }
+        public virtual Status Status { get; set; }
         public virtual ICollection<Owner> InverseParent { get; set; }
     }
 }

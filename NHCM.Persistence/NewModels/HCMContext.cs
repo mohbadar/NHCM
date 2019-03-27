@@ -17,6 +17,13 @@ namespace NHCM.Persistence.NewModels
 
         public virtual DbSet<Address> Address { get; set; }
         public virtual DbSet<AddressType> AddressType { get; set; }
+        public virtual DbSet<AspNetRoleClaims> AspNetRoleClaims { get; set; }
+        public virtual DbSet<AspNetRoles> AspNetRoles { get; set; }
+        public virtual DbSet<AspNetUserClaims> AspNetUserClaims { get; set; }
+        public virtual DbSet<AspNetUserLogins> AspNetUserLogins { get; set; }
+        public virtual DbSet<AspNetUserRoles> AspNetUserRoles { get; set; }
+        public virtual DbSet<AspNetUserTokens> AspNetUserTokens { get; set; }
+        public virtual DbSet<AspNetUsers> AspNetUsers { get; set; }
         public virtual DbSet<AssessmentLevel> AssessmentLevel { get; set; }
         public virtual DbSet<AssessmentRules> AssessmentRules { get; set; }
         public virtual DbSet<AssetType> AssetType { get; set; }
@@ -54,14 +61,13 @@ namespace NHCM.Persistence.NewModels
         public virtual DbSet<FeedbackChoice> FeedbackChoice { get; set; }
         public virtual DbSet<FeedbackOption> FeedbackOption { get; set; }
         public virtual DbSet<FileLocation> FileLocation { get; set; }
-        public virtual DbSet<FolderPath> FolderPath { get; set; }
         public virtual DbSet<FundLevel> FundLevel { get; set; }
         public virtual DbSet<Gender> Gender { get; set; }
         public virtual DbSet<Habit> Habit { get; set; }
         public virtual DbSet<HealthReport> HealthReport { get; set; }
         public virtual DbSet<HealthReportTopic> HealthReportTopic { get; set; }
         public virtual DbSet<IdCard> IdCard { get; set; }
-        public virtual DbSet<Identification> Identification { get; set; }
+        public virtual DbSet<IdentificationType> IdentificationType { get; set; }
         public virtual DbSet<Indicator> Indicator { get; set; }
         public virtual DbSet<Institute> Institute { get; set; }
         public virtual DbSet<InstituteType> InstituteType { get; set; }
@@ -82,6 +88,7 @@ namespace NHCM.Persistence.NewModels
         public virtual DbSet<OffDutyReason> OffDutyReason { get; set; }
         public virtual DbSet<OrderType> OrderType { get; set; }
         public virtual DbSet<OrgUnit> OrgUnit { get; set; }
+        public virtual DbSet<OrgUnitChange> OrgUnitChange { get; set; }
         public virtual DbSet<OrgUnitType> OrgUnitType { get; set; }
         public virtual DbSet<Organization> Organization { get; set; }
         public virtual DbSet<OrganizationType> OrganizationType { get; set; }
@@ -97,6 +104,9 @@ namespace NHCM.Persistence.NewModels
         public virtual DbSet<PlanType> PlanType { get; set; }
         public virtual DbSet<PoliticalRelation> PoliticalRelation { get; set; }
         public virtual DbSet<Position> Position { get; set; }
+        public virtual DbSet<PositionChange> PositionChange { get; set; }
+        public virtual DbSet<PositionRequirements> PositionRequirements { get; set; }
+        public virtual DbSet<PositionResponsibility> PositionResponsibility { get; set; }
         public virtual DbSet<PositionType> PositionType { get; set; }
         public virtual DbSet<ProcessTracking> ProcessTracking { get; set; }
         public virtual DbSet<ProgramType> ProgramType { get; set; }
@@ -105,6 +115,7 @@ namespace NHCM.Persistence.NewModels
         public virtual DbSet<Publication> Publication { get; set; }
         public virtual DbSet<PublicationType> PublicationType { get; set; }
         public virtual DbSet<Rank> Rank { get; set; }
+        public virtual DbSet<RankSalary> RankSalary { get; set; }
         public virtual DbSet<Reference> Reference { get; set; }
         public virtual DbSet<ReferenceType> ReferenceType { get; set; }
         public virtual DbSet<Relationship> Relationship { get; set; }
@@ -128,7 +139,7 @@ namespace NHCM.Persistence.NewModels
             if (!optionsBuilder.IsConfigured)
             {
 #warning To protect potentially sensitive information in your connection string, you should move it out of source code. See http://go.microsoft.com/fwlink/?LinkId=723263 for guidance on storing connection strings.
-                optionsBuilder.UseNpgsql("Server=localhost; Database=HCM; username=postgres; password=P@33word");
+                optionsBuilder.UseNpgsql("Server=localhost; Database=HCM; username = postgres; password=kasperskyantigeral;");
             }
         }
 
@@ -210,6 +221,92 @@ namespace NHCM.Persistence.NewModels
                 entity.Property(e => e.Name)
                     .HasColumnName("NAME")
                     .HasColumnType("char");
+            });
+
+            modelBuilder.Entity<AspNetRoleClaims>(entity =>
+            {
+                entity.HasIndex(e => e.RoleId);
+
+                entity.HasOne(d => d.Role)
+                    .WithMany(p => p.AspNetRoleClaims)
+                    .HasForeignKey(d => d.RoleId);
+            });
+
+            modelBuilder.Entity<AspNetRoles>(entity =>
+            {
+                entity.HasIndex(e => e.NormalizedName)
+                    .HasName("RoleNameIndex")
+                    .IsUnique();
+
+                entity.Property(e => e.Name).HasMaxLength(256);
+
+                entity.Property(e => e.NormalizedName).HasMaxLength(256);
+            });
+
+            modelBuilder.Entity<AspNetUserClaims>(entity =>
+            {
+                entity.HasIndex(e => e.UserId);
+
+                entity.HasOne(d => d.User)
+                    .WithMany(p => p.AspNetUserClaims)
+                    .HasForeignKey(d => d.UserId);
+            });
+
+            modelBuilder.Entity<AspNetUserLogins>(entity =>
+            {
+                entity.HasKey(e => new { e.LoginProvider, e.ProviderKey });
+
+                entity.HasIndex(e => e.UserId);
+
+                entity.HasOne(d => d.User)
+                    .WithMany(p => p.AspNetUserLogins)
+                    .HasForeignKey(d => d.UserId);
+            });
+
+            modelBuilder.Entity<AspNetUserRoles>(entity =>
+            {
+                entity.HasKey(e => new { e.UserId, e.RoleId });
+
+                entity.HasIndex(e => e.RoleId);
+
+                entity.HasOne(d => d.Role)
+                    .WithMany(p => p.AspNetUserRoles)
+                    .HasForeignKey(d => d.RoleId);
+
+                entity.HasOne(d => d.User)
+                    .WithMany(p => p.AspNetUserRoles)
+                    .HasForeignKey(d => d.UserId);
+            });
+
+            modelBuilder.Entity<AspNetUserTokens>(entity =>
+            {
+                entity.HasKey(e => new { e.UserId, e.LoginProvider, e.Name });
+
+                entity.HasOne(d => d.User)
+                    .WithMany(p => p.AspNetUserTokens)
+                    .HasForeignKey(d => d.UserId);
+            });
+
+            modelBuilder.Entity<AspNetUsers>(entity =>
+            {
+                entity.HasIndex(e => e.NormalizedEmail)
+                    .HasName("EmailIndex");
+
+                entity.HasIndex(e => e.NormalizedUserName)
+                    .HasName("UserNameIndex")
+                    .IsUnique();
+
+                entity.Property(e => e.Email).HasMaxLength(256);
+
+                entity.Property(e => e.LockoutEnd).HasColumnType("timestamp with time zone");
+
+                entity.Property(e => e.NormalizedEmail).HasMaxLength(256);
+
+                entity.Property(e => e.NormalizedUserName).HasMaxLength(256);
+
+                entity.Property(e => e.OrganizationId).HasColumnName("OrganizationID");
+
+                entity.Property(e => e.UserName).HasMaxLength(256);
             });
 
             modelBuilder.Entity<AssessmentLevel>(entity =>
@@ -531,7 +628,7 @@ namespace NHCM.Persistence.NewModels
 
                 entity.Property(e => e.Id)
                     .HasColumnName("ID")
-                    .HasDefaultValueSql("nextval('dbo.documents_id_seq'::regclass)");
+                    .HasDefaultValueSql("nextval('dbo.\"Documents_ID_seq\"'::regclass)");
 
                 entity.Property(e => e.ContentType)
                     .IsRequired()
@@ -545,9 +642,7 @@ namespace NHCM.Persistence.NewModels
 
                 entity.Property(e => e.EncryptionKey).HasMaxLength(120);
 
-                entity.Property(e => e.FileName)
-                    .IsRequired()
-                    .HasMaxLength(200);
+                entity.Property(e => e.Item).HasMaxLength(50);
 
                 entity.Property(e => e.LastDownloadDate).HasColumnType("timestamp with time zone");
 
@@ -559,13 +654,7 @@ namespace NHCM.Persistence.NewModels
                     .HasColumnType("timestamp with time zone")
                     .HasDefaultValueSql("now()");
 
-                entity.Property(e => e.ObjectName)
-                    .IsRequired()
-                    .HasMaxLength(30);
-
-                entity.Property(e => e.ObjectSchema)
-                    .IsRequired()
-                    .HasMaxLength(20);
+                entity.Property(e => e.Module).HasMaxLength(50);
 
                 entity.Property(e => e.Path)
                     .IsRequired()
@@ -578,11 +667,7 @@ namespace NHCM.Persistence.NewModels
 
                 entity.Property(e => e.ReferenceNo).HasMaxLength(14);
 
-                entity.Property(e => e.Root)
-                    .IsRequired()
-                    .HasMaxLength(15);
-
-                entity.Property(e => e.ScreenId).HasColumnName("ScreenID");
+                entity.Property(e => e.Root).HasMaxLength(100);
 
                 entity.Property(e => e.StatusId).HasColumnName("StatusID");
 
@@ -639,6 +724,12 @@ namespace NHCM.Persistence.NewModels
                 entity.Property(e => e.Remarks).HasMaxLength(300);
 
                 entity.Property(e => e.StartDate).HasColumnType("date");
+
+                entity.HasOne(d => d.EducationLevel)
+                    .WithMany(p => p.Education)
+                    .HasForeignKey(d => d.EducationLevelId)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("fk_education_educationlevel");
             });
 
             modelBuilder.Entity<EducationLevel>(entity =>
@@ -696,6 +787,16 @@ namespace NHCM.Persistence.NewModels
                 entity.Property(e => e.ReferenceNo).HasMaxLength(200);
 
                 entity.Property(e => e.Year).HasDefaultValueSql("0");
+
+                entity.HasOne(d => d.OrgUnit)
+                    .WithMany(p => p.Employee)
+                    .HasForeignKey(d => d.OrgUnitId)
+                    .HasConstraintName("fk_employee_orgunitid");
+
+                entity.HasOne(d => d.Position)
+                    .WithMany(p => p.Employee)
+                    .HasForeignKey(d => d.PositionId)
+                    .HasConstraintName("fk_employee_position");
             });
 
             modelBuilder.Entity<EmployeePromotion>(entity =>
@@ -984,21 +1085,6 @@ namespace NHCM.Persistence.NewModels
                 entity.Property(e => e.Location).HasMaxLength(200);
             });
 
-            modelBuilder.Entity<FolderPath>(entity =>
-            {
-                entity.ToTable("FolderPath", "look");
-
-                entity.Property(e => e.Id)
-                    .HasColumnName("ID")
-                    .HasDefaultValueSql("nextval('look.\"FolderPath_ID_seq\"'::regclass)");
-
-                entity.Property(e => e.CurrentFolder).HasMaxLength(300);
-
-                entity.Property(e => e.SettingsKey)
-                    .IsRequired()
-                    .HasMaxLength(100);
-            });
-
             modelBuilder.Entity<FundLevel>(entity =>
             {
                 entity.ToTable("FundLevel", "look");
@@ -1080,6 +1166,11 @@ namespace NHCM.Persistence.NewModels
                 entity.Property(e => e.ReportDate).HasColumnType("date");
 
                 entity.Property(e => e.StatusId).HasColumnName("StatusID");
+
+                entity.HasOne(d => d.Person)
+                    .WithMany(p => p.HealthReport)
+                    .HasForeignKey(d => d.PersonId)
+                    .HasConstraintName("fk_healthreport_person");
             });
 
             modelBuilder.Entity<HealthReportTopic>(entity =>
@@ -1137,9 +1228,9 @@ namespace NHCM.Persistence.NewModels
                     .HasConstraintName("fk_idcard_person");
             });
 
-            modelBuilder.Entity<Identification>(entity =>
+            modelBuilder.Entity<IdentificationType>(entity =>
             {
-                entity.ToTable("Identification", "look");
+                entity.ToTable("IdentificationType", "look");
 
                 entity.Property(e => e.Id)
                     .HasColumnName("ID")
@@ -1411,6 +1502,12 @@ namespace NHCM.Persistence.NewModels
 
                 entity.Property(e => e.StartDate).HasColumnType("date");
 
+                entity.HasOne(d => d.MilitaryServiceType)
+                    .WithMany(p => p.MilitaryService)
+                    .HasForeignKey(d => d.MilitaryServiceTypeId)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("fk_militaryservicetype_militaryservice");
+
                 entity.HasOne(d => d.Person)
                     .WithMany(p => p.MilitaryService)
                     .HasForeignKey(d => d.PersonId)
@@ -1562,6 +1659,51 @@ namespace NHCM.Persistence.NewModels
                     .WithMany(p => p.InverseParent)
                     .HasForeignKey(d => d.ParentId)
                     .HasConstraintName("fk_orgunit_orgunit");
+            });
+
+            modelBuilder.Entity<OrgUnitChange>(entity =>
+            {
+                entity.ToTable("OrgUnitChange", "org");
+
+                entity.Property(e => e.Id)
+                    .HasColumnName("ID")
+                    .HasColumnType("numeric")
+                    .HasDefaultValueSql("nextval('org.orgunitchange_id_seq'::regclass)");
+
+                entity.Property(e => e.IsAddition)
+                    .IsRequired()
+                    .HasDefaultValueSql("true");
+
+                entity.Property(e => e.Name).HasMaxLength(100);
+
+                entity.Property(e => e.NeworgUnitId)
+                    .HasColumnName("NeworgUnitID")
+                    .HasColumnType("numeric");
+
+                entity.Property(e => e.OrgUnitId)
+                    .HasColumnName("OrgUnitID")
+                    .HasColumnType("numeric");
+
+                entity.Property(e => e.OrganogramId).HasColumnName("OrganogramID");
+
+                entity.Property(e => e.PlanTypeId).HasColumnName("PlanTypeID");
+
+                entity.HasOne(d => d.NeworgUnit)
+                    .WithMany(p => p.OrgUnitChangeNeworgUnit)
+                    .HasForeignKey(d => d.NeworgUnitId)
+                    .HasConstraintName("fk_orgunitchange_orgunit1");
+
+                entity.HasOne(d => d.OrgUnit)
+                    .WithMany(p => p.OrgUnitChangeOrgUnit)
+                    .HasForeignKey(d => d.OrgUnitId)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("fk_orgunitchange_orgunit");
+
+                entity.HasOne(d => d.Organogram)
+                    .WithMany(p => p.OrgUnitChange)
+                    .HasForeignKey(d => d.OrganogramId)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("fk_orgunitchange_organogram");
             });
 
             modelBuilder.Entity<OrgUnitType>(entity =>
@@ -1718,6 +1860,12 @@ namespace NHCM.Persistence.NewModels
                     .WithMany(p => p.InverseParent)
                     .HasForeignKey(d => d.ParentId)
                     .HasConstraintName("fk_owner_owner");
+
+                entity.HasOne(d => d.Status)
+                    .WithMany(p => p.Owner)
+                    .HasForeignKey(d => d.StatusId)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("fk_owner_status");
             });
 
             modelBuilder.Entity<Person>(entity =>
@@ -1736,7 +1884,6 @@ namespace NHCM.Persistence.NewModels
                 entity.Property(e => e.Comments).HasMaxLength(400);
 
                 entity.Property(e => e.CreatedOn)
-                    .HasColumnName("createdOn")
                     .HasColumnType("timestamp with time zone")
                     .HasDefaultValueSql("now()");
 
@@ -1766,6 +1913,10 @@ namespace NHCM.Persistence.NewModels
 
                 entity.Property(e => e.HashKey).HasMaxLength(32);
 
+                entity.Property(e => e.Hiringofficenumber)
+                    .HasColumnName("hiringofficenumber")
+                    .HasMaxLength(50);
+
                 entity.Property(e => e.Hrcode).HasMaxLength(90);
 
                 entity.Property(e => e.LastName).HasMaxLength(90);
@@ -1784,7 +1935,7 @@ namespace NHCM.Persistence.NewModels
 
                 entity.Property(e => e.Nid)
                     .HasColumnName("NID")
-                    .HasMaxLength(30);
+                    .HasMaxLength(50);
 
                 entity.Property(e => e.PhotoPath).HasMaxLength(200);
 
@@ -1837,6 +1988,12 @@ namespace NHCM.Persistence.NewModels
 
                 entity.Property(e => e.Value).HasColumnType("numeric");
 
+                entity.HasOne(d => d.AssetType)
+                    .WithMany(p => p.PersonAsset)
+                    .HasForeignKey(d => d.AssetTypeId)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("fk_personasset_assettype");
+
                 entity.HasOne(d => d.Person)
                     .WithMany(p => p.PersonAsset)
                     .HasForeignKey(d => d.PersonId)
@@ -1875,6 +2032,12 @@ namespace NHCM.Persistence.NewModels
                 entity.Property(e => e.ReferenceNo).HasMaxLength(200);
 
                 entity.Property(e => e.Value).HasMaxLength(200);
+
+                entity.HasOne(d => d.Person)
+                    .WithMany(p => p.PersonCharacteristic)
+                    .HasForeignKey(d => d.PersonId)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("fk_personcharacteristic_person");
             });
 
             modelBuilder.Entity<PersonDocument>(entity =>
@@ -1962,6 +2125,11 @@ namespace NHCM.Persistence.NewModels
                 entity.Property(e => e.TazkraIssueDate).HasColumnType("date");
 
                 entity.Property(e => e.TypeId).HasColumnName("TypeID");
+
+                entity.HasOne(d => d.Type)
+                    .WithMany(p => p.PersonIdentification)
+                    .HasForeignKey(d => d.TypeId)
+                    .HasConstraintName("fk_personidentification_identificationtype");
             });
 
             modelBuilder.Entity<PersonLanguage>(entity =>
@@ -1985,11 +2153,37 @@ namespace NHCM.Persistence.NewModels
 
                 entity.Property(e => e.ReferenceNo).HasMaxLength(200);
 
+                entity.HasOne(d => d.Language)
+                    .WithMany(p => p.PersonLanguage)
+                    .HasForeignKey(d => d.LanguageId)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("fk_personlanguage_language");
+
                 entity.HasOne(d => d.Person)
                     .WithMany(p => p.PersonLanguage)
                     .HasForeignKey(d => d.PersonId)
                     .OnDelete(DeleteBehavior.ClientSetNull)
                     .HasConstraintName("fk_personlanguage_person");
+
+                entity.HasOne(d => d.ReadingExpertiseNavigation)
+                    .WithMany(p => p.PersonLanguageReadingExpertiseNavigation)
+                    .HasForeignKey(d => d.ReadingExpertise)
+                    .HasConstraintName("fk_personlanguage_expertise");
+
+                entity.HasOne(d => d.SpeakingExpertiseNavigation)
+                    .WithMany(p => p.PersonLanguageSpeakingExpertiseNavigation)
+                    .HasForeignKey(d => d.SpeakingExpertise)
+                    .HasConstraintName("fk_personlanguage_expertise3");
+
+                entity.HasOne(d => d.UnderstandingExpertiseNavigation)
+                    .WithMany(p => p.PersonLanguageUnderstandingExpertiseNavigation)
+                    .HasForeignKey(d => d.UnderstandingExpertise)
+                    .HasConstraintName("fk_personlanguage_expertise1");
+
+                entity.HasOne(d => d.WritingExpertiseNavigation)
+                    .WithMany(p => p.PersonLanguageWritingExpertiseNavigation)
+                    .HasForeignKey(d => d.WritingExpertise)
+                    .HasConstraintName("fk_personlanguage_expertise2");
             });
 
             modelBuilder.Entity<PersonSkill>(entity =>
@@ -2085,6 +2279,8 @@ namespace NHCM.Persistence.NewModels
 
                 entity.Property(e => e.DirectorateId).HasColumnName("DirectorateID");
 
+                entity.Property(e => e.EducationLevelId).HasColumnName("EducationLevelID");
+
                 entity.Property(e => e.Kadr).HasMaxLength(50);
 
                 entity.Property(e => e.LocationId).HasColumnName("LocationID");
@@ -2110,6 +2306,8 @@ namespace NHCM.Persistence.NewModels
                     .HasColumnType("numeric");
 
                 entity.Property(e => e.PlanTypeId).HasColumnName("PlanTypeID");
+
+                entity.Property(e => e.PositionResponsibilityAndPurpose).HasMaxLength(600);
 
                 entity.Property(e => e.PositionTypeId).HasColumnName("PositionTypeID");
 
@@ -2137,6 +2335,119 @@ namespace NHCM.Persistence.NewModels
                     .WithMany(p => p.InverseParent)
                     .HasForeignKey(d => d.ParentId)
                     .HasConstraintName("fk_position_position");
+            });
+
+            modelBuilder.Entity<PositionChange>(entity =>
+            {
+                entity.ToTable("PositionChange", "org");
+
+                entity.Property(e => e.Id)
+                    .HasColumnName("ID")
+                    .HasColumnType("numeric")
+                    .HasDefaultValueSql("nextval('org.positionchange_id_seq'::regclass)");
+
+                entity.Property(e => e.IsAddition)
+                    .IsRequired()
+                    .HasDefaultValueSql("true");
+
+                entity.Property(e => e.Name).HasMaxLength(100);
+
+                entity.Property(e => e.NewPositionId)
+                    .HasColumnName("NewPositionID")
+                    .HasColumnType("numeric");
+
+                entity.Property(e => e.OrganogramId).HasColumnName("OrganogramID");
+
+                entity.Property(e => e.PlanTypeId).HasColumnName("PlanTypeID");
+
+                entity.Property(e => e.PositionId)
+                    .HasColumnName("PositionID")
+                    .HasColumnType("numeric");
+
+                entity.HasOne(d => d.Organogram)
+                    .WithMany(p => p.PositionChange)
+                    .HasForeignKey(d => d.OrganogramId)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("fk_positionchange_organogram");
+
+                entity.HasOne(d => d.Position)
+                    .WithMany(p => p.PositionChange)
+                    .HasForeignKey(d => d.PositionId)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("fk_positionchange_position");
+            });
+
+            modelBuilder.Entity<PositionRequirements>(entity =>
+            {
+                entity.ToTable("PositionRequirements", "org");
+
+                entity.Property(e => e.Id)
+                    .HasColumnName("ID")
+                    .HasColumnType("numeric")
+                    .HasDefaultValueSql("nextval('org.positionrequirements_id_seq'::regclass)");
+
+                entity.Property(e => e.CourseId).HasColumnName("CourseID");
+
+                entity.Property(e => e.CreatedOn)
+                    .HasColumnType("timestamp with time zone")
+                    .HasDefaultValueSql("now()");
+
+                entity.Property(e => e.EducationLevelId).HasColumnName("EducationLevelID");
+
+                entity.Property(e => e.ModifiedBy)
+                    .IsRequired()
+                    .HasMaxLength(200);
+
+                entity.Property(e => e.ModifiedOn)
+                    .HasColumnType("timestamp with time zone")
+                    .HasDefaultValueSql("now()");
+
+                entity.Property(e => e.PositionId)
+                    .HasColumnName("PositionID")
+                    .HasColumnType("numeric");
+
+                entity.Property(e => e.Purpose).HasMaxLength(20);
+
+                entity.Property(e => e.ReferenceNo).HasMaxLength(200);
+            });
+
+            modelBuilder.Entity<PositionResponsibility>(entity =>
+            {
+                entity.ToTable("PositionResponsibility", "org");
+
+                entity.Property(e => e.Id)
+                    .HasColumnName("ID")
+                    .HasColumnType("numeric")
+                    .HasDefaultValueSql("nextval('org.positionresponsibility_id_seq'::regclass)");
+
+                entity.Property(e => e.CreatedOn)
+                    .HasColumnType("timestamp with time zone")
+                    .HasDefaultValueSql("now()");
+
+                entity.Property(e => e.ModifiedOn).HasColumnType("timestamp with time zone");
+
+                entity.Property(e => e.Modifiedby)
+                    .IsRequired()
+                    .HasColumnName("modifiedby")
+                    .HasMaxLength(200);
+
+                entity.Property(e => e.Name).HasMaxLength(350);
+
+                entity.Property(e => e.ParentId)
+                    .HasColumnName("ParentID")
+                    .HasColumnType("numeric");
+
+                entity.Property(e => e.PositionId)
+                    .HasColumnName("PositionID")
+                    .HasColumnType("numeric");
+
+                entity.Property(e => e.ReferenceNo).HasMaxLength(200);
+
+                entity.HasOne(d => d.Position)
+                    .WithMany(p => p.PositionResponsibility)
+                    .HasForeignKey(d => d.PositionId)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("fk_positionresponsibility_position1");
             });
 
             modelBuilder.Entity<PositionType>(entity =>
@@ -2271,6 +2582,12 @@ namespace NHCM.Persistence.NewModels
                 entity.Property(e => e.SupervisorId)
                     .HasColumnName("SupervisorID")
                     .HasColumnType("numeric");
+
+                entity.HasOne(d => d.Person)
+                    .WithMany(p => p.Promotion)
+                    .HasForeignKey(d => d.PersonId)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("fk_promotion_person");
             });
 
             modelBuilder.Entity<Publication>(entity =>
@@ -2315,6 +2632,12 @@ namespace NHCM.Persistence.NewModels
                     .HasForeignKey(d => d.PersonId)
                     .OnDelete(DeleteBehavior.ClientSetNull)
                     .HasConstraintName("fk_publication_person");
+
+                entity.HasOne(d => d.PublicationType)
+                    .WithMany(p => p.Publication)
+                    .HasForeignKey(d => d.PublicationTypeId)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("fk_publication_publicationtype");
             });
 
             modelBuilder.Entity<PublicationType>(entity =>
@@ -2355,6 +2678,38 @@ namespace NHCM.Persistence.NewModels
                 entity.Property(e => e.Sorter).HasMaxLength(100);
 
                 entity.Property(e => e.StatusId).HasColumnName("StatusID");
+            });
+
+            modelBuilder.Entity<RankSalary>(entity =>
+            {
+                entity.ToTable("RankSalary", "org");
+
+                entity.Property(e => e.Id)
+                    .HasColumnName("ID")
+                    .HasDefaultValueSql("nextval('org.ranksalary_id_seq'::regclass)");
+
+                entity.Property(e => e.CreatedOn)
+                    .HasColumnType("timestamp with time zone")
+                    .HasDefaultValueSql("now()");
+
+                entity.Property(e => e.EffectDate).HasColumnType("date");
+
+                entity.Property(e => e.ModifiedOn)
+                    .HasColumnType("timestamp with time zone")
+                    .HasDefaultValueSql("now()");
+
+                entity.Property(e => e.Modifiedby)
+                    .IsRequired()
+                    .HasColumnName("modifiedby")
+                    .HasMaxLength(200);
+
+                entity.Property(e => e.RankId).HasColumnName("RankID");
+
+                entity.Property(e => e.ReferenceNo).HasMaxLength(200);
+
+                entity.Property(e => e.Salary)
+                    .HasColumnName("salary")
+                    .HasColumnType("numeric");
             });
 
             modelBuilder.Entity<Reference>(entity =>
@@ -2417,6 +2772,16 @@ namespace NHCM.Persistence.NewModels
                 entity.Property(e => e.Remark).HasMaxLength(200);
 
                 entity.Property(e => e.TelephoneNo).HasMaxLength(50);
+
+                entity.HasOne(d => d.Bank)
+                    .WithMany(p => p.Reference)
+                    .HasForeignKey(d => d.BankId)
+                    .HasConstraintName("fk_bank_reference");
+
+                entity.HasOne(d => d.ReferenceType)
+                    .WithMany(p => p.Reference)
+                    .HasForeignKey(d => d.ReferenceTypeId)
+                    .HasConstraintName("fk_referencetype_reference");
             });
 
             modelBuilder.Entity<ReferenceType>(entity =>
@@ -2509,6 +2874,11 @@ namespace NHCM.Persistence.NewModels
                 entity.Property(e => e.Remark).HasMaxLength(200);
 
                 entity.Property(e => e.Village).HasMaxLength(50);
+
+                entity.HasOne(d => d.Religion)
+                    .WithMany(p => p.Relative)
+                    .HasForeignKey(d => d.ReligionId)
+                    .HasConstraintName("fk_relative_religion");
             });
 
             modelBuilder.Entity<Religion>(entity =>
@@ -2716,6 +3086,17 @@ namespace NHCM.Persistence.NewModels
                 entity.Property(e => e.VerdictDate).HasColumnType("timestamp with time zone");
 
                 entity.Property(e => e.VerdictRegNo).HasMaxLength(20);
+
+                entity.HasOne(d => d.Organization)
+                    .WithMany(p => p.Selection)
+                    .HasForeignKey(d => d.OrganizationId)
+                    .HasConstraintName("fk_selection_organization");
+
+                entity.HasOne(d => d.Position)
+                    .WithMany(p => p.Selection)
+                    .HasForeignKey(d => d.PositionId)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("fk_selection_position");
             });
 
             modelBuilder.Entity<SkillType>(entity =>
@@ -2848,7 +3229,7 @@ namespace NHCM.Persistence.NewModels
                     .HasMaxLength(200);
             });
 
-            modelBuilder.HasSequence("documents_id_seq");
+            modelBuilder.HasSequence<int>("Documents_ID_seq");
 
             modelBuilder.HasSequence("organization_id_seq");
 
@@ -2901,8 +3282,6 @@ namespace NHCM.Persistence.NewModels
             modelBuilder.HasSequence("feedbackchoice_id_seq");
 
             modelBuilder.HasSequence("filelocation_id_seq");
-
-            modelBuilder.HasSequence<int>("FolderPath_ID_seq");
 
             modelBuilder.HasSequence("fundlevel_id_seq");
 
@@ -2986,11 +3365,17 @@ namespace NHCM.Persistence.NewModels
 
             modelBuilder.HasSequence("orgunit_id_seq");
 
+            modelBuilder.HasSequence("orgunitchange_id_seq");
+
             modelBuilder.HasSequence("position_id_seq");
+
+            modelBuilder.HasSequence("positionchange_id_seq");
 
             modelBuilder.HasSequence("positionrequirements_id_seq");
 
             modelBuilder.HasSequence("positionresponsibility_id_seq");
+
+            modelBuilder.HasSequence("ranksalary_id_seq");
 
             modelBuilder.HasSequence("complain_id_seq");
 

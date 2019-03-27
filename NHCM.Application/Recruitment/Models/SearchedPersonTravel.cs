@@ -15,9 +15,11 @@ namespace NHCM.Application.Recruitment.Models
         public string Reason { get; set; }
         public string AccompanyWith { get; set; }
         public string ReferenceNo { get; set; }
-       
         
-
         public string CountryText { get; set; }
+
+
+        public String TravelDateText { get; set; }
+        public String ReturnDateText { get; set; }
     }
 }

@@ -14,5 +14,7 @@ namespace NHCM.Persistence.NewModels
         public DateTime? CreatedOn { get; set; }
         public int? CreatedBy { get; set; }
         public string Value { get; set; }
+
+        public virtual Person Person { get; set; }
     }
 }

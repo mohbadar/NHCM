@@ -8,14 +8,18 @@ namespace NHCM.Domain.Entities
     {
         public Person()
         {
-            //Attendance = new HashSet<Attendance>();
-            //EmployeePromotion = new HashSet<EmployeePromotion>();
-            //IdCard = new HashSet<IdCard>();
-            //JudgesPromotion = new HashSet<JudgesPromotion>();
+          //  Attendance = new HashSet<Attendance>();
+          //  EmployeePromotion = new HashSet<EmployeePromotion>();
+            HealthReport = new HashSet<HealthReport>();
+           // IdCard = new HashSet<IdCard>();
+          //  JudgesPromotion = new HashSet<JudgesPromotion>();
             MilitaryService = new HashSet<MilitaryService>();
             PersonAsset = new HashSet<PersonAsset>();
+            //PersonCharacteristic = new HashSet<PersonCharacteristic>();
+            PersonDocument = new HashSet<PersonDocument>();
             PersonLanguage = new HashSet<PersonLanguage>();
             PersonSkill = new HashSet<PersonSkill>();
+           // Promotion = new HashSet<Promotion>();
             Publication = new HashSet<Publication>();
             Travel = new HashSet<Travel>();
         }
@@ -48,26 +52,24 @@ namespace NHCM.Domain.Entities
         public int? StatusId { get; set; }
         public string Remark { get; set; }
         public int? BloodGroupId { get; set; }
-
-
-
-
-
-        public int? DocumentTypeId { get; set; }
-        public string PhotoPath { get; set; }
+        public string Hiringofficenumber { get; set; }
         public string Nid { get; set; }
+        public string PhotoPath { get; set; }
+        public int? DocumentTypeId { get; set; }
 
-        //public virtual ICollection<Attendance> Attendance { get; set; }
-        //public virtual ICollection<EmployeePromotion> EmployeePromotion { get; set; }
-        //public virtual ICollection<IdCard> IdCard { get; set; }
-        //public virtual ICollection<JudgesPromotion> JudgesPromotion { get; set; }
-
-
-         public virtual DocumentType DocumentType { get; set; }
+        public virtual DocumentType DocumentType { get; set; }
+       // public virtual ICollection<Attendance> Attendance { get; set; }
+       // public virtual ICollection<EmployeePromotion> EmployeePromotion { get; set; }
+        public virtual ICollection<HealthReport> HealthReport { get; set; }
+       // public virtual ICollection<IdCard> IdCard { get; set; }
+       // public virtual ICollection<JudgesPromotion> JudgesPromotion { get; set; }
         public virtual ICollection<MilitaryService> MilitaryService { get; set; }
         public virtual ICollection<PersonAsset> PersonAsset { get; set; }
+       // public virtual ICollection<PersonCharacteristic> PersonCharacteristic { get; set; }
+        public virtual ICollection<PersonDocument> PersonDocument { get; set; }
         public virtual ICollection<PersonLanguage> PersonLanguage { get; set; }
         public virtual ICollection<PersonSkill> PersonSkill { get; set; }
+       // public virtual ICollection<Promotion> Promotion { get; set; }
         public virtual ICollection<Publication> Publication { get; set; }
         public virtual ICollection<Travel> Travel { get; set; }
     }

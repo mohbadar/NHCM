@@ -28,5 +28,9 @@ namespace NHCM.Application.Recruitment.Models
         public string ExpertiseText { get; set; }
         public string CertificationText { get; set; }
 
+
+        public String StartDateText { get; set; }
+        public String EndDateText { get; set; }
+
     }
 }

@@ -15,7 +15,7 @@ namespace NHCM.Application.Recruitment.Queries
     {
         public decimal? Id { get; set; }
         public decimal? PersonId { get; set; }
-        public int LanguageId { get; set; }
+        public int? LanguageId { get; set; }
         public short ExpertiseId { get; set; } 
         public int? Locationid { get; set; } 
         public int? CertificationId { get; set; }
@@ -24,7 +24,11 @@ namespace NHCM.Application.Recruitment.Queries
         public DateTime? StartDate { get; set; }
         public DateTime? EndDate { get; set; }
 
-        
+        public string ExpertiseText { get; set; }
+        public string CertificationText { get; set; } 
+        public String StartDateText { get; set; }
+        public String EndDateText { get; set; }
+
     }
 
     public class SearchPersonSkillQueryHandler : IRequestHandler<SearchPersonSkillQuery, List<SearchedPersonSkill>>
@@ -54,20 +58,25 @@ namespace NHCM.Application.Recruitment.Queries
                                     {
                                         Id = ps.Id,
                                         PersonId = ps.PersonId,
-                                        LanguageId = ps.LanguageId,
+                                        //LanguageId = ps.LanguageId,
                                         ExpertiseId = ps.ExpertiseId,
                                         Locationid = ps.Locationid,
+                                        
                                         CertificationId = ps.CertificationId,
                                         CertifiedFrom = ps.CertifiedFrom,
                                         CertificationDate = ps.CertificationDate,
                                         StartDate = ps.StartDate,
                                         EndDate = ps.EndDate,
-                                        ExpertiseText = resultse.Name,
-
-                                        CertificationText = resultCert.Name
+                                        ExpertiseText = resultse.Name, 
+                                        CertificationText = resultCert.Name, 
+                                        Remarks=ps.Remarks,
                                         
 
-                                    }).ToListAsync(cancellationToken);
+                                        StartDateText = PersianLibrary.PersianDate.GetFormatedString(ps.StartDate.Value),
+                                        EndDateText = PersianLibrary.PersianDate.GetFormatedString(ps.EndDate.Value)
+
+
+                                    }).OrderBy(s => s.EndDate).ToListAsync(cancellationToken);
                 }
             }
 
@@ -91,7 +100,7 @@ namespace NHCM.Application.Recruitment.Queries
                                     {
                                         Id = ps.Id,
                                         PersonId = ps.PersonId,
-                                        LanguageId = ps.LanguageId,
+                                       // LanguageId = ps.LanguageId,
                                         ExpertiseId = ps.ExpertiseId,
                                         Locationid = ps.Locationid,
                                         CertificationId = ps.CertificationId,
@@ -99,12 +108,15 @@ namespace NHCM.Application.Recruitment.Queries
                                         CertificationDate = ps.CertificationDate,
                                         StartDate = ps.StartDate,
                                         EndDate = ps.EndDate,
-                                        ExpertiseText = resultse.Name,
+                                        Remarks=ps.Remarks,
+                                        ExpertiseText = resultse.Name, 
+                                        CertificationText = resultCert.Name,
 
-                                        CertificationText = resultCert.Name
+                                        StartDateText = PersianLibrary.PersianDate.GetFormatedString(ps.StartDate.Value),
+                                        EndDateText = PersianLibrary.PersianDate.GetFormatedString(ps.EndDate.Value)
 
 
-                                    }).ToListAsync(cancellationToken);
+                                    }).OrderBy(s => s.EndDate).ToListAsync(cancellationToken);
                 } 
             } 
             return result ;

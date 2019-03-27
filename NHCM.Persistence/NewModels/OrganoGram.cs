@@ -8,6 +8,8 @@ namespace NHCM.Persistence.NewModels
         public OrganoGram()
         {
             OrgUnit = new HashSet<OrgUnit>();
+            OrgUnitChange = new HashSet<OrgUnitChange>();
+            PositionChange = new HashSet<PositionChange>();
         }
 
         public int Id { get; set; }
@@ -21,7 +23,10 @@ namespace NHCM.Persistence.NewModels
         public int? Year { get; set; }
         public DateTime? PreparedDate { get; set; }
         public DateTime? AppreovedDate { get; set; }
+        public int? NumberOfPositions { get; set; }
 
         public virtual ICollection<OrgUnit> OrgUnit { get; set; }
+        public virtual ICollection<OrgUnitChange> OrgUnitChange { get; set; }
+        public virtual ICollection<PositionChange> PositionChange { get; set; }
     }
 }

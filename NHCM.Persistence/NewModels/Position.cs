@@ -7,7 +7,11 @@ namespace NHCM.Persistence.NewModels
     {
         public Position()
         {
+            Employee = new HashSet<Employee>();
             InverseParent = new HashSet<Position>();
+            PositionChange = new HashSet<PositionChange>();
+            PositionResponsibility = new HashSet<PositionResponsibility>();
+            Selection = new HashSet<Selection>();
         }
 
         public decimal Id { get; set; }
@@ -33,8 +37,15 @@ namespace NHCM.Persistence.NewModels
         public int? OrganoGramId { get; set; }
         public decimal? TransferPositionId { get; set; }
         public short? PlanTypeId { get; set; }
+        public int? EducationLevelId { get; set; }
+        public short? ExperienceNoOfYear { get; set; }
+        public string PositionResponsibilityAndPurpose { get; set; }
 
         public virtual Position Parent { get; set; }
+        public virtual ICollection<Employee> Employee { get; set; }
         public virtual ICollection<Position> InverseParent { get; set; }
+        public virtual ICollection<PositionChange> PositionChange { get; set; }
+        public virtual ICollection<PositionResponsibility> PositionResponsibility { get; set; }
+        public virtual ICollection<Selection> Selection { get; set; }
     }
 }

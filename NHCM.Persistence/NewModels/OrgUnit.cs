@@ -7,7 +7,11 @@ namespace NHCM.Persistence.NewModels
     {
         public OrgUnit()
         {
+            Employee = new HashSet<Employee>();
             InverseParent = new HashSet<OrgUnit>();
+            OrgUnitChangeNeworgUnit = new HashSet<OrgUnitChange>();
+            OrgUnitChangeOrgUnit = new HashSet<OrgUnitChange>();
+            Selection = new HashSet<Selection>();
         }
 
         public decimal Id { get; set; }
@@ -27,6 +31,10 @@ namespace NHCM.Persistence.NewModels
 
         public virtual OrganoGram OrganOgram { get; set; }
         public virtual OrgUnit Parent { get; set; }
+        public virtual ICollection<Employee> Employee { get; set; }
         public virtual ICollection<OrgUnit> InverseParent { get; set; }
+        public virtual ICollection<OrgUnitChange> OrgUnitChangeNeworgUnit { get; set; }
+        public virtual ICollection<OrgUnitChange> OrgUnitChangeOrgUnit { get; set; }
+        public virtual ICollection<Selection> Selection { get; set; }
     }
 }

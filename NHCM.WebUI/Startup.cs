@@ -21,6 +21,7 @@ using NHCM.Persistence;
 using NHCM.Persistence.Identity.Infrastructure;
 using NHCM.Persistence.Infrastructure.Identity;
 using NHCM.WebUI.Areas.Security;
+using NHCM.WebUI.Types;
 
 namespace NHCM.WebUI
 {
@@ -60,11 +61,16 @@ namespace NHCM.WebUI
 
             services.AddDbContext<HCMIdentityDbContext>();
 
-
-            services.AddIdentity<HCMUser, HCMRole>()
+            services.AddIdentity<HCMUser, HCMRole>(options => { options.User.RequireUniqueEmail = true; })
+                .AddErrorDescriber<IdentityLocalizedErrorDescribers>()
                 .AddEntityFrameworkStores<HCMIdentityDbContext>()
-                
                 .AddDefaultTokenProviders();
+
+            services.Configure<IdentityOptions>(options => {
+                options.Password.RequireNonAlphanumeric = false;
+                options.Password.RequiredLength = 6;
+               
+            });
 
 
           
@@ -73,27 +79,38 @@ namespace NHCM.WebUI
 
 
 
+            
+
+
+
+
+            // Add MediatR
+            services.AddTransient(typeof(IPipelineBehavior<,>), typeof(RequestPreProcessorBehavior<,>));
+             services.AddTransient(typeof(IPipelineBehavior<,>), typeof(RequestValidationBehavior<,>));
+            services.AddMediatR(typeof(CreatePersonCommandHandler).GetTypeInfo().Assembly);
+
+
+
             // Add MVC with fluent validation, Razor pages option
             services.AddMvc()
-                .AddFluentValidation(fv => fv.RegisterValidatorsFromAssemblyContaining<SearchPersonQueryValidator>())
-                //.AddRazorPagesOptions
-                //(
-                //    options => 
-                //    {
-                //        options.AllowAreas = true;
+                .AddFluentValidation(fv => fv.RegisterValidatorsFromAssemblyContaining<CreatePersonCommandValidator>())
+                .AddRazorPagesOptions
+                (
+                    options =>
+                    {
 
-                //        options.Conventions.AuthorizeAreaFolder("Security", "/");
-                //        // Comment this after creating the admin user
-                //        options.Conventions.AllowAnonymousToAreaPage("Security", "/Register");
+                        // Comment it in production
+                         options.Conventions.AllowAnonymousToPage("/Security/Register");
 
+                        options.Conventions.AuthorizeFolder("/Security");
+                        options.Conventions.AuthorizeFolder("/Recruitment");
+                        options.Conventions.AuthorizeFolder("/Shared");
+                        options.Conventions.AuthorizePage("/index");
 
+                        options.AllowMappingHeadRequestsToGetHandler = true;
 
-                //        options.Conventions.AuthorizeFolder("/Recruitment");
-                //        options.Conventions.AuthorizeFolder("/Shared");
-                //        options.Conventions.AuthorizePage("/index");
-
-                //    }
-                //)
+                    }
+                )
                 .SetCompatibilityVersion(CompatibilityVersion.Version_2_2);
 
             services.ConfigureApplicationCookie
@@ -107,14 +124,6 @@ namespace NHCM.WebUI
 
 
 
-
-
-
-
-            // Add MediatR
-            services.AddTransient(typeof(IPipelineBehavior<,>), typeof(RequestPreProcessorBehavior<,>));
-          //  services.AddTransient(typeof(IPipelineBehavior<,>), typeof(RequestValidationBehavior<,>));
-            services.AddMediatR(typeof(CreatePersonCommandHandler).GetTypeInfo().Assembly);
         }
 
 
@@ -125,7 +134,7 @@ namespace NHCM.WebUI
 
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
-        public async void Configure(IApplicationBuilder app, IHostingEnvironment env)
+        public async void Configure(IApplicationBuilder app, IHostingEnvironment env, IServiceProvider serviceProvider)
         {
             if (env.IsDevelopment())
             {
@@ -139,15 +148,12 @@ namespace NHCM.WebUI
             }
 
 
+            // User type extension method used for providing configuration from config file in static methods.
+            serviceProvider.SetConfigurationProvider(Configuration);
 
-           
             app.UseHttpsRedirection();
             app.UseStaticFiles();
             app.UseAuthentication();
-
-           
-         //  await UserInitializer.SeedUser(userManager);
-
             app.UseCookiePolicy();
             app.UseMvc();
         }

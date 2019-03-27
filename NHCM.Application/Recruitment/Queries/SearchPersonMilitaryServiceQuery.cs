@@ -24,6 +24,9 @@ namespace NHCM.Application.Recruitment.Queries
         public int ModifiedBy { get; set; }
         public DateTime ModifiedOn { get; set; }
         public string Remark { get; set; }
+
+        public String StartDateText { get; set; }
+        public String EndDateText { get; set; }
     }
 
 
@@ -38,64 +41,43 @@ namespace NHCM.Application.Recruitment.Queries
         {
             List<SearchedPersonMilitaryService> result = new List<SearchedPersonMilitaryService>();
 
-
             if (request.Id != null)
             {
-
-
                 result = await (from ms in _context.MilitaryService
-
                                 where ms.Id == request.Id
                                 select new SearchedPersonMilitaryService
                                 {
-
                                     Id = ms.Id,
                                     PersonId = ms.PersonId,
                                     MilitaryServiceTypeId = ms.MilitaryServiceTypeId,
                                     StartDate = ms.StartDate,
                                     EndDate = ms.EndDate,
                                     Remark = ms.Remark,
-
+                                    StartDateText = PersianLibrary.PersianDate.GetFormatedString(ms.StartDate),
+                                    EndDateText = PersianLibrary.PersianDate.GetFormatedString(ms.EndDate),
                                     // CHANGE : apply join when look.MilitaryServiceType table is added and scaffolded in system
-                                    MilitaryServiceTypeText = request.MilitaryServiceTypeId ==1 ? "مکلفیت"  : "احتیاط"
-
-
-
-
+                                    MilitaryServiceTypeText = request.MilitaryServiceTypeId == 1 ? "مکلفیت" : "احتیاط"
                                 }).ToListAsync(cancellationToken);
             }
-
 
             else if (request.PersonId != null)
             {
                 result = await (from ms in _context.MilitaryService
-
                                 where ms.PersonId == request.PersonId
                                 select new SearchedPersonMilitaryService
                                 {
-
                                     Id = ms.Id,
                                     PersonId = ms.PersonId,
                                     MilitaryServiceTypeId = ms.MilitaryServiceTypeId,
                                     StartDate = ms.StartDate,
                                     EndDate = ms.EndDate,
                                     Remark = ms.Remark,
-
+                                    StartDateText = PersianLibrary.PersianDate.GetFormatedString(ms.StartDate),
+                                    EndDateText = PersianLibrary.PersianDate.GetFormatedString(ms.EndDate),
                                     // CHANGE : apply join when look.MilitaryServiceType table is added and scaffolded in system
                                     MilitaryServiceTypeText = request.MilitaryServiceTypeId == 1 ? "مکلفیت" : "احتیاط"
-
-
-
-
-
                                 }).ToListAsync(cancellationToken);
             }
-
-
-
-
-
-
             return result;
         }
     }

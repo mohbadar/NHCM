@@ -31,8 +31,14 @@ namespace NHCM.WebUI.Pages.Document
         }
 
         // public List<SelectListItem> ListOfLocations = new List<SelectListItem>();
-        public void OnGet()
+
+        public async Task  OnGetAsync()
         {
+            ListOfDocumentTypesD = new List<SelectListItem>();
+            List<DocumentType> documentTypesd = new List<DocumentType>();
+            documentTypesd = await Mediator.Send(new GetDocumentTypeQuery() { ScreenID = null, ID = null });
+            foreach (DocumentType documentType in documentTypesd)
+                ListOfDocumentTypesD.Add(new SelectListItem() { Text = documentType.Name, Value = documentType.Id.ToString() });
 
         }
         public async Task<IActionResult> OnPostSave([FromBody]CreateDocumentCommand command)
@@ -44,20 +50,24 @@ namespace NHCM.WebUI.Pages.Document
             {
                 List<SearchedDocumentModel> dbResult = new List<SearchedDocumentModel>();
                 dbResult = await Mediator.Send(command);
-                return new JsonResult(new Types.Result()
+
+                return new JsonResult(new Types.UIResult()
                 {
                     Data = new { list = dbResult },
-                    Status = Types.Status.Success,
+                    Status = Types.UIStatus.Success,
+
                     Text = "اسناد و ضمایم موفقانه ثبت گردید",
                     Description = string.Empty
                 });
             }
             catch (Exception ex)
             {
-                return new JsonResult(new Types.Result()
+
+                return new JsonResult(new Types.UIResult()
                 {
                     Data = null,
-                    Status = Types.Status.Failure,
+                    Status = Types.UIStatus.Failure,
+
                     Text = CustomMessages.InternalSystemException,
                     Description = ex.Message + " \n StackTrace : " + ex.StackTrace
                 });
@@ -98,20 +108,24 @@ namespace NHCM.WebUI.Pages.Document
             {
                 List<SearchedDocumentModel> dbResult = new List<SearchedDocumentModel>();
                 dbResult = await Mediator.Send(command);
-                return new JsonResult(new Types.Result()
+
+                return new JsonResult(new Types.UIResult()
                 {
                     Data = new { list = dbResult },
-                    Status = Types.Status.Success,
+                    Status = Types.UIStatus.Success,
+
                     Text = string.Empty,
                     Description = string.Empty
                 });
             }
             catch (Exception ex)
             {
-                return new JsonResult(new Types.Result()
+
+                return new JsonResult(new Types.UIResult()
                 {
                     Data = null,
-                    Status = Types.Status.Failure,
+                    Status = Types.UIStatus.Failure,
+
                     Text = CustomMessages.InternalSystemException,
                     Description = ex.Message + " \n StackTrace : " + ex.StackTrace
                 });

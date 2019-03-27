@@ -3,15 +3,16 @@ using System.Collections.Generic;
 
 namespace NHCM.Domain.Entities
 {
-    public partial class Documents
+
+    public  class Documents
+
     {
         public int Id { get; set; }
         public string ContentType { get; set; }
         public DateTime UploadDate { get; set; }
-        public string Module { get; set; }
-        public string Item { get; set; }
+
         public string RecordId { get; set; }
-        public string Root { get; set; }
+
         public string Path { get; set; }
         public DateTime ModifiedOn { get; set; }
         public string ModifiedBy { get; set; }
@@ -23,5 +24,10 @@ namespace NHCM.Domain.Entities
         public string Description { get; set; }
         public int? DocumentTypeId { get; set; }
         public DateTime? LastDownloadDate { get; set; }
+
+        public string Root { get; set; }
+        public string Item { get; set; }
+        public string Module { get; set; }
+
     }
 }

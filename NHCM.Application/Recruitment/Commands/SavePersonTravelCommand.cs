@@ -97,6 +97,7 @@ namespace NHCM.Application.Recruitment.Commands
 
 
                     await _context.SaveChangesAsync(cancellationToken);
+                    result = await _mediator.Send(new Queries.SearchPersonTravelQuery() { Id = toUpdateRecord.Id });
                 }
             }
 

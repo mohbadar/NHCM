@@ -8,14 +8,21 @@ using NHCM.Application.Recruitment.Commands;
 using NHCM.Application.Recruitment.Queries;
 using NHCM.WebUI.Types;
 using NHCM.Application.Recruitment.Models;
+using Microsoft.AspNetCore.Mvc.Rendering;
+using NHCM.Domain.Entities;
+using NHCM.Application.Lookup.Queries;
 
 namespace NHCM.WebUI.Pages.Recruitment
 {
     public class PublicationModel : BasePage
     {
-        public void OnGet()
+        public async Task  OnGetAsync()
         {
-
+            ListOfPublicationType = new List<SelectListItem>();
+            List<PublicationType> publicationTypes = new List<PublicationType>();
+            publicationTypes = await Mediator.Send(new GetPublicationTypeQuery() { ID = null });
+            foreach (PublicationType publicationType in publicationTypes)
+                ListOfPublicationType.Add(new SelectListItem() { Text = publicationType.Dari, Value = publicationType.Id.ToString() });
         }
 
         public async Task<IActionResult> OnPostSave([FromBody] SavePersonPublicationCommand command)
@@ -31,10 +38,10 @@ namespace NHCM.WebUI.Pages.Recruitment
                 List<SearchedPersonPublication> result = new List<SearchedPersonPublication>();
                 result = await Mediator.Send(command);
 
-                return new JsonResult(new Result()
+                return new JsonResult(new UIResult()
                 {
                     Data = new { list = result },
-                    Status = Status.Success,
+                    Status = UIStatus.Success,
                     Text = "انتشار کارمند موفقانه ثبت سیستم شد",
                     Description = string.Empty
 
@@ -43,11 +50,11 @@ namespace NHCM.WebUI.Pages.Recruitment
             }
             catch (Exception ex)
             {
-                return new JsonResult(new Result()
+                return new JsonResult(new UIResult()
                 {
 
                     Data = null,
-                    Status = Status.Failure,
+                    Status = UIStatus.Failure,
                     Text = CustomMessages.InternalSystemException,
                     // Can be changed from app settings
                     Description = ex.Message
@@ -62,11 +69,11 @@ namespace NHCM.WebUI.Pages.Recruitment
                 List<SearchedPersonPublication> dbResult = new List<SearchedPersonPublication>();
                 dbResult = await Mediator.Send(query);
 
-                return new JsonResult(new Result()
+                return new JsonResult(new UIResult()
                 {
 
                     Data = new { list = dbResult },
-                    Status = Status.Success,
+                    Status = UIStatus.Success,
                     Text = string.Empty,
                     Description = string.Empty
 
@@ -76,11 +83,11 @@ namespace NHCM.WebUI.Pages.Recruitment
             }
             catch (Exception ex)
             {
-                return new JsonResult(new Result()
+                return new JsonResult(new UIResult()
                 {
 
                     Data = null,
-                    Status = Status.Failure,
+                    Status = UIStatus.Failure,
                     Text = CustomMessages.InternalSystemException,
                     Description = ex.Message + " \n StackTrace : " + ex.StackTrace
 

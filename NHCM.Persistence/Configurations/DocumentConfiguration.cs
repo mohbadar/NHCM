@@ -11,12 +11,14 @@ namespace NHCM.Persistence.Configurations
     {
         public void Configure(EntityTypeBuilder<Documents> builder)
         {
-         
+
                 builder.ToTable("Documents", "dbo");
 
                 builder.Property(e => e.Id)
                     .HasColumnName("ID")
-                    .HasDefaultValueSql("nextval('dbo.documents_id_seq'::regclass)");
+
+                    .HasDefaultValueSql("nextval('dbo.\"Documents_ID_seq\"'::regclass)");
+
 
                 builder.Property(e => e.ContentType)
                     .IsRequired()
@@ -30,6 +32,9 @@ namespace NHCM.Persistence.Configurations
 
                 builder.Property(e => e.EncryptionKey).HasMaxLength(120);
 
+
+                builder.Property(e => e.Item).HasMaxLength(50);
+
                 builder.Property(e => e.LastDownloadDate).HasColumnType("timestamp with time zone");
 
                 builder.Property(e => e.ModifiedBy)
@@ -40,13 +45,9 @@ namespace NHCM.Persistence.Configurations
                     .HasColumnType("timestamp with time zone")
                     .HasDefaultValueSql("now()");
 
-                builder.Property(e => e.Module)
-                    .IsRequired()
-                    .HasMaxLength(30);
 
-                builder.Property(e => e.Item)
-                    .IsRequired()
-                    .HasMaxLength(20);
+                builder.Property(e => e.Module).HasMaxLength(50);
+
 
                 builder.Property(e => e.Path)
                     .IsRequired()
@@ -59,16 +60,14 @@ namespace NHCM.Persistence.Configurations
 
                 builder.Property(e => e.ReferenceNo).HasMaxLength(14);
 
-                builder.Property(e => e.Root)
-                    .IsRequired()
-                    .HasMaxLength(15);
 
-                builder.Property(e => e.DocumentTypeId).HasColumnName("DocumentTypeId");
+                builder.Property(e => e.Root).HasMaxLength(100);
+
 
                 builder.Property(e => e.StatusId).HasColumnName("StatusID");
 
                 builder.Property(e => e.UploadDate).HasColumnType("timestamp with time zone");
-            
+
         }
     }
 }

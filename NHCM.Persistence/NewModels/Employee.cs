@@ -21,5 +21,8 @@ namespace NHCM.Persistence.NewModels
         public short? TotalDay { get; set; }
         public DateTime? LastPromotionDate { get; set; }
         public string ReferenceNo { get; set; }
+
+        public virtual OrgUnit OrgUnit { get; set; }
+        public virtual Position Position { get; set; }
     }
 }

@@ -29,7 +29,7 @@ namespace NHCM.Application.Recruitment.Commands
         public DateTime? CreatedOn { get; set; }
         public int? CreatedBy { get; set; }
         public DateTime? StartDate { get; set; }
-        public DateTime? Enddate { get; set; }
+        public DateTime? EndDate { get; set; }
         public string OfficialDocumentNo { get; set; }
         public int? LocationId { get; set; }
         public string Institute { get; set; }
@@ -40,13 +40,6 @@ namespace NHCM.Application.Recruitment.Commands
         public string Remarks { get; set; }
         public string MigratedLocation { get; set; }
         public string Faculty { get; set; }
-
-
-
-
-
-
-
     }
 
 
@@ -73,9 +66,6 @@ namespace NHCM.Application.Recruitment.Commands
 
                 using (_context)
                 {
-
-
-
                     // Construct Education Object
                     Education education = new Education()
                     {
@@ -87,7 +77,7 @@ namespace NHCM.Application.Recruitment.Commands
                         CreatedOn = request.CreatedOn,
                         CreatedBy = request.CreatedBy,
                         StartDate = request.StartDate,
-                        Enddate = request.Enddate,
+                        EndDate = request.EndDate,
                         OfficialDocumentNo = request.OfficialDocumentNo,
                         LocationId = request.LocationId,
                         Institute = request.Institute,
@@ -112,49 +102,33 @@ namespace NHCM.Application.Recruitment.Commands
             // Update
             else
             {
-
                 using (_context)
                 {
-
-
                     Education education =await (from e in _context.Education
-                                           where e.Id == request.Id
+                                           where e.Id.Equals(request.Id.Value)
                                            select e).FirstOrDefaultAsync();
-
 
                     education.PersonId = request.PersonId;
                     education.EducationLevelId = request.EducationLevelId;
-                    education.ModifiedOn = request.ModifiedOn;
+                    education.ModifiedOn = DateTime.Now;
                     education.ModifiedBy = request.ModifiedBy;
                     education.ReferenceNo = request.ReferenceNo;
                     education.CreatedOn = request.CreatedOn;
                     education.CreatedBy = request.CreatedBy;
                     education.StartDate = request.StartDate;
-                    education.Enddate = request.Enddate;
+                    education.EndDate = request.EndDate;
                     education.OfficialDocumentNo = request.OfficialDocumentNo;
                     education.LocationId = request.LocationId;
                     education.Institute = request.Institute;
                     education.Course = request.Course;
                     education.Department = request.Department;
-                    education.Inservice = request.Inservice;
                     education.Major = request.Major;
                     education.Remarks = request.Remarks;
-                    education.MigratedLocation = request.MigratedLocation;
                     education.Faculty = request.Faculty;
-
-
-
-
-
                     await _context.SaveChangesAsync();
-
-
                     dbResult = await _mediator.Send(new SearchPersonEducationQuery() { Id = education.Id });
-
                     return dbResult;
-
                 }
-
             }
         }
     }

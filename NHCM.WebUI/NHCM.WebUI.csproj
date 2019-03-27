@@ -28,6 +28,11 @@
     <ProjectReference Include="..\NHCM.Domain\NHCM.Domain.csproj" />
   </ItemGroup>
 
+
+  <ItemGroup>
+    <Folder Include="Pages\Employment\" />
+  </ItemGroup>
+
   
   
 </Project>
