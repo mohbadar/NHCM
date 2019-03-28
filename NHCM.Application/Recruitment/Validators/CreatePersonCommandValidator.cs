@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Text;
+using NHCM.Application.Infrastructure.Extensions;
 using FluentValidation;
 using NHCM.Application.Recruitment.Commands;
 
@@ -11,9 +12,15 @@ namespace NHCM.Application.Recruitment.Validators
         public CreatePersonCommandValidator()
         {
             
-            RuleFor(p => p.FirstName).NotEmpty().MinimumLength(2).WithMessage("نام باید حد اقل دارای یک حرف باشد");
-            RuleFor(p => p.FirstName).MaximumLength(5).WithMessage("نام باید حد اکثر دارای 5 حرف باشد");
+            RuleFor(p => p.FirstName).NotNull().NotEmpty().MinimumLength(3).WithMessage("نام باید حد اقل دارای سه حرف باشد");
+            RuleFor(p => p.FirstName).CannotInclude("$", "نام");
+            RuleFor(p => p.FirstName).CannotInclude(".", "نام");
+
+            RuleFor(p => p.FirstName).MaximumLength(50).WithMessage("نام میتواند حد اکثر دارای پنجاه حرف باشد");
+            RuleFor(p => p.LastName).NotNull().NotEmpty().MinimumLength(3).WithMessage("تخلص فرد باید حداقل دارای  سه حرف باشد");
            
+            
+
         }
 
     }

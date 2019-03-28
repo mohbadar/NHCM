@@ -4,7 +4,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 
-namespace NHCM.Application.Exceptions
+namespace NHCM.Application.Infrastructure.Exceptions
 {
     public class ValidationException : Exception
     {

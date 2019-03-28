@@ -10,7 +10,7 @@ using NHCM.Persistence.Extensions;
 using NHCM.Persistence;
 using System.Linq;
 using Microsoft.EntityFrameworkCore;
-using NHCM.Application.Exceptions;
+using NHCM.Application.Infrastructure.Exceptions;
 using NHCM.Application.Recruitment.Queries;
 using NHCM.Application.Recruitment.Models;
 using NHCM.Application.Common;

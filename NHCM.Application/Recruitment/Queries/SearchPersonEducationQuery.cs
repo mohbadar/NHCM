@@ -8,7 +8,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using System.Linq;
 using Microsoft.EntityFrameworkCore;
-using NHCM.Application.Common.StringProcessor;
+
 
 namespace NHCM.Application.Recruitment.Queries
 {

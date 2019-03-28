@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Text;
 
-namespace NHCM.Application.Exceptions
+namespace NHCM.Application.Infrastructure.Exceptions
 {
     public class BusinessRulesException : Exception
     {

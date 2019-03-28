@@ -1,6 +1,6 @@
 ﻿using Microsoft.Extensions.Configuration;
 using System;
-using NHCM.Application.Exceptions;
+using NHCM.Application.Infrastructure.Exceptions;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
