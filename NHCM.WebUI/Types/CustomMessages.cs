@@ -70,7 +70,7 @@ namespace NHCM.WebUI.Types
             }
             else
             {
-                DescriptionBuilder.Append("\n").Append(":پیام").Append("\n").Append(ex.Message);
+                DescriptionBuilder.Append("\n").Append(ex.Message);
             }
 
             return DescriptionBuilder.ToString();
