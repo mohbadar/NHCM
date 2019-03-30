@@ -67,7 +67,7 @@ namespace NHCM.WebUI.Pages.Organogram
                 command.ModifiedBy = "Test";
                 command.CreatedOn = DateTime.Now;
                 command.ModifiedOn = DateTime.Now;
-                command.StatusId = 51;
+                command.StatusId = 24; // پیشنهاد شده change 
 
                 List<SearchedPlan> dbResult = new List<SearchedPlan>();
                 dbResult = await Mediator.Send(command);
@@ -75,7 +75,7 @@ namespace NHCM.WebUI.Pages.Organogram
                 return new JsonResult(new NHCM.WebUI.Types.UIResult()
                 {
                     Data = new { list = dbResult },
-                    Status = UIStatus.Success,
+                    Status = NHCM.WebUI.Types.UIStatus.Success,
                     Text = "تشکیل موفقانه ثبت سیستم شد",
                     Description = string.Empty
 
@@ -96,9 +96,7 @@ namespace NHCM.WebUI.Pages.Organogram
             }
 
         }
-
-
-
+        
         public async Task<IActionResult> OnPostSearch([FromBody] SearchPlanQuery command)
         {
 
@@ -130,7 +128,6 @@ namespace NHCM.WebUI.Pages.Organogram
                 });
             }
         }
-
 
         public async Task<IActionResult> OnPostNext([FromBody] ConfirmPlanCommand command)
         {

@@ -4,18 +4,26 @@ using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
+using Microsoft.AspNetCore.Mvc.Rendering;
+using NHCM.Application.Lookup.Queries;
 using NHCM.Application.Recruitment.Commands;
 using NHCM.Application.Recruitment.Models;
 using NHCM.Application.Recruitment.Queries;
+using NHCM.Domain.Entities;
 using NHCM.WebUI.Types;
 
 namespace NHCM.WebUI.Pages.Recruitment
 {
     public class MilitaryServiceModel : BasePage
     {
-        public void OnGet()
+        public async Task OnGet()
         {
+            ListOfMilitaryServiceType = new List<SelectListItem>();
 
+            List<MilitaryServiceType> service = new List<MilitaryServiceType>();
+            service = await Mediator.Send(new GetMilitryServiceTypeQuery() { Id = null });
+            foreach (MilitaryServiceType s in service)
+                ListOfMilitaryServiceType.Add(new SelectListItem(s.Name, s.Id.ToString()));
         }
 
 

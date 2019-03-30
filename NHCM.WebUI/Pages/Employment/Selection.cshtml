@@ -10,12 +10,12 @@
     <h1 class="panel-title">پیشنهاد تعیینات</h1>
 </div>
 <div class="panel-body" style="padding-bottom:5px;">
-    <legend class="text-bold">برای ثبت و تغیر پیشنهادات تعیینات از فورم ذیل استفاده نمائید</legend>
     <form id="dv_Employment_Selection" class="form main-form page-component" type="form" attachment="true" prefix="ux">
-        <fieldset class="content-group">
+        <fieldset class="content-group"> 
+            <legend class="text-bold">برای ثبت و تغیر پیشنهادات تعیینات از فورم ذیل استفاده نمائید</legend>
             <div class="row">
 
-                <div class="col-md-4 col-sm-12 col-xs-12 pull-right">
+                <div class="col-md-2 col-sm-12 col-xs-12 pull-right">
                     <div class="form-group">
                         <label class="text-bold">
                             کارمند
@@ -26,7 +26,7 @@
                         </select>
                     </div>
                 </div>
-                <div class="col-md-5 col-sm-12 col-xs-12 pull-right">
+                <div class="col-md-3 col-sm-12 col-xs-12 pull-right">
                     <div class="form-group">
                         <label class="text-bold">
                             عنوان وظیفه
@@ -124,7 +124,7 @@
                         </label>
                         <div class="input-group">
                             <span class="input-group-addon"><i class="icon-calendar3"></i></span>
-                            <input type="text" id="uxeffectivedate" name="uxeffectivedate"  class="form-control Miladi" sibling="uxeffectivedatepersian" placeholder="تاریخ منظوری" required />
+                            <input type="text" id="uxeffectivedate" name="uxeffectivedate" class="form-control Miladi" sibling="uxeffectivedatepersian" placeholder="تاریخ منظوری" required />
                         </div>
                     </div>
                 </div>
@@ -136,7 +136,7 @@
                             ملاحظات
                             <span class="text-danger">&nbsp;*</span>
                         </label>
-                        <textarea id="uxpremarks" name="uxpddescription" rows="2" cols="2" class="form-control remarks" required></textarea>
+                        <textarea id="uxremarks" name="uxremarks" rows="2" cols="2" class="form-control remarks" required></textarea>
                     </div>
                 </div>
             </div>
@@ -155,14 +155,9 @@
             <table style="direction: rtl;" bindonclick="true">
                 <thead>
                     <tr>
-                        <th colname="PositionId">بست</th>
-
-
-                        
-
-
-                        <th colname="DateText">تاریخ</th>
-                        <th colname="EventTypeId">نوع </th>
+                        <th colname="PositionText">بست</th>
+                        <th colname="DateText">تاریخ حکم</th>
+                        <th colname="EventTypeText">نوع </th>
                         <th colname="Remarks"> ملاحضات</th>
                       
                     </tr>

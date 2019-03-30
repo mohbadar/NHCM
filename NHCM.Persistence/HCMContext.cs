@@ -69,6 +69,7 @@ namespace NHCM.Persistence
         public virtual DbSet<PositionChange> PositionChange { get; set; }
         public virtual DbSet<PlanType> PlanType { get; set; }
         public virtual DbSet<SalaryType> SalaryType { get; set; }
+        public virtual DbSet<MilitaryServiceType> MilitaryServiceType { get; set; }
 
 
 

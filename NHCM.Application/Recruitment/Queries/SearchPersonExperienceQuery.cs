@@ -98,14 +98,11 @@ namespace NHCM.Application.Recruitment.Queries
                                     Approved = pe.Approved,
                                     Remarks = pe.Remarks,
                                     ExperienceTypeId = pe.ExperienceTypeId,
-
-
                                     LocationText =resultLocation.Dari,
                                     RankText =  resultRank.Name,
                                     PromotionText = resultpromotion.Dari,
                                     JobStatusText =resultJobStatus.Name,
-                                    ExperienceTypeText = resultExperienceType.Dari,
-
+                                    ExperienceTypeText = resultExperienceType.Dari, 
                                     StartDateText = PersianLibrary.PersianDate.GetFormatedString(pe.StartDate.Value),
                                     EndDateText = PersianLibrary.PersianDate.GetFormatedString(pe.EndDate.Value)
 
@@ -153,13 +150,11 @@ namespace NHCM.Application.Recruitment.Queries
                                     Approved = pe.Approved,
                                     Remarks = pe.Remarks,
                                     ExperienceTypeId = pe.ExperienceTypeId,
-                                     
                                     LocationText = resultLocation.Dari,
                                     RankText = resultRank.Name,
                                     PromotionText = resultpromotion.Dari,
                                     JobStatusText = resultJobStatus.Name,
-                                    ExperienceTypeText = resultExperienceType.Dari,
-
+                                    ExperienceTypeText = resultExperienceType.Dari, 
                                     StartDateText = PersianLibrary.PersianDate.GetFormatedString(pe.StartDate.Value),
                                     EndDateText = PersianLibrary.PersianDate.GetFormatedString(pe.EndDate.Value)
 

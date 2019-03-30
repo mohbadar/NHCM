@@ -20,10 +20,8 @@
                                 نوع خدمت
                                 <span class="text-danger">&nbsp;*</span>
                             </label>
-                            <select id="uxmsmilitaryservicetypeid" name="uxmsMilitaryServiceTypeID" class="select" required>
-                                <option value="1">مکلفیت</option>
-                                <option value="2">احتیاط</option>
-
+                            <select id="uxmsmilitaryservicetypeid" name="uxmsMilitaryServiceTypeID" asp-items="@Model.ListOfMilitaryServiceType" class="select" required>
+                                <option></option>
                             </select>
                         </div>
                     </div>

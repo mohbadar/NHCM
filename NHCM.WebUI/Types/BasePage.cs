@@ -52,7 +52,7 @@ namespace NHCM.WebUI.Types
         public List<SelectListItem> ListOfPlanType;
         public List<SelectListItem> ListOfPositionType;
         public List<EducationLevel> ListOfOrganoGram = new List<EducationLevel>();
-
+        public List<SelectListItem> ListOfMilitaryServiceType;
         public List<SelectListItem> ListOfEventType;
         public List<SelectListItem> ListOfPerson;
         public List<SelectListItem> ListOfPosition;
