@@ -56,12 +56,8 @@
                                 حالت
                                 <span class="text-danger">&nbsp;*</span>
                             </label>
-                            <select id="postatusid" name="poStatusId" class="select " required>
-                                <option value="">&nbsp;&nbsp;---</option>
-                                <option value="19">کمبود</option>
-                                <option value="20">ریزرف شده</option>
-                                <option value="21">موجود</option>
-                                <option value="22">غیر فعال</option>
+                            <select id="postatusid" name="poStatusId"  class="select " asp-items="@Model.ListOfStatus" required>
+                                <option value="">&nbsp;&nbsp;---</option> 
                             </select>
                         </div>
                     </div>
