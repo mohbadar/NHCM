@@ -53,7 +53,7 @@ namespace NHCM.WebUI
             
 
 
-            // 2 Add DbContext and Identity
+            // 2 Add DbContext
             services.AddDbContext<HCMContext>();
 
 

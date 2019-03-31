@@ -137,10 +137,10 @@ namespace NHCM.WebUI.Pages.Recruitment
             {
                 return new JsonResult(new UIResult()
                 {
-                    Data =          null,
-                    Status =        UIStatus.Failure,
-                    Text =          CustomMessages.StateExceptionTitle(ex),
-                    Description =   CustomMessages.DescribeException(ex)
+                    Data = null,
+                    Status = UIStatus.Failure,
+                    Text = CustomMessages.StateExceptionTitle(ex),
+                    Description = CustomMessages.DescribeException(ex)
 
                 });
             }
@@ -153,23 +153,22 @@ namespace NHCM.WebUI.Pages.Recruitment
             {
                 List<SearchedPersonModel> SearchedResult = new List<SearchedPersonModel>();
                 SearchedResult = await Mediator.Send(searchQuery);
-                return new JsonResult(new NHCM.WebUI.Types.UIResult()
+                return new JsonResult(new UIResult()
                 {
                     Data = new { list = SearchedResult },
-                    Status = NHCM.WebUI.Types.UIStatus.SuccessWithoutMessage,
+                    Status = UIStatus.SuccessWithoutMessage,
                     Text = string.Empty,
                     Description = string.Empty
                 });
             }
             catch (Exception ex)
             {
-                return new JsonResult(new NHCM.WebUI.Types.UIResult()
+                return new JsonResult(new UIResult()
                 {
                     Data = null,
-                    Status = NHCM.WebUI.Types.UIStatus.Failure,
-                    Text = CustomMessages.InternalSystemException,
-                    // Can be changed from app settings
-                    Description = ex.Message + " \n" + " StackTrace: " + ex.StackTrace
+                    Status = UIStatus.Failure,
+                    Text = CustomMessages.StateExceptionTitle(ex),
+                    Description = CustomMessages.DescribeException(ex)
                 });
 
             }
@@ -182,7 +181,7 @@ namespace NHCM.WebUI.Pages.Recruitment
             // check for a valid mediatype
             if (!img.ContentType.StartsWith("image/"))
             {
-                return new JsonResult(new NHCM.WebUI.Types.UIResult()
+                return new JsonResult(new UIResult()
                 {
                     Data = null,
                     Status = 0,

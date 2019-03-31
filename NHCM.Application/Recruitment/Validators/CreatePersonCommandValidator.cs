@@ -49,11 +49,11 @@ namespace NHCM.Application.Recruitment.Validators
             RuleFor(p => p.FatherName)
                 .NotNull()
                 .NotEmpty()
-                .MinimumLength(3)
-                .MaximumLength(50)
-                .WithMessage("ولد کارمند حداقل دارای سه و حد اکثر دارای پنجاه حرف بوده میتواند");
+                .MinimumLength(3).WithMessage("ولد کارمند حداقل دارای سه و حد اکثر دارای پنجاه حرف بوده میتواند")
+                .MaximumLength(50).WithMessage("ولد کارمند حداقل دارای سه و حد اکثر دارای پنجاه حرف بوده میتواند");
 
-            RuleFor(p => p.FatherName).CannotInclude(ValidationHelper.ForbiddenSymbols).WithMessage("");
+
+            RuleFor(p => p.FatherName).CannotInclude(ValidationHelper.ForbiddenSymbols).WithMessage("ولد کارمند نمیتواند دارای یکی از سمبول های ذیل باشد" + ValidationHelper.StringyfyList(ValidationHelper.ForbiddenSymbols));
             RuleFor(p => p.FatherName).DariTextOnly().WithMessage("ولد دری کارمند تنها به دری بوده میتواند");
             RuleFor(p => p.FatherName).NoDigit().WithMessage(" ولد دری کارمند نمی تواند دارای ارقام باشد");
 
