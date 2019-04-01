@@ -8,6 +8,7 @@ namespace NHCM.Domain.Entities
     {
         public SkillType()
         {
+            Certification = new HashSet<Certification>();
             InverseParent = new HashSet<SkillType>();
         }
 
@@ -16,6 +17,7 @@ namespace NHCM.Domain.Entities
         public int? ParentId { get; set; }
 
         public virtual SkillType Parent { get; set; }
+        public virtual ICollection<Certification> Certification { get; set; }
         public virtual ICollection<SkillType> InverseParent { get; set; }
     }
 }

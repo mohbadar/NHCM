@@ -31,8 +31,6 @@ namespace NHCM.Persistence.Configurations
                 .IsRequired()
                 .HasMaxLength(100);
 
-            builder.Property(e => e.KeyOutComeDari).HasColumnName("KeyOutCome_Dari");
-
             builder.Property(e => e.ModifiedBy)
                 .IsRequired()
                 .HasMaxLength(200);
@@ -60,8 +58,6 @@ namespace NHCM.Persistence.Configurations
             builder.Property(e => e.Sorter).HasMaxLength(50);
 
             builder.Property(e => e.StatusId).HasColumnName("StatusID");
-
-            builder.Property(e => e.StrategicObject).HasMaxLength(2000);
         }
     }
 }

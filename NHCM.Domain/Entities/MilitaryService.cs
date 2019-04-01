@@ -3,7 +3,7 @@ using System.Collections.Generic;
 
 namespace NHCM.Domain.Entities
 {
-    public partial class MilitaryService
+    public  class MilitaryService
     {
         public int Id { get; set; }
         public decimal PersonId { get; set; }
@@ -16,7 +16,7 @@ namespace NHCM.Domain.Entities
         public DateTime ModifiedOn { get; set; }
         public string Remark { get; set; }
 
-       
+        public virtual MilitaryServiceType MilitaryServiceType { get; set; }
         public virtual Person Person { get; set; }
     }
 }

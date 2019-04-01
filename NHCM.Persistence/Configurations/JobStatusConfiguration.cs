@@ -10,15 +10,15 @@ namespace NHCM.Persistence.Configurations
     {
         public void Configure(EntityTypeBuilder<JobStatus> builder)
         {
-           
-                builder.ToTable("JobStatus", "look");
 
-                builder.Property(e => e.Id)
-                    .HasColumnName("ID")
-                    .HasDefaultValueSql("nextval('look.jobstatus_id_seq'::regclass)");
+            builder.ToTable("JobStatus", "look");
 
-                builder.Property(e => e.Name).HasMaxLength(50);
-           
+            builder.Property(e => e.Id)
+                .HasColumnName("ID")
+                .HasDefaultValueSql("nextval('look.jobstatus_id_seq'::regclass)");
+
+            builder.Property(e => e.Name).HasMaxLength(50);
+
         }
     }
 }

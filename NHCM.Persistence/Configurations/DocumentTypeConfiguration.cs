@@ -19,16 +19,9 @@ namespace NHCM.Persistence.Configurations
 
             builder.Property(e => e.Description).HasMaxLength(200);
 
-            builder.Property(e => e.Name)
-                .IsRequired()
-                .HasMaxLength(100);
+            builder.Property(e => e.Name).HasMaxLength(200);
 
             builder.Property(e => e.ScreenId).HasColumnName("ScreenID");
-
-            builder.HasOne(d => d.Screen)
-                .WithMany(p => p.DocumentType)
-                .HasForeignKey(d => d.ScreenId)
-                .HasConstraintName("DocumentType_ScreenID_fkey");
         }
     }
 }

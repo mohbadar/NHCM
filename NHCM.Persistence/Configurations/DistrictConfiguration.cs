@@ -15,13 +15,11 @@ namespace NHCM.Persistence.Configurations
             builder.ToTable("District", "look");
 
             builder.Property(e => e.Id)
-                    .HasColumnName("ID")
-                    .ValueGeneratedNever();
+                .HasColumnName("ID")
+                .ValueGeneratedNever();
 
             builder.Property(e => e.Name).HasMaxLength(200);
 
-            builder.Property(e => e.Sorter).HasMaxLength(200);
-           
 
         }
     }

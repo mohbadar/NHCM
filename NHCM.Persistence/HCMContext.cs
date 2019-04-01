@@ -84,6 +84,13 @@ namespace NHCM.Persistence
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
+
+            modelBuilder.HasSequence("assettype_id_seq");
+
+
+
+
+
             modelBuilder.ApplyConfigurationsFromAssembly(typeof(HCMContext).Assembly);
             modelBuilder.HasSequence("expertise_id_seq");
             modelBuilder.HasSequence("documentlog_id_seq");
@@ -95,7 +102,7 @@ namespace NHCM.Persistence
             modelBuilder.HasSequence("evaluation_id_seq");
             modelBuilder.HasSequence("workplan_id_seq");
             modelBuilder.HasSequence("addresstype_id_seq");
-            modelBuilder.HasSequence("assettype_id_seq");
+           
             modelBuilder.HasSequence("gender_id_seq");
             modelBuilder.HasSequence("institutetype_id_seq");
             modelBuilder.HasSequence("jobstatus_id_seq");
