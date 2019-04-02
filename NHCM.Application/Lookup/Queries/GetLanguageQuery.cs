@@ -36,7 +36,7 @@ namespace NHCM.Application.Lookup.Queries
             if (request.ID != null)
             {
                 // Return specific language.
-                languages = await _dbContext.Language.Where(l => l.ID == request.ID).ToListAsync(cancellationToken);
+                languages = await _dbContext.Language.Where(l => l.Id == request.ID).ToListAsync(cancellationToken);
                 return languages;
             }
             else

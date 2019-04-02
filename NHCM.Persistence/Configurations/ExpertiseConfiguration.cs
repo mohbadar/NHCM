@@ -15,13 +15,13 @@ namespace NHCM.Persistence.Configurations
             builder.ToTable("Expertise", "look");
 
             builder.Property(e => e.Id)
-                    .HasColumnName("ID")
-                    .HasDefaultValueSql("nextval('look.expertise_id_seq'::regclass)");
+                .HasColumnName("ID")
+                .HasDefaultValueSql("nextval('look.expertise_id_seq'::regclass)");
 
             builder.Property(e => e.Name)
-                    .IsRequired()
-                    .HasMaxLength(50);
-           
+                .IsRequired()
+                .HasMaxLength(50);
+
         }
     }
 }

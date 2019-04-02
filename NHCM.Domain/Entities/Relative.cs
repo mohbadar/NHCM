@@ -16,7 +16,6 @@ namespace NHCM.Domain.Entities
         public string LastName { get; set; }
         public decimal? PersonId { get; set; }
         public string GrandFatherName { get; set; }
-        //public short? RelationShipId { get; set; }
         public int? RelationShipId { get; set; }
         public string NidNo { get; set; }
         public string Profession { get; set; }
@@ -24,17 +23,19 @@ namespace NHCM.Domain.Entities
         public string ContactInfo { get; set; }
         public string PersonalProperty { get; set; }
         public string EmailAddress { get; set; }
-       // public string CurrentVillage { get; set; }
+        public string CurrentVillage { get; set; }
         public string Village { get; set; }
-        //public int? CurrentLocationId { get; set; }
+        public int? CurrentLocationId { get; set; }
         public int? LocationId { get; set; }
-        //public short? ReligionId { get; set; }
-      //  public string JobLocation { get; set; }
+        public short? ReligionId { get; set; }
+        public string JobLocation { get; set; }
         public string Remark { get; set; }
         public string ModifiedBy { get; set; }
         public DateTime? ModifiedOn { get; set; }
         public string ReferenceNo { get; set; }
         public DateTime? CreatedOn { get; set; }
         public int? CreatedBy { get; set; }
+
+        public virtual Religion Religion { get; set; }
     }
 }

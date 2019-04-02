@@ -8,6 +8,5 @@ namespace NHCM.Domain.Entities
     {
         public int Id { get; set; }
         public string Name { get; set; }
-        public string Sorter { get; set; }
     }
 }

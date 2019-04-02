@@ -10,21 +10,21 @@ namespace NHCM.Persistence.Configurations
     {
         public void Configure(EntityTypeBuilder<PublicationType> builder)
         {
-           
-                builder.ToTable("PublicationType", "look");
 
-                builder.Property(e => e.Id)
-                    .HasColumnName("ID")
-                    .HasDefaultValueSql("nextval('look.publicationtype_id_seq'::regclass)");
+            builder.ToTable("PublicationType", "look");
 
-                builder.Property(e => e.Dari).HasMaxLength(50);
+            builder.Property(e => e.Id)
+                .HasColumnName("ID")
+                .HasDefaultValueSql("nextval('look.publicationtype_id_seq'::regclass)");
 
-                builder.Property(e => e.Name)
-                    .IsRequired()
-                    .HasMaxLength(100);
+            builder.Property(e => e.Dari).HasMaxLength(50);
 
-                builder.Property(e => e.Pashto).HasMaxLength(50);
-           
+            builder.Property(e => e.Name)
+                .IsRequired()
+                .HasMaxLength(100);
+
+            builder.Property(e => e.Pashto).HasMaxLength(50);
+
         }
     }
 }

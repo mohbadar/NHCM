@@ -28,7 +28,7 @@ namespace NHCM.WebUI.Pages.Recruitment
             List<Language> languages = new List<Language>();
             languages = await Mediator.Send(new GetLanguageQuery() { ID = null });
             foreach (Language language in languages)
-                ListOfLanguages.Add(new SelectListItem(language.Name, language.ID.ToString()));
+                ListOfLanguages.Add(new SelectListItem(language.Name, language.Id.ToString()));
 
             ListOfExpertise = new List<SelectListItem>();
             List<Expertise> expertises = new List<Expertise>();

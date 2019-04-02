@@ -22,8 +22,5 @@ namespace NHCM.Domain.Entities
         public string Sorter { get; set; }
         public decimal? ParentId { get; set; }
         public short? AndssectorId { get; set; }
-        public string StrategicObject { get; set; }
-        public string KeyOutCome { get; set; }
-        public string KeyOutComeDari { get; set; }
     }
 }

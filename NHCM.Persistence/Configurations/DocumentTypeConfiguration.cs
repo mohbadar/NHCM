@@ -11,6 +11,12 @@ namespace NHCM.Persistence.Configurations
     {
         public void Configure(EntityTypeBuilder<DocumentType> builder)
         {
+           
+
+
+
+
+
             builder.ToTable("DocumentType", "look");
 
             builder.Property(e => e.Id)

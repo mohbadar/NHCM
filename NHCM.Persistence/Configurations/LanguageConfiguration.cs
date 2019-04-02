@@ -11,19 +11,19 @@ namespace NHCM.Persistence.Configurations
     {
         public void Configure(EntityTypeBuilder<Language> builder)
         {
-        
-                builder.ToTable("Language", "look");
 
-                builder.Property(e => e.ID)
-                    .HasColumnName("ID")
-                    .HasDefaultValueSql("nextval('look.language_id_seq'::regclass)");
+            builder.ToTable("Language", "look");
 
-                builder.Property(e => e.Category).HasMaxLength(20);
+            builder.Property(e => e.Id)
+                .HasColumnName("ID")
+                .HasDefaultValueSql("nextval('look.language_id_seq'::regclass)");
 
-                builder.Property(e => e.Name)
-                    .IsRequired()
-                    .HasMaxLength(50);
-           
+            builder.Property(e => e.Category).HasMaxLength(20);
+
+            builder.Property(e => e.Name)
+                .IsRequired()
+                .HasMaxLength(50);
+
         }
     }
 }

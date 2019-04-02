@@ -8,7 +8,7 @@ namespace NHCM.Domain.Entities
     {
 
         public decimal Id { get; set; }
-        public decimal PersonId { get; set; }
+        public decimal? PersonId { get; set; }
         public DateTime ReportDate { get; set; }
         public int StatusId { get; set; }
         public DateTime ModifiedOn { get; set; }
@@ -18,5 +18,7 @@ namespace NHCM.Domain.Entities
         public int? CreatedBy { get; set; }
         public bool? Approved { get; set; }
         public string Remarks { get; set; }
+
+        public virtual Person Person { get; set; }
     }
 }

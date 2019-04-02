@@ -21,8 +21,8 @@ namespace NHCM.Persistence.Configurations
                 .HasDefaultValueSql("nextval('look.educationlevel_id_seq'::regclass)");
 
             builder.Property(e => e.Name)
-                        .IsRequired()
-                        .HasMaxLength(50);
+                .IsRequired()
+                .HasMaxLength(50);
 
             builder.Property(e => e.Parentid).HasColumnName("parentid");
 

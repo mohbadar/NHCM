@@ -7,7 +7,7 @@ namespace NHCM.Domain.Entities
     public class Education
     {
         public decimal Id { get; set; }
-        public decimal PersonId { get; set; }
+        public decimal? PersonId { get; set; }
         public short EducationLevelId { get; set; }
         public DateTime ModifiedOn { get; set; }
         public string ModifiedBy { get; set; }
@@ -26,5 +26,7 @@ namespace NHCM.Domain.Entities
         public string Remarks { get; set; }
         public string MigratedLocation { get; set; }
         public string Faculty { get; set; }
+
+        public virtual EducationLevel EducationLevel { get; set; }
     }
 }
