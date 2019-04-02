@@ -15,7 +15,7 @@ namespace NHCM.Domain.Entities
         public DateTime? CreatedOn { get; set; }
         public int? CreatedBy { get; set; }
         public DateTime? StartDate { get; set; }
-        public DateTime? Enddate { get; set; }
+        public DateTime? EndDate { get; set; }
         public string OfficialDocumentNo { get; set; }
         public int? LocationId { get; set; }
         public string Institute { get; set; }

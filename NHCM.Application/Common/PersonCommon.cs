@@ -173,7 +173,8 @@ namespace NHCM.Application.Common
                 using (_context)
                 {
                     result = await (from r in _context.Relative
-                                    join relationship in _context.Relationship on r.RelationShipId equals relationship.Id into rR
+                                   
+                                   join relationship in _context.Relationship on r.RelationShipId equals relationship.Id into rR
                                     from resultRr in rR.DefaultIfEmpty()
                                     join l in _context.Location on r.LocationId equals l.Id into rL
                                     from resultrL in rL.DefaultIfEmpty()
@@ -263,7 +264,7 @@ namespace NHCM.Application.Common
             if (request.Id != null)
             {
                 result = await (from pl in _context.PersonLanguage
-                                join l in _context.Language on pl.LanguageId equals l.ID into plL
+                                join l in _context.Language on pl.LanguageId equals l.Id into plL
                                 from resultplL in plL.DefaultIfEmpty()
 
                                 join ex in _context.Expertise on pl.ReadingExpertise equals ex.Id into plRex
@@ -306,7 +307,7 @@ namespace NHCM.Application.Common
             else if (request.PersonId != null)
             {
                 result = await (from pl in _context.PersonLanguage
-                                join l in _context.Language on pl.LanguageId equals l.ID into plL
+                                join l in _context.Language on pl.LanguageId equals l.Id into plL
                                 from resultplL in plL.DefaultIfEmpty()
 
                                 join ex in _context.Expertise on pl.ReadingExpertise equals ex.Id into plRex

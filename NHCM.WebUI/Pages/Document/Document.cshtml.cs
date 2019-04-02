@@ -36,7 +36,7 @@ namespace NHCM.WebUI.Pages.Document
         {
             ListOfDocumentTypesD = new List<SelectListItem>();
             List<DocumentType> documentTypesd = new List<DocumentType>();
-            documentTypesd = await Mediator.Send(new GetDocumentTypeQuery() { ScreenID = null, ID = null });
+            documentTypesd = await Mediator.Send(new GetDocumentTypeQuery() { ScreenID = 1, ID = null });
             foreach (DocumentType documentType in documentTypesd)
                 ListOfDocumentTypesD.Add(new SelectListItem() { Text = documentType.Name, Value = documentType.Id.ToString() });
 

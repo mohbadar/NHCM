@@ -10,8 +10,8 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace NHCM.Persistence.Migrations
 {
     [DbContext(typeof(HCMIdentityDbContext))]
-    [Migration("20190401110151_initialIdentitySchema")]
-    partial class initialIdentitySchema
+    [Migration("20190402193648_initialSchemaa")]
+    partial class initialSchemaa
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {

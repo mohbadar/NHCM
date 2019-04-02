@@ -57,15 +57,15 @@ namespace NHCM.Application.Document.Queries
             if (request.Id != null)
             {
                 result = await (from d in _context.Document
-                                join dt in _context.DocumentTypes on d.DocumentTypeId equals dt.Id into ddt
-                                from resultDDT in ddt.DefaultIfEmpty()
+                                //join dt in _context.DocumentTypes on d.DocumentTypeId equals dt.Id into ddt
+                                //from resultDDT in ddt.DefaultIfEmpty()
                                 where d.Id == request.Id
                                 select new SearchedDocumentModel
                                 {
                                     Id = d.Id,
                                     Description = d.Description,
-                                    DocumentTypeId = d.DocumentTypeId,
-                                    DocumentTypeText = resultDDT.Name,
+                                    //DocumentTypeId = d.DocumentTypeId,
+                                    //DocumentTypeText = resultDDT.Name,
                                     Path = d.Path,
                                     DownloadDateText = PersianLibrary.PersianDate.GetFormatedString(d.LastDownloadDate),
                                     UploadDateText = PersianLibrary.PersianDate.GetFormatedString(d.UploadDate)
@@ -75,15 +75,15 @@ namespace NHCM.Application.Document.Queries
             else if (request.RecordId != null)
             {
                 result = await (from d in _context.Document
-                                join dt in _context.DocumentTypes on d.DocumentTypeId equals dt.Id into ddt
-                                from resultDDT in ddt.DefaultIfEmpty()
+                                //join dt in _context.DocumentTypes on d.DocumentTypeId equals dt.Id into ddt
+                                //from resultDDT in ddt.DefaultIfEmpty()
                                 where d.RecordId == request.RecordId
                                 select new SearchedDocumentModel
                                 {
                                     Id = d.Id,
                                     Description = d.Description,
-                                    DocumentTypeId = d.DocumentTypeId,
-                                    DocumentTypeText = resultDDT.Name,
+                                    //DocumentTypeId = d.DocumentTypeId,
+                                    //DocumentTypeText = resultDDT.Name,
                                     Path = d.Path,
                                     DownloadDateText = PersianLibrary.PersianDate.GetFormatedString(d.LastDownloadDate),
                                     UploadDateText = PersianLibrary.PersianDate.GetFormatedString(d.UploadDate)

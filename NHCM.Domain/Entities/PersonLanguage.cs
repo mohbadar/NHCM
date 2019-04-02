@@ -16,6 +16,11 @@ namespace NHCM.Domain.Entities
         public DateTime? CreatedOn { get; set; }
         public int? CreatedBy { get; set; }
 
+        public virtual Language Language { get; set; }
         public virtual Person Person { get; set; }
+        public virtual Expertise ReadingExpertiseNavigation { get; set; }
+        public virtual Expertise SpeakingExpertiseNavigation { get; set; }
+        public virtual Expertise UnderstandingExpertiseNavigation { get; set; }
+        public virtual Expertise WritingExpertiseNavigation { get; set; }
     }
 }

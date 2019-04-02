@@ -11,17 +11,17 @@ namespace NHCM.Persistence.Configurations
     {
         public void Configure(EntityTypeBuilder<ReferenceType> builder)
         {
-            
-                builder.ToTable("ReferenceType", "look");
 
-                builder.Property(e => e.Id)
-                    .HasColumnName("ID")
-                    .HasDefaultValueSql("nextval('look.referencetype_id_seq'::regclass)");
+            builder.ToTable("ReferenceType", "look");
 
-                builder.Property(e => e.Name)
-                    .IsRequired()
-                    .HasMaxLength(50);
-           
+            builder.Property(e => e.Id)
+                .HasColumnName("ID")
+                .HasDefaultValueSql("nextval('look.referencetype_id_seq'::regclass)");
+
+            builder.Property(e => e.Name)
+                .IsRequired()
+                .HasMaxLength(50);
+
         }
     }
 }
