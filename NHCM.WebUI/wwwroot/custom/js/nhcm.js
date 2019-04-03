@@ -449,7 +449,7 @@ var clean = window.clean = window.clean || {};
                     self.el.append("<input type='hidden' class='auto-gen-hidden search' id='" + self.prefix + self.el.attr('parentcol') + "' value = '" + self.parent.record.id + "' /> ");
                 }
                 self.getfields();
-            } 
+            }
 
             var data = {};
             if (r) {
@@ -468,14 +468,9 @@ var clean = window.clean = window.clean || {};
                     if (r) {
                         self.bindtoform(list[0]);
                     }
-                    //////////////////////////////////////////////bind to table positions
-                    else if (self.el.attr('treetable')) {
-                        self.test();
-                    }
                     else {
                         self.bindtogrid(list);
                     }
-
                 }
             });
         },
