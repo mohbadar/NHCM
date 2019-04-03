@@ -23,18 +23,12 @@ namespace NHCM.Application.Recruitment.Validators
             RuleFor(p => p.FirstName)
                 .NoDigit()
                 .WithMessage("نام کارمند نمیتواند دارای ارقام باشد" );
-            RuleFor(p => p.FirstName)
-                .DariTextOnly()
-                .WithMessage("نام دری کارمند تنها به دری بوده میتواند" );
-
-
-
+            RuleFor(p => p.FirstName).DariTextOnly().WithMessage("نام دری کارمند تنها به دری بوده میتواند" );
+              
             // LastName
 
             RuleFor(p => p.LastName).NotNull().NotEmpty().MinimumLength(3).WithMessage("تخلص کارمند باید حد اقل دارای سه حرف باشد" );
-            RuleFor(p => p.LastName)
-                .MaximumLength(50)
-                .WithMessage("تخلص کارمند میتواند حد اکثر دارای پنجاه حرف باشد" );
+            RuleFor(p => p.LastName).MaximumLength(50).WithMessage("تخلص کارمند میتواند حد اکثر دارای پنجاه حرف باشد" );
             RuleFor(p => p.LastName)
                 .CannotInclude(ValidationHelper.ForbiddenSymbols)
                 .WithMessage(" تخلص کارمند نمی تواند یکی از حروف ذیل را داشته باشد " + ValidationHelper.StringyfyList(ValidationHelper.ForbiddenSymbols) );
@@ -49,18 +43,31 @@ namespace NHCM.Application.Recruitment.Validators
             RuleFor(p => p.FatherName)
                 .NotNull()
                 .NotEmpty()
-                .MinimumLength(3)
-                .MaximumLength(50)
-                .WithMessage("ولد کارمند حداقل دارای سه و حد اکثر دارای پنجاه حرف بوده میتواند");
+                .MinimumLength(3). WithMessage("ولد کارمند حداقل دارای سه حرف بوده میتواند")
+                .MaximumLength(50).WithMessage("ولد کارمند حدااکثر دارای پنجاه حرف بوده میتواند");
 
-            RuleFor(p => p.FatherName).CannotInclude(ValidationHelper.ForbiddenSymbols).WithMessage("");
+            RuleFor(p => p.FatherName).CannotInclude(ValidationHelper.ForbiddenSymbols).WithMessage("ولد کارمند نمی تواند یکی از حروف ذیل را داشته باشد");
             RuleFor(p => p.FatherName).DariTextOnly().WithMessage("ولد دری کارمند تنها به دری بوده میتواند");
             RuleFor(p => p.FatherName).NoDigit().WithMessage(" ولد دری کارمند نمی تواند دارای ارقام باشد");
 
+            //GrandFaterhName
+            RuleFor(p => p.GrandFatherName)
+                .NotNull()
+                .NotEmpty()
+                 .MinimumLength(3).WithMessage("نام پدر کلان حداقل دارای سه حرف بوده میتواند")
+                .MaximumLength(50).WithMessage(" نام پدر کلان اکثر دارای پنجاه حرف بوده میتواند"); 
+
+            RuleFor(p => p.GrandFatherName).CannotInclude(ValidationHelper.ForbiddenSymbols).WithMessage("نام پدر کلان نمی تواند یکی از حروف ذیل را داشته باشد");
+            RuleFor(p => p.GrandFatherName).DariTextOnly().WithMessage("نام پدر کلان دری کارمند تنها به دری بوده میتواند");
+            RuleFor(p => p.FatherName).NoDigit().WithMessage(" نام پدر کلان دری کارمند نمی تواند دارای ارقام باشد");
 
 
-
-
+            //DOB
+            RuleFor(p => p.DateOfBirth)
+                .NotNull()
+                .NotEmpty()
+                .WithMessage("تاریخ تولد خالی بوده نمیتواند");
+  
         }
 
     }

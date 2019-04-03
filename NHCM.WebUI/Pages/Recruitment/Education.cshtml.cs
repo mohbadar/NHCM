@@ -59,11 +59,11 @@ namespace NHCM.WebUI.Pages.Recruitment
             {
                 return new JsonResult(new UIResult()
                 {
-
+                     
                     Data = null,
                     Status = UIStatus.Failure,
-                    Text = CustomMessages.InternalSystemException,
-                    Description = ex.Message + " \n StackTrace : " + ex.StackTrace
+                    Text = CustomMessages.StateExceptionTitle(ex),
+                    Description = CustomMessages.DescribeException(ex)
 
                 });
             }

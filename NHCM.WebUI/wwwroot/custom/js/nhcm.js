@@ -449,7 +449,7 @@ var clean = window.clean = window.clean || {};
                     self.el.append("<input type='hidden' class='auto-gen-hidden search' id='" + self.prefix + self.el.attr('parentcol') + "' value = '" + self.parent.record.id + "' /> ");
                 }
                 self.getfields();
-            }
+            } 
 
             var data = {};
             if (r) {
@@ -468,9 +468,14 @@ var clean = window.clean = window.clean || {};
                     if (r) {
                         self.bindtoform(list[0]);
                     }
+                    //////////////////////////////////////////////bind to table positions
+                    else if (self.el.attr('treetable')) {
+                        self.test();
+                    }
                     else {
                         self.bindtogrid(list);
                     }
+
                 }
             });
         },
@@ -587,15 +592,12 @@ var clean = window.clean = window.clean || {};
                     var colname = self.grid.cols[i].toLowerCase();
                     for (var key in ob) {
                         if (key.toLowerCase() == colname) {
-
                             if (colname != 'path') {
                                 var va = ob[key];
                                 if (clean.isEmpty(ob[key]))
                                     va = 'درج نگردیده';
                                 column = column + "<td col='" + key.toLowerCase() + "'>" + va + "</td>";
                             }
-
-
                             else {
                                 var temp = '<button type="button" downloadpath="$path" class="btn-link download-on-click"><i class="icon-download position-right"></i>دریافت فایل</button>'
                                 column = column + "<td col='" + key.toLowerCase() + "'>" + temp.replace('$path', ob[key]) + "</td>";
@@ -605,7 +607,6 @@ var clean = window.clean = window.clean || {};
                 }
                 row = row + "<tr role='row' class='" + rowclick + "' data='" + ob.id + "'>" + column + "</tr>";
             });
-
             $('#' + self.grid.table).find('tbody').empty().html(row);
             $('#' + self.grid.table).DataTable({
                 "paging": false,
@@ -615,19 +616,19 @@ var clean = window.clean = window.clean || {};
                 autoWidth: true,
                 scrollY: 150
             });
-
             $('#' + self.grid.table).find('.fetch-record').click(function () {
                 self.record = {};
                 self.record.id = $(this).attr('data');
                 self.fetch(self);
             });
-
             $('#' + self.grid.table).find('.download-on-click').click(function () {
                 self.download($(this).attr('downloadpath'));
             });
-
             self.bindtoform(d[0]);
+
+
         },
+
         attach: function () {
             var self = this;
             if (!$.isEmptyObject(self.record)) {
@@ -674,17 +675,14 @@ var clean = window.clean = window.clean || {};
             }
         },
         others: function (v) {
-
-
-           
-           var self = r || this;
-            
-
+           //var self = r || this;
+            var self = this;
             var path = self.path + '/' + v.name;
+            var data = {};
             self.fields.each(function () {
-                var fld = $(this);
+                var fld = $(this); 
                 var col = fld.attr('id').substring(self.prefix.length);
-                Object.defineProperty(data, col.toString(), { value: fld.val().toString(), enumerable: true });
+                Object.defineProperty(data, col.toString(), { value: fld.val().toString(), enumerable: true }); 
             });
             clean.data.post({
                 async: false, url: path, data: clean.data.json.write(data), dataType: 'json',
@@ -701,10 +699,7 @@ var clean = window.clean = window.clean || {};
             });
         },
         next: function () {
-
-        
-            
-
+            var self = this;
             var v = {};
             v.name = 'next';
             self.others(v);
