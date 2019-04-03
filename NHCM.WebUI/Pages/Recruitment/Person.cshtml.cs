@@ -93,9 +93,18 @@ namespace NHCM.WebUI.Pages.Recruitment
                 ListOfDocumentTypes.Add(new SelectListItem() { Text = documentType.Name, Value = documentType.Id.ToString() });
 
 
-            string screen = RijndaelManagedEncryption.RijndaelManagedEncryption.DecryptRijndael(HttpContext.Request.Query["p"], "P@33word");
-            int ID = Convert.ToInt32(screen);
-            // int ID = Convert.ToInt32(HttpContext.Request.Query["p"]);
+            int ID;
+            if (!string.IsNullOrEmpty(HttpContext.Request.Query["p"].ToString()))
+            {
+                string screen = RijndaelManagedEncryption.RijndaelManagedEncryption.DecryptRijndael(HttpContext.Request.Query["p"], "P@33word");
+                ID = Convert.ToInt32(screen);
+            }
+            else
+            {
+                // For direct access of the page.
+                ID = 1;
+            }
+
             try
             {
                 List<Screens> screens = new List<Screens>();

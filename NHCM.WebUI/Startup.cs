@@ -106,13 +106,20 @@ namespace NHCM.WebUI
                     options =>
                     {
 
-                        // Comment it in production
-                         options.Conventions.AllowAnonymousToPage("/Security/Register");
+                        // Configuring default pages routes for folders
+                        options.Conventions.AddPageRoute("/Recruitment/Person", "/Recruitment");
+                        options.Conventions.AddPageRoute("/Organogram/Plan", "/Organogram");
+                        options.Conventions.AddPageRoute("/Employment/Selection", "/Employment");
 
+                        // Limiting access to folders
                         options.Conventions.AuthorizeFolder("/Security");
                         options.Conventions.AuthorizeFolder("/Recruitment", "ProfilerPolicy");
                         options.Conventions.AuthorizeFolder("/Shared");
                         options.Conventions.AuthorizePage("/index");
+
+                        // Comment it in production
+                        options.Conventions.AllowAnonymousToPage("/Security/Register");
+
 
                         options.AllowMappingHeadRequestsToGetHandler = true;
 
