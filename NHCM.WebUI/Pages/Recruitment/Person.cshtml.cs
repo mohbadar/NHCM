@@ -120,8 +120,12 @@ namespace NHCM.WebUI.Pages.Recruitment
             {
 
             }
+
+
+
         }
-        
+
+
         public async Task<IActionResult> OnPostSave([FromBody] CreatePersonCommand command)
         {
             try

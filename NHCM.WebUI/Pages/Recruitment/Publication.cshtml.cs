@@ -55,8 +55,9 @@ namespace NHCM.WebUI.Pages.Recruitment
 
                     Data = null,
                     Status = UIStatus.Failure,
-                    Text = CustomMessages.StateExceptionTitle(ex),
-                    Description = CustomMessages.DescribeException(ex)
+                    Text = CustomMessages.InternalSystemException,
+                    // Can be changed from app settings
+                    Description = ex.Message
                 });
             }
         }

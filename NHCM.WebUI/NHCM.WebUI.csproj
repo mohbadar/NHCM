@@ -12,18 +12,6 @@
     <None Remove="wwwroot\old\**" />
   </ItemGroup>
 
-  <ItemGroup>
-    <Compile Remove="Pages\Organogram\CheckOrganogram.cshtml.cs" />
-    <Compile Remove="Pages\Organogram\CheckPositions.cshtml.cs" />
-    <Compile Remove="Pages\Organogram\Confirm.cshtml.cs" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <Content Remove="Pages\Organogram\CheckOrganogram.cshtml" />
-    <Content Remove="Pages\Organogram\CheckPositions.cshtml" />
-    <Content Remove="Pages\Organogram\Confirm.cshtml" />
-  </ItemGroup>
-
 
   <ItemGroup>
     <PackageReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Design" Version="2.2.0" />

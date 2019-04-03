@@ -5,12 +5,6 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Compile Remove="OrganogramCheckAndControl\**" />
-    <EmbeddedResource Remove="OrganogramCheckAndControl\**" />
-    <None Remove="OrganogramCheckAndControl\**" />
-  </ItemGroup>
-
-  <ItemGroup>
     <ProjectReference Include="..\NHCM.Domain\NHCM.Domain.csproj" />
     <ProjectReference Include="..\NHCM.Persistence\NHCM.Persistence.csproj" />
   </ItemGroup>

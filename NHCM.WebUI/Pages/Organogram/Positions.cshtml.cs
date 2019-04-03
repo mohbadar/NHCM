@@ -22,13 +22,6 @@ namespace NHCM.WebUI.Pages.Organogram
         
         public async Task OnGetAsync()
         {
-            ListOfStatus = new List<SelectListItem>();
-            List<Status> statuses = new List<NHCM.Domain.Entities.Status>();
-            statuses = await Mediator.Send(new GetStatusQuery() { category = "PS" });
-            foreach (NHCM.Domain.Entities.Status status in statuses)
-                ListOfStatus.Add(new SelectListItem() { Text = status.Dari, Value = status.Id.ToString() });
-
-
             // Page Specific Lookups
             ListOfPlanType = new List<SelectListItem>();
             List<PlanType> plantype = new List<PlanType>();
@@ -91,10 +84,11 @@ namespace NHCM.WebUI.Pages.Organogram
                 command.ModifiedBy = "Test";
                 command.CreatedOn = DateTime.Now;
                 command.ModifiedOn = DateTime.Now;
-               
+                command.StatusId = 51;
 
                 List<SearchedPosition> dbResult = new List<SearchedPosition>();
                 dbResult = await Mediator.Send(command);
+
                 return new JsonResult(new NHCM.WebUI.Types.UIResult()
                 {
                     Data = new { list = dbResult },
