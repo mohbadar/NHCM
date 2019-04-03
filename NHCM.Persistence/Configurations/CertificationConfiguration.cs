@@ -18,10 +18,15 @@ namespace NHCM.Persistence.Configurations
                 .HasDefaultValueSql("nextval('look.certification_id_seq'::regclass)");
 
             builder.Property(e => e.Name)
-                                .IsRequired()
-                                .HasMaxLength(200);
+                .IsRequired()
+                .HasMaxLength(200);
 
             builder.Property(e => e.SkillTypeId).HasColumnName("SkillTypeID");
+
+            builder.HasOne(d => d.SkillType)
+                .WithMany(p => p.Certification)
+                .HasForeignKey(d => d.SkillTypeId)
+                .HasConstraintName("fk_certification_skilltype");
         }
     }
 }

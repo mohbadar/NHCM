@@ -3,7 +3,7 @@ using System.Collections.Generic;
 
 namespace NHCM.Domain.Entities
 {
-    public partial class Publication
+    public  class Publication
     {
         public decimal Id { get; set; }
         public decimal PersonId { get; set; }
@@ -19,5 +19,6 @@ namespace NHCM.Domain.Entities
         public int? NoofPages { get; set; }
 
         public virtual Person Person { get; set; }
+        public virtual PublicationType PublicationType { get; set; }
     }
 }

@@ -45,11 +45,11 @@ namespace NHCM.WebUI.Pages.Security
 
         {
             // If user is already logged in. This snippet is called when logout partial is clicked.
-            if (_signInManger.IsSignedIn(User))
-            {
-                await _signInManger.SignOutAsync();
+            //if (_signInManger.IsSignedIn(User))
+            //{
+            //    await _signInManger.SignOutAsync();
 
-            }
+            //}
 
             returnUrl = returnUrl ?? Url.Content("~/");
             await HttpContext.SignOutAsync(IdentityConstants.ExternalScheme);

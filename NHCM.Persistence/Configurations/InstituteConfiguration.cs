@@ -25,15 +25,15 @@ namespace NHCM.Persistence.Configurations
             builder.Property(e => e.LocationId).HasColumnName("LocationID");
 
             builder.Property(e => e.Name)
-                        .IsRequired()
-                        .HasMaxLength(100);
+                .IsRequired()
+                .HasMaxLength(100);
 
             builder.Property(e => e.ParentId).HasColumnName("ParentID");
 
             builder.HasOne(d => d.Parent)
-                        .WithMany(p => p.InverseParent)
-                        .HasForeignKey(d => d.ParentId)
-                        .HasConstraintName("fk_institute_institute1");
+                .WithMany(p => p.InverseParent)
+                .HasForeignKey(d => d.ParentId)
+                .HasConstraintName("fk_institute_institute1");
         }
     }
 }

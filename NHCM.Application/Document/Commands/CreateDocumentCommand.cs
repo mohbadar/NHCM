@@ -70,8 +70,8 @@ namespace NHCM.Application.Document.Commands
                     {
                         ContentType = request.ContentType,
                         UploadDate = DateTime.Now,
-                        Module = request.Module,
-                        Item = request.Item,
+                      //  Module = request.Module,
+                      //  Item = request.Item,
                         RecordId = request.RecordId,
                         Root = request.Root,
                         Path = request.Path,
@@ -83,14 +83,13 @@ namespace NHCM.Application.Document.Commands
                         ReferenceNo = "",
                         StatusId = 1,
                         Description = request.Description,
-                        DocumentTypeId = request.DocumentTypeId,
+                     //   DocumentTypeId = request.DocumentTypeId,
                         LastDownloadDate = DateTime.Now
                     };
                     _context.Document.Add(d);
-                    // Before Saving the changes. Get the ID of inserted person and insert a new record to pol.Employee
+                  
                     await _context.SaveChangesAsync(cancellationToken);
-                    // Search and Return the saved object
-                    //PersonCommon common = new PersonCommon(_context);
+                    
                     result = await _mediator.Send(new SearchDocumentQuery() { Id = d.Id });
                     return result;
                 }
@@ -110,12 +109,11 @@ namespace NHCM.Application.Document.Commands
                     d.EncryptionKey = "";
                     d.StatusId = 1;
                     d.Description = request.Description;
-                    d.DocumentTypeId = request.DocumentTypeId;
+            //        d.DocumentTypeId = request.DocumentTypeId;
                     d.LastDownloadDate = DateTime.Now;
-                    // Before Saving the changes. Get the ID of inserted person and insert a new record to pol.Employee
+                    
                     await _context.SaveChangesAsync();
-                    // Search and Return the saved object
-                    //PersonCommon common = new PersonCommon(_context);
+                 
                     result = await _mediator.Send(new SearchDocumentQuery() { Id = d.Id });
                     return result;
                 }

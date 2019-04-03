@@ -16,6 +16,11 @@ namespace NHCM.Domain.Entities
         public short? ParentId { get; set; }
 
         public virtual AssetType Parent { get; set; }
+
         public virtual ICollection<AssetType> InverseParent { get; set; }
+
+
+        // Manually Added
+        public virtual ICollection<PersonAsset> PersonAssets { get; set; }
     }
 }

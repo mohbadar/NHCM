@@ -53,7 +53,7 @@ namespace NHCM.WebUI
             
 
 
-            // 2 Add DbContext and Identity
+            // 2 Add DbContext
             services.AddDbContext<HCMContext>();
 
 
@@ -62,6 +62,7 @@ namespace NHCM.WebUI
             services.AddDbContext<HCMIdentityDbContext>();
 
             services.AddIdentity<HCMUser, HCMRole>(options => { options.User.RequireUniqueEmail = true; })
+                .AddRoles<HCMRole>()
                 .AddErrorDescriber<IdentityLocalizedErrorDescribers>()
                 .AddEntityFrameworkStores<HCMIdentityDbContext>()
                 .AddDefaultTokenProviders();
@@ -91,7 +92,13 @@ namespace NHCM.WebUI
 
 
 
-            // Add MVC with fluent validation, Razor pages option
+            // Add authorization Policy
+            services.AddAuthorization(options => {
+
+                options.AddPolicy("ProfilerPolicy", policy => { policy.RequireRole("Profiler"); });
+            });
+
+            // Add MVC with fluent validation, Razor pages
             services.AddMvc()
                 .AddFluentValidation(fv => fv.RegisterValidatorsFromAssemblyContaining<CreatePersonCommandValidator>())
                 .AddRazorPagesOptions
@@ -99,13 +106,20 @@ namespace NHCM.WebUI
                     options =>
                     {
 
-                        // Comment it in production
-                         options.Conventions.AllowAnonymousToPage("/Security/Register");
+                        // Configuring default pages routes for folders
+                        options.Conventions.AddPageRoute("/Recruitment/Person", "/Recruitment");
+                        options.Conventions.AddPageRoute("/Organogram/Plan", "/Organogram");
+                        options.Conventions.AddPageRoute("/Employment/Selection", "/Employment");
 
+                        // Limiting access to folders
                         options.Conventions.AuthorizeFolder("/Security");
-                        options.Conventions.AuthorizeFolder("/Recruitment");
+                        options.Conventions.AuthorizeFolder("/Recruitment", "ProfilerPolicy");
                         options.Conventions.AuthorizeFolder("/Shared");
                         options.Conventions.AuthorizePage("/index");
+
+                        // Comment it in production
+                        options.Conventions.AllowAnonymousToPage("/Security/Register");
+
 
                         options.AllowMappingHeadRequestsToGetHandler = true;
 

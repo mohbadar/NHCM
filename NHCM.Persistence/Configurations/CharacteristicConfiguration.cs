@@ -19,8 +19,8 @@ namespace NHCM.Persistence.Configurations
                 .ValueGeneratedNever();
 
             builder.Property(e => e.Name)
-                        .IsRequired()
-                        .HasMaxLength(50);
+                .IsRequired()
+                .HasMaxLength(50);
         }
     }
 }

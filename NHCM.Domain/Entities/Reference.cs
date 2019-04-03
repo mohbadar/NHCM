@@ -31,5 +31,8 @@ namespace NHCM.Domain.Entities
         public string DocumentNumber { get; set; }
         public DateTime? DocumentDate { get; set; }
         public string Remark { get; set; }
+
+       // public virtual Bank Bank { get; set; }
+        public virtual ReferenceType ReferenceType { get; set; }
     }
 }

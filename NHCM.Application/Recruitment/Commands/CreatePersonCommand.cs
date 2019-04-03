@@ -81,7 +81,7 @@ namespace NHCM.Application.Recruitment.Commands
 
             List<SearchedPersonModel> result = new List<SearchedPersonModel>();
 
-            //  throw new BusinessRulesException("این استثنا به شکل امتحانی از لایه سیستم");
+            // throw new BusinessRulesException("این استثنا به شکل امتحانی از لایه سیستم");
 
 
             // Save

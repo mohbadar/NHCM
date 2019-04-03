@@ -9,7 +9,7 @@ namespace NHCM.Domain.Entities
         public OrganoGram()
         {
             OrgUnit = new HashSet<OrgUnit>();
-            //OrgUnitChange = new HashSet<OrgUnitChange>();
+           // OrgUnitChange = new HashSet<OrgUnitChange>();
             PositionChange = new HashSet<PositionChange>();
         }
 
@@ -27,7 +27,7 @@ namespace NHCM.Domain.Entities
         public int? NumberOfPositions { get; set; }
 
         public virtual ICollection<OrgUnit> OrgUnit { get; set; }
-        //public virtual ICollection<OrgUnitChange> OrgUnitChange { get; set; }
+       // public virtual ICollection<OrgUnitChange> OrgUnitChange { get; set; }
         public virtual ICollection<PositionChange> PositionChange { get; set; }
     }
 }

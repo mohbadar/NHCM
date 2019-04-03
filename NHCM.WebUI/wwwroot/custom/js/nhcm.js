@@ -70,12 +70,12 @@ var clean = window.clean = {};
                     window.JSON.stringify = JSON2.stringify;
                 },
 
-                
+
                 write: function (v) { return JSON.stringify(v); }
             },
             ajax: function (opt) {
                 var url = opt.url || opt.service;
-                
+
                 if (!opt.url) $.extend(opt, { url: url });
                 var complete1 = opt.complete, success1 = opt.success, ui = clean.widget;
                 opt.contentType = opt.contentType === undefined ? 'application/json; charset=utf-8' : opt.contentType;
@@ -83,7 +83,7 @@ var clean = window.clean = {};
                 return $.ajax($.extend(opt, {
                     timeout: 300000,
 
-                    type : opt.type,
+                    type: opt.type,
                     beforeSend: function (xhr) {
                         xhr.setRequestHeader("XSRF-TOKEN",
                             $('input:hidden[name="__RequestVerificationToken"]').val());
@@ -619,7 +619,9 @@ var clean = window.clean = window.clean || {};
             $('#' + self.grid.table).find('.download-on-click').click(function () {
                 self.download($(this).attr('downloadpath'));
             });
+
             self.bindtoform(d[0]);
+
 
 
         },
@@ -670,8 +672,10 @@ var clean = window.clean = window.clean || {};
             }
         },
         others: function (v) {
+
            //var self = r || this;
             var self = this;
+
             var path = self.path + '/' + v.name;
             var data = {};
             self.fields.each(function () {
@@ -694,7 +698,9 @@ var clean = window.clean = window.clean || {};
             });
         },
         next: function () {
+
             var self = this;
+
             var v = {};
             v.name = 'next';
             self.others(v);

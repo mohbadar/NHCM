@@ -16,6 +16,7 @@ namespace NHCM.Domain.Entities
         public string Description { get; set; }
         public decimal? Value { get; set; }
 
+        public virtual AssetType AssetType { get; set; }
         public virtual Person Person { get; set; }
     }
 }

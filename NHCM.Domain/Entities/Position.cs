@@ -8,9 +8,11 @@ namespace NHCM.Domain.Entities
     {
         public Position()
         {
+          //  Employee = new HashSet<Employee>();
             InverseParent = new HashSet<Position>();
             PositionChange = new HashSet<PositionChange>();
-            //PositionResponsibility = new HashSet<PositionResponsibility>();
+        //    PositionResponsibility = new HashSet<PositionResponsibility>();
+            Selection = new HashSet<Selection>();
         }
 
         public decimal Id { get; set; }
@@ -41,9 +43,10 @@ namespace NHCM.Domain.Entities
         public string PositionResponsibilityAndPurpose { get; set; }
 
         public virtual Position Parent { get; set; }
+       // public virtual ICollection<Employee> Employee { get; set; }
         public virtual ICollection<Position> InverseParent { get; set; }
         public virtual ICollection<PositionChange> PositionChange { get; set; }
-        public virtual ICollection<Selection> Selection { get; set; }
         //public virtual ICollection<PositionResponsibility> PositionResponsibility { get; set; }
+        public virtual ICollection<Selection> Selection { get; set; }
     }
 }
