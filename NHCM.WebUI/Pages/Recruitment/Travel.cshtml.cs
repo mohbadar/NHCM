@@ -54,9 +54,9 @@ namespace NHCM.WebUI.Pages.Recruitment
                 {
 
                     Data = null,
-                    Status = Types.UIStatus.Failure,
-                    Text = CustomMessages.InternalSystemException,
-                    Description = ex.Message + " \n StackTrace : " + ex.StackTrace
+                    Status = UIStatus.Failure,
+                    Text = CustomMessages.StateExceptionTitle(ex),
+                    Description = CustomMessages.DescribeException(ex)
 
                 });
             }
