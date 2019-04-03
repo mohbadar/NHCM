@@ -87,7 +87,7 @@ namespace NHCM.Application.Organogram.Commands
                 using (_context)
                 {
                     OrganoGram toUpdateRecord = await (from org in _context.OrganoGram
-                                                       where org.Id == request.Id
+                                                       where org.Id == request.Id 
                                                         select org).SingleOrDefaultAsync();
 
                     toUpdateRecord.OrganizationId = request.OrganizationId;

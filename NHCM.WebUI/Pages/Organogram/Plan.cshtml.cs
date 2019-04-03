@@ -67,7 +67,7 @@ namespace NHCM.WebUI.Pages.Organogram
                 command.ModifiedBy = "Test";
                 command.CreatedOn = DateTime.Now;
                 command.ModifiedOn = DateTime.Now;
-                command.StatusId = 24; // پیشنهاد شده change 
+                command.StatusId = 24; // پیشنهاد شده change to dynamic
 
                 List<SearchedPlan> dbResult = new List<SearchedPlan>();
                 dbResult = await Mediator.Send(command);
