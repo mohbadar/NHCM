@@ -4,18 +4,26 @@ using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
+using Microsoft.AspNetCore.Mvc.Rendering;
+using NHCM.Application.Lookup.Queries;
 using NHCM.Application.Recruitment.Commands;
 using NHCM.Application.Recruitment.Models;
 using NHCM.Application.Recruitment.Queries;
+using NHCM.Domain.Entities;
 using NHCM.WebUI.Types;
 
 namespace NHCM.WebUI.Pages.Recruitment
 {
     public class MilitaryServiceModel : BasePage
     {
-        public void OnGet()
+        public async Task OnGet()
         {
+            ListOfMilitaryServiceType = new List<SelectListItem>();
 
+            List<MilitaryServiceType> service = new List<MilitaryServiceType>();
+            service = await Mediator.Send(new GetMilitryServiceTypeQuery() { Id = null });
+            foreach (MilitaryServiceType s in service)
+                ListOfMilitaryServiceType.Add(new SelectListItem(s.Name, s.Id.ToString()));
         }
 
 
@@ -33,10 +41,10 @@ namespace NHCM.WebUI.Pages.Recruitment
                 List<SearchedPersonMilitaryService> result = new List<SearchedPersonMilitaryService>();
                 result = await Mediator.Send(command);
 
-                return new JsonResult(new Result()
+                return new JsonResult(new UIResult()
                 {
                     Data = new { list = result },
-                    Status = Status.Success,
+                    Status = UIStatus.Success,
                     Text = " خدمت عسکری کارمند موفقانه ثبت سیستم شد",
                     Description = string.Empty
 
@@ -45,11 +53,11 @@ namespace NHCM.WebUI.Pages.Recruitment
             }
             catch (Exception ex)
             {
-                return new JsonResult(new Result()
+                return new JsonResult(new UIResult()
                 {
 
                     Data = null,
-                    Status = Status.Failure,
+                    Status = UIStatus.Failure,
                     Text = CustomMessages.InternalSystemException,
                     // Can be changed from app settings
                     Description = ex.Message
@@ -65,11 +73,11 @@ namespace NHCM.WebUI.Pages.Recruitment
                 
                 dbResult = await Mediator.Send(query);
 
-                return new JsonResult(new Result()
+                return new JsonResult(new UIResult()
                 {
 
                     Data = new { list = dbResult },
-                    Status = Status.Success,
+                    Status = UIStatus.Success,
                     Text = string.Empty,
                     Description = string.Empty
 
@@ -79,11 +87,11 @@ namespace NHCM.WebUI.Pages.Recruitment
             }
             catch (Exception ex)
             {
-                return new JsonResult(new Result()
+                return new JsonResult(new UIResult()
                 {
 
                     Data = null,
-                    Status = Status.Failure,
+                    Status = UIStatus.Failure,
                     Text = CustomMessages.InternalSystemException,
                     Description = ex.Message + " \n StackTrace : " + ex.StackTrace
 
@@ -99,11 +107,11 @@ namespace NHCM.WebUI.Pages.Recruitment
                 string dbResult = string.Empty;
                 dbResult = await Mediator.Send(command);
 
-                return new JsonResult(new Result()
+                return new JsonResult(new UIResult()
                 {
 
                     Data = new { list = dbResult },
-                    Status = Status.Success,
+                    Status = UIStatus.Success,
                     Text = " خدمت عسکری انتخاب شده موفقانه حذف شد",
                     Description = string.Empty
 
@@ -111,11 +119,11 @@ namespace NHCM.WebUI.Pages.Recruitment
             }
             catch (Exception ex)
             {
-                return new JsonResult(new Result()
+                return new JsonResult(new UIResult()
                 {
 
                     Data = null,
-                    Status = Status.Failure,
+                    Status = UIStatus.Failure,
                     Text = CustomMessages.InternalSystemException,
                     Description = ex.Message + " \n StackTrace : " + ex.StackTrace
 

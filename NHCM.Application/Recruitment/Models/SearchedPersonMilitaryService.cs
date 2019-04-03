@@ -16,6 +16,8 @@ namespace NHCM.Application.Recruitment.Models
         public string Remark { get; set; }
 
 
+        public String StartDateText { get; set; }
+        public String EndDateText { get; set; }
         public string MilitaryServiceTypeText { get; set; }
     }
 }

@@ -25,7 +25,7 @@ namespace NHCM.Application.Lookup.Queries
 
         public async Task<List<Screens>> Handle(GetSubScreens request, CancellationToken cancellationToken)
         {
-            return await _context.Screens.Where(s => s.ParentId == request.ID).ToListAsync(cancellationToken);
+            return await _context.Screens.Where(s => s.ParentId == request.ID).OrderBy(c=>c.Sorter).ToListAsync(cancellationToken);
         }
     }
 

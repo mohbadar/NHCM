@@ -9,13 +9,16 @@
     Croppic = function (id, options) {
         var that = this;
         that.id = id;
+        that.file = {};
         that.obj = $('#' + id);
         that.outputDiv = that.obj;
         // DEFAULT OPTIONS
         that.options = {
             uploadUrl: '',
+            page: {},
             uploadData: {},
             cropUrl: '',
+            downloadUrl: '',
             cropData: {},
             outputUrlId: '',
             //styles
@@ -99,6 +102,8 @@
             } else {
                 that.loadExistingImage();
             }
+
+
         },
         createImgUploadControls: function () {
             var that = this;
@@ -184,25 +189,18 @@
                             image.onload = function () {
                                 that.imgInitW = that.imgW = image.width;
                                 that.imgInitH = that.imgH = image.height;
-
                                 if (that.options.modal) { that.createModal(); }
                                 if (!$.isEmptyObject(that.croppedImg)) { that.croppedImg.remove(); }
-
                                 that.imgUrl = image.src;
-
                                 that.obj.append('<img src="' + image.src + '">');
-
                                 that.initCropper();
                                 that.hideLoader();
-
                                 if (that.options.onAfterImgUpload) that.options.onAfterImgUpload.call(that);
-
                             }
                         };
                         reader.readAsDataURL(that.form.find('input[type="file"]')[0].files[0]);
                     }
                 } else {
-
                     try {
                         // other modern browsers
                         formData = new FormData(that.form[0]);
@@ -212,13 +210,11 @@
                         formData.append('img', that.form.find("input[type=file]")[0].files[0]);
 
                     }
-
                     for (var key in that.options.uploadData) {
                         if (that.options.uploadData.hasOwnProperty(key)) {
                             formData.append(key, that.options.uploadData[key]);
                         }
                     }
-
                     $.ajax({
                         url: that.options.uploadUrl,
                         data: formData,
@@ -240,7 +236,6 @@
         },
         loadExistingImage: function () {
             var that = this;
-
             if ($.isEmptyObject(that.croppedImg)) {
                 if (that.options.onBeforeImgUpload) that.options.onBeforeImgUpload.call(that);
 
@@ -277,7 +272,6 @@
         },
         afterUpload: function (data) {
             var that = this;
-
             response = typeof data == 'object' ? data : jQuery.parseJSON(data);
             if (response.status == 'success') {
                 var file = {};
@@ -289,7 +283,7 @@
                 if (!$.isEmptyObject(that.croppedImg)) { that.croppedImg.remove(); }
 
                 var xhr = new XMLHttpRequest();
-                xhr.open('POST', '/Recruitment/Person/Download', true);
+                xhr.open('POST', that.options.downloadUrl, true);
                 xhr.setRequestHeader("XSRF-TOKEN",
                     $('input:hidden[name="__RequestVerificationToken"]').val());
                 xhr.setRequestHeader("Content-Type", 'application/json; charset=utf-8');
@@ -667,7 +661,6 @@
                         formData.append(key, that.options.cropData[key]);
                     }
                 }
-
                 $.ajax({
                     url: that.options.cropUrl,
                     data: JSON.stringify(cropData),
@@ -685,7 +678,6 @@
                     that.afterCrop(data);
                 });
             }
-
             //
         },
         afterCrop: function (data) {
@@ -696,48 +688,39 @@
             catch (err) {
                 response = typeof data == 'object' ? data : jQuery.parseJSON(data);
             }
-
             if (response.status == 'success') {
 
                 if (that.options.imgEyecandy)
                     that.imgEyecandy.hide();
                 that.destroy();
-
-
-                var file = {};
-                file.Name = response.url;
-
+                that.file = {};
+                that.file.Name = response.url;
                 var xhr = new XMLHttpRequest();
-
-                xhr.open('POST', '/Recruitment/Person/Download', true);
+                xhr.open('POST', that.options.downloadUrl, true);
                 xhr.setRequestHeader("XSRF-TOKEN",
                     $('input:hidden[name="__RequestVerificationToken"]').val());
                 xhr.setRequestHeader("Content-Type", 'application/json; charset=utf-8');
                 xhr.onreadystatechange = function () {
                     if (xhr.readyState == 4 && xhr.status == 200) {
-
                         var blob = new Blob([xhr.response], {
                             type: xhr.getResponseHeader("Content-Type")
                         });
                         var imgUrl = window.URL.createObjectURL(blob);
-
                         var img = $('<img class="croppedImg" src="' + imgUrl + '">');
-
                         that.imgUrl = imgUrl;
                         that.obj.append(img);
-
                         img.load(function () {
-                            if (that.options.outputUrlId !== '') { $('#' + that.options.outputUrlId).val(imgUrl); }
+                            if (that.options.outputUrlId !== '') { $('#' + that.options.outputUrlId).val(that.file.Name); }
                             that.croppedImg = that.obj.find('.croppedImg');
                             that.init();
                             that.hideLoader();
-
+                            that.validate();
                             if (that.options.onAfterImgCrop) that.options.onAfterImgCrop.call(that, response);
                         });
                     }
                 }
                 xhr.responseType = "arraybuffer";
-                xhr.send(JSON.stringify(file));
+                xhr.send(JSON.stringify(that.file));
             }
             if (response.status == 'error') {
                 if (that.options.onError) that.options.onError.call(that, response.message);
@@ -746,6 +729,47 @@
             }
 
 
+        },
+        validate: function () {
+            var that = this;
+            var _valid = $('#' + that.options.outputUrlId).val().length > 0 ? true : false;
+            if (!_valid)
+                that.obj.addClass('hrmis-error');
+            else
+                that.obj.removeClass('hrmis-error');
+            return _valid
+        },
+        bind: function (img) {
+            that = this;
+            that.showLoader();
+            that.destroy();
+            that.file = {};
+            that.file.Name = img;
+            var xhr = new XMLHttpRequest();
+            xhr.open('POST', that.options.downloadUrl, true);
+            xhr.setRequestHeader("XSRF-TOKEN",
+                $('input:hidden[name="__RequestVerificationToken"]').val());
+            xhr.setRequestHeader("Content-Type", 'application/json; charset=utf-8');
+            xhr.onreadystatechange = function () {
+                if (xhr.readyState == 4 && xhr.status == 200) {
+                    var blob = new Blob([xhr.response], {
+                        type: xhr.getResponseHeader("Content-Type")
+                    });
+                    var imgUrl = window.URL.createObjectURL(blob);
+                    var img = $('<img class="croppedImg" src="' + imgUrl + '">');
+                    that.imgUrl = imgUrl;
+                    that.obj.append(img);
+                    img.load(function () {
+                        if (that.options.outputUrlId !== '') { $('#' + that.options.outputUrlId).val(that.file.Name); }
+                        that.croppedImg = that.obj.find('.croppedImg');
+                        that.init();
+                        that.hideLoader();
+
+                    });
+                }
+            }
+            xhr.responseType = "arraybuffer";
+            xhr.send(JSON.stringify(that.file));
         },
         showLoader: function () {
             var that = this;
@@ -781,6 +805,9 @@
             if (!$.isEmptyObject(that.form)) { that.form.remove(); }
             that.obj.html('');
         },
+        sendfile: function (r) {
+            alert(this.file.Name);
+        },
         isAjaxUploadSupported: function () {
             var input = document.createElement("input");
             input.type = "file";
@@ -793,7 +820,6 @@
         },
         CreateFallbackIframe: function () {
             var that = this;
-
             if (!that.isAjaxUploadSupported()) {
 
                 if (jQuery.isEmptyObject(that.iframeobj)) {
@@ -809,7 +835,6 @@
                 } else {
                     iframe = that.iframeobj[0];
                 }
-
                 var myContent = '<!DOCTYPE html>'
                     + '<html><head><title>Uploading File</title></head>'
                     + '<body>'
@@ -824,10 +849,8 @@
                 iframe.contentWindow.document.open('text/htmlreplace');
                 iframe.contentWindow.document.write(myContent);
                 iframe.contentWindow.document.close();
-
                 that.iframeobj = $("#" + that.id + "_upload_iframe");
                 that.iframeform = that.iframeobj.contents().find("html").find("." + that.id + "_upload_iframe_form");
-
                 that.iframeform.on("change", "input", function () {
                     that.SubmitFallbackIframe(that);
                 });

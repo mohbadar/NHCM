@@ -8,10 +8,13 @@ namespace NHCM.Persistence.Extensions
     {
         public static string Right(this string sValue, int noOfExtraction)
         {
-
-
             return sValue.Substring(sValue.Length - noOfExtraction);
+        }
 
+
+        public static string CleanValue(this string val)
+        {
+            return !String.IsNullOrWhiteSpace(val) ? val.Trim() : "درج نگردیده";
         }
     }
 }

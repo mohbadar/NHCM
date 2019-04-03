@@ -22,10 +22,12 @@ namespace NHCM.Application.Recruitment.Queries
         public string Reason { get; set; }
         public string AccompanyWith { get; set; }
         public string ReferenceNo { get; set; }
-      
-        
-
+       
         public string CountryText { get; set; }
+
+
+        public String TravelDateText { get; set; }
+        public String ReturnDateText { get; set; }
     }
 
     public class SearchPersonTravelHandler : IRequestHandler<SearchPersonTravelQuery, List<SearchedPersonTravel>>
@@ -54,12 +56,14 @@ namespace NHCM.Application.Recruitment.Queries
                                         ReturnDate = pt.ReturnDate,
                                         Reason = pt.Reason,
                                         AccompanyWith = pt.AccompanyWith,
-                                        ReferenceNo = pt.ReferenceNo,
-                                        
-                                        CountryText = l.Name
+                                        ReferenceNo = pt.ReferenceNo, 
+                                        CountryText = l.Dari,
+
+                                        TravelDateText = PersianLibrary.PersianDate.GetFormatedString(pt.TravelDate.Value),
+                                        ReturnDateText = PersianLibrary.PersianDate.GetFormatedString(pt.ReturnDate.Value)
 
 
-                                    }).ToListAsync(cancellationToken);
+                                    }).OrderByDescending(t => t.TravelDate).ToListAsync(cancellationToken);
                 }
             }
 
@@ -81,12 +85,15 @@ namespace NHCM.Application.Recruitment.Queries
                                         ReturnDate = pt.ReturnDate,
                                         Reason = pt.Reason,
                                         AccompanyWith = pt.AccompanyWith,
-                                        ReferenceNo = pt.ReferenceNo,
+                                        ReferenceNo = pt.ReferenceNo, 
+                                        CountryText = l.Dari,
 
-                                        CountryText = l.Name
+
+                                        TravelDateText = PersianLibrary.PersianDate.GetFormatedString(pt.TravelDate.Value),
+                                        ReturnDateText = PersianLibrary.PersianDate.GetFormatedString(pt.ReturnDate.Value)
 
 
-                                    }).ToListAsync(cancellationToken);
+                                    }).OrderByDescending(t => t.TravelDate).ToListAsync(cancellationToken);
                 }
             }
             return result;

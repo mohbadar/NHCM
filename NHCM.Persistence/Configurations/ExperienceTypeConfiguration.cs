@@ -12,16 +12,14 @@ namespace NHCM.Persistence.Configurations
         public void Configure(EntityTypeBuilder<ExperienceType> builder)
         {
 
-                builder.ToTable("ExperienceType", "look");
+            builder.ToTable("ExperienceType", "look");
 
-                builder.Property(e => e.Id)
-                    .HasColumnName("ID")
-                    .ValueGeneratedNever();
+            builder.Property(e => e.Id)
+                .HasColumnName("ID")
+                .ValueGeneratedNever();
 
-                builder.Property(e => e.Dari).HasMaxLength(50);
+            builder.Property(e => e.Dari).HasMaxLength(50);
 
-                builder.Property(e => e.Name).HasMaxLength(50);
-           
         }
     }
 }

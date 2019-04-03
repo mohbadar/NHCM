@@ -9,5 +9,7 @@ namespace NHCM.Domain.Entities
         public int Id { get; set; }
         public string Name { get; set; }
         public int? SkillTypeId { get; set; }
+
+        public virtual SkillType SkillType { get; set; }
     }
 }

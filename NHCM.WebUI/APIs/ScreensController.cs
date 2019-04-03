@@ -30,20 +30,20 @@ namespace NHCM.WebUI.APIs
             {
                 List<Screens> screens = new List<Screens>();
                 screens = await _mediator.Send(command);
-                return new JsonResult(new NHCM.WebUI.Types.Result()
+                return new JsonResult(new NHCM.WebUI.Types.UIResult()
                 {
                     Data = new { list = screens },
-                    Status =NHCM.WebUI.Types. Status.Success,
+                    Status =NHCM.WebUI.Types. UIStatus.Success,
                     Description = string.Empty,
                     Text = string.Empty
                 });
             }
             catch(Exception ex)
             {
-                return new JsonResult(new NHCM.WebUI.Types. Result()
+                return new JsonResult(new NHCM.WebUI.Types. UIResult()
                 {
                     Data = null,
-                    Status = NHCM.WebUI.Types.Status.Failure,
+                    Status = NHCM.WebUI.Types.UIStatus.Failure,
                     Text = CustomMessages.InternalSystemException,
                     Description = ex.Message + "\n StackTrace: " + ex.StackTrace
                 });
@@ -56,20 +56,20 @@ namespace NHCM.WebUI.APIs
             //{
             //    List<Screens> screens = new List<Screens>();
             //    screens = await _mediator.Send(new GetScreensByParentID() { ID = ParentID });
-            //    return new JsonResult(new Result()
+            //    return new JsonResult(new UIResult()
             //    {
             //        Data = new { list = screens },
-            //        Status = Status.Success,
+            //        Status = UStatus,
             //        Text = string.Empty,
             //        Description = string.Empty
             //    });
             //}
             //catch(Exception ex)
             //{
-            //    return new JsonResult(new Result()
+            //    return new JsonResult(new UIResult()
             //    {
             //        Data = null,
-            //        Status = Status.Failure,
+            //        Status = UStatus,
             //        Text = CustomMessages.InternalSystemException,
             //        Description = ex.Message + "\n StackTrace: " + ex.StackTrace
             //    });

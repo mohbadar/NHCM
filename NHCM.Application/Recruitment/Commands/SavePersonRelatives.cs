@@ -161,6 +161,9 @@ namespace NHCM.Application.Recruitment.Commands
                     UpdateableRecord.ModifiedOn = request.ModifiedOn;
 
                     await _context.SaveChangesAsync(cancellationToken);
+                    PersonCommon common = new PersonCommon(_context);
+                    // Return Saved Relative
+                    result = await common.SearchPersonRelative(new Queries.SearchPersonRelativeQuery() { Id = UpdateableRecord.Id }, cancellationToken);
                 }
             }
 

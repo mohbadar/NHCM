@@ -15,6 +15,7 @@ namespace NHCM.Application.Recruitment.Models
         public string Isbn { get; set; }
         public int? NoofPages { get; set; }
 
+        public String PublishDateText { get; set; }
         public string PublicationTypeText { get; set; }
     }
 }

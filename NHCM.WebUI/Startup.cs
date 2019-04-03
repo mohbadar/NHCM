@@ -10,7 +10,7 @@ using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.HttpsPolicy;
-
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -18,6 +18,10 @@ using NHCM.Application.Infrastructure;
 using NHCM.Application.Recruitment.Commands;
 using NHCM.Application.Recruitment.Validators;
 using NHCM.Persistence;
+using NHCM.Persistence.Identity.Infrastructure;
+using NHCM.Persistence.Infrastructure.Identity;
+using NHCM.WebUI.Areas.Security;
+using NHCM.WebUI.Types;
 
 namespace NHCM.WebUI
 {
@@ -41,26 +45,103 @@ namespace NHCM.WebUI
                 options.MinimumSameSitePolicy = SameSiteMode.None;
             });
 
+
+
            
-
-            // Add MVC with fluent validation.
-            services.AddMvc()
-                .AddFluentValidation(fv => fv.RegisterValidatorsFromAssemblyContaining<SearchPersonQueryValidator>())
-                .SetCompatibilityVersion(CompatibilityVersion.Version_2_2);
-
+            // 1 Antiforgery
             services.AddAntiforgery(options => options.HeaderName = "XSRF-TOKEN");
             
-            // Add DbContext
+
+
+            // 2 Add DbContext
             services.AddDbContext<HCMContext>();
+
+
+            // 3 Identity
+
+            services.AddDbContext<HCMIdentityDbContext>();
+
+            services.AddIdentity<HCMUser, HCMRole>(options => { options.User.RequireUniqueEmail = true; })
+                .AddRoles<HCMRole>()
+                .AddErrorDescriber<IdentityLocalizedErrorDescribers>()
+                .AddEntityFrameworkStores<HCMIdentityDbContext>()
+                .AddDefaultTokenProviders();
+
+            services.Configure<IdentityOptions>(options => {
+                options.Password.RequireNonAlphanumeric = false;
+                options.Password.RequiredLength = 6;
+               
+            });
+
+
+          
+
+         
+
+
+
+            
+
+
+
 
             // Add MediatR
             services.AddTransient(typeof(IPipelineBehavior<,>), typeof(RequestPreProcessorBehavior<,>));
-          //  services.AddTransient(typeof(IPipelineBehavior<,>), typeof(RequestValidationBehavior<,>));
+             services.AddTransient(typeof(IPipelineBehavior<,>), typeof(RequestValidationBehavior<,>));
             services.AddMediatR(typeof(CreatePersonCommandHandler).GetTypeInfo().Assembly);
+
+
+
+            // Add authorization Policy
+            services.AddAuthorization(options => {
+
+                options.AddPolicy("ProfilerPolicy", policy => { policy.RequireRole("Profiler"); });
+            });
+
+            // Add MVC with fluent validation, Razor pages
+            services.AddMvc()
+                .AddFluentValidation(fv => fv.RegisterValidatorsFromAssemblyContaining<CreatePersonCommandValidator>())
+                .AddRazorPagesOptions
+                (
+                    options =>
+                    {
+
+                        // Comment it in production
+                         options.Conventions.AllowAnonymousToPage("/Security/Register");
+
+                        options.Conventions.AuthorizeFolder("/Security");
+                        options.Conventions.AuthorizeFolder("/Recruitment", "ProfilerPolicy");
+                        options.Conventions.AuthorizeFolder("/Shared");
+                        options.Conventions.AuthorizePage("/index");
+
+                        options.AllowMappingHeadRequestsToGetHandler = true;
+
+                    }
+                )
+                .SetCompatibilityVersion(CompatibilityVersion.Version_2_2);
+
+            services.ConfigureApplicationCookie
+                (
+                    options =>
+                    {
+                        options.LoginPath = "/Security/Login";
+                    }
+                );
+
+
+
+
         }
 
+
+
+
+
+
+
+
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
-        public void Configure(IApplicationBuilder app, IHostingEnvironment env)
+        public async void Configure(IApplicationBuilder app, IHostingEnvironment env, IServiceProvider serviceProvider)
         {
             if (env.IsDevelopment())
             {
@@ -74,12 +155,17 @@ namespace NHCM.WebUI
             }
 
 
+            // User type extension method used for providing configuration from config file in static methods.
+            serviceProvider.SetConfigurationProvider(Configuration);
 
-           
             app.UseHttpsRedirection();
             app.UseStaticFiles();
+            app.UseAuthentication();
             app.UseCookiePolicy();
             app.UseMvc();
         }
+
+
+       
     }
 }

@@ -20,9 +20,8 @@
     <meta name="msapplication-TileImage" content="~/assets/favicon/ms-icon-144x144.png">
     <meta name="theme-color" content="#ffffff">
 
-    <title>IARCSC - HRMIS</title>
+    <title>سیستم ملی منابع بشری دولت افغانستان</title>
     @* Template css references *@
-    <link href="https://fonts.googleapis.com/css?family=Roboto:400,300,100,500,700,900" rel="stylesheet" type="text/css">
     <link href="~/assets/css/icons/icomoon/styles.css" rel="stylesheet" type="text/css">
     <link href="~/assets/css/minified/bootstrap.min.css" rel="stylesheet" type="text/css">
     <link href="~/assets/css/minified/core.min.css" rel="stylesheet" type="text/css">
@@ -34,15 +33,19 @@
     @* CSS for the persian datepicker *@
     <link href="~/custom/css/jquery.md.bootstrap.datetimepicker.style.css" rel="stylesheet" />
     @* Overriden other classes*@
-    <link href="~/custom/css/overridenclasses.css" rel="stylesheet" />
     <link href="~/custom/css/hrmis.css" rel="stylesheet" />
 </head>
 <body class="rtl" dir="rtl">
+    <div id="overlay">
+        <div class="centered">
+            <img src="~/custom/images/iarcsc.gif" class="centered" style="margin-left: auto; margin-right: auto;" />
+        </div>
+    </div>
     <!-- Main navbar -->
     <div class="navbar" style="background: #fff; box-shadow: 0 0 0.5cm rgba(0, 0, 0, 0.5); color: #444;">
         <div class="navbar-header">
             <a class="navbar-brand" href="../index">
-                <img src="~/assets/images/iarcsc.png" />
+                <img src="~/assets/img/iarcsc.png" />
                 <span>
                     کمیسیون مستقل اصلاحات اداری و خدمات ملکی
                 </span>
@@ -52,22 +55,27 @@
                 <li><a class="sidebar-mobile-main-toggle"><i class="icon-paragraph-justify3"></i></a></li>
             </ul>
         </div>
-        @*<div class="navbar-collapse collapse" id="navbar-mobile">
-                <ul class="nav navbar-nav navbar-right">
-                    <li class="dropdown dropdown-user">
-                        <a class="dropdown-toggle" data-toggle="dropdown">
-                            <span id="uxUserNameLeft" style="color: #444;"></span>
-                            <i class="caret" style="color: #444;"></i>
-                        </a>
-                        <ul class="dropdown-menu dropdown-menu-right">
-                            <li><a href="Error.aspx"><i class="icon-user-plus"></i>Profile</a></li>
-                            <li><a href="Error.aspx"><i class="icon-key"></i>Change Password</a></li>
-                            <li class="divider"></li>
-                            <li><a href="UnAuthorized.aspx"><i class="icon-switch2"></i>Log out</a></li>
-                        </ul>
-                    </li>
+        <ul class="nav navbar-nav">
+
+            @*<li class="dropdown dropdown-user">
+                <a class="dropdown-toggle" data-toggle="dropdown">
+                    <i class="caret"></i>
+                    <span>میر عزیز الله رحمتی کارمند اداره ملی احصائیه و معلومات</span>
+
+                </a>
+                <ul class="dropdown-menu dropdown-menu-right">
+                    <li><a href="#"><i class="icon-user-plus"></i>بیوگرافی من</a></li>
+                    <li><a href="#"><span class="badge bg-teal-400 pull-right">58</span> <i class="icon-comment-discussion"></i>پیام های من</a></li>
+                    <li class="divider"></li>
+                    <li><a href="#"><i class="icon-cog5"></i>تنظیمات حساب من</a></li>
+                    <li><a href="#"><i class="icon-switch2"></i> خروج از سیستم</a></li>
                 </ul>
-            </div>*@
+
+            </li>*@
+
+            <partial name="_LoginPartial" />
+
+        </ul>
     </div>
     <!-- /main navbar -->
     <!-- /main navbar -->
@@ -76,7 +84,6 @@
         <!-- Page content -->
         <div class="page-content">
             <div class="content-wrapper">
-                <!-- Content area -->
                 <div class="content">
                     <div class="row">
                         <div class="col-md-12 pull-right">
@@ -112,11 +119,15 @@
         <script type="text/javascript" src="~/assets/js/plugins/notifications/jgrowl.min.js"></script>
         <script type="text/javascript" src="~/assets/js/plugins/forms/validation/validate.min.js"></script>
 
+
+        <script src="~/assets/js/plugins/uploaders/fileinput.min.js"></script>
+
+
         <script src="~/assets/js/plugins/forms/selects/select2.min.js"></script>
         <script src="~/custom/js/jquery.md.bootstrap.datetimepicker.js"></script>
         <script src="~/assets/js/plugins/forms/validation/localization/messages_fa.js"></script>
         <script src="~/assets/js/plugins/croppic/croppic.js"></script>
-
+        <script src="~/custom/js/app.js"></script>
         <script src="~/custom/js/nhcm.js"></script>
     </environment>
     <script>

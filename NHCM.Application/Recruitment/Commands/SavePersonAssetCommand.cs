@@ -93,7 +93,9 @@ namespace NHCM.Application.Recruitment.Commands
                     toUpdateRecord.Value = request.Value;
 
                     await _context.SaveChangesAsync(cancellationToken);
-                     
+
+                    result = await _mediator.Send(new Queries.SearchPersonAssetQuery() { Id = toUpdateRecord.Id });
+
                 }
             }
 

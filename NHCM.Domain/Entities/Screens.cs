@@ -8,6 +8,7 @@ namespace NHCM.Domain.Entities
     {
         public Screens()
         {
+            DocumentType = new HashSet<DocumentType>();
             InverseParent = new HashSet<Screens>();
         }
 
@@ -20,6 +21,7 @@ namespace NHCM.Domain.Entities
         public int? ParentId { get; set; }
 
         public virtual Screens Parent { get; set; }
+        public virtual ICollection<DocumentType> DocumentType { get; set; }
         public virtual ICollection<Screens> InverseParent { get; set; }
     }
 

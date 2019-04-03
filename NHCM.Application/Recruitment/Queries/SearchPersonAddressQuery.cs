@@ -24,7 +24,7 @@ namespace NHCM.Application.Recruitment.Queries
         public int? LocationId { get; set; }
         public int? DistrictId { get; set; }
         public string Village { get; set; }
-        public string Address1 { get; set; }
+        public string Address1 { get; set; } //change it to Address also in database
         public string StreetNo { get; set; }
         public string HouseNo { get; set; }
         public string Phone { get; set; }
@@ -35,10 +35,7 @@ namespace NHCM.Application.Recruitment.Queries
         public int? ClocationId { get; set; }
         public int? CdistrictId { get; set; }
         public string Cvillage { get; set; }
-
-
-
-
+         
     }
 
 
@@ -57,8 +54,7 @@ namespace NHCM.Application.Recruitment.Queries
 
             if (request.Id != null)
             {
-
-
+                 
                 result = await (from ad in _context.Address
                                 join l in _context.Location on ad.LocationId equals l.Id into adL
                                 from resultLocation in adL.DefaultIfEmpty()
@@ -88,7 +84,7 @@ namespace NHCM.Application.Recruitment.Queries
                                     LocationId = ad.LocationId,
                                     DistrictId = ad.DistrictId,
                                     Village = ad.Village,
-                                    Address1 = ad.Address1,
+                                    Address1 = ad.Address1,  //change it to Address also in database
                                     StreetNo = ad.StreetNo,
                                     HouseNo = ad.HouseNo,
                                     Phone = ad.Phone,
@@ -106,9 +102,7 @@ namespace NHCM.Application.Recruitment.Queries
                                     DistrictText =resultDistrict.Name,
                                     ClocationText = resultCLocation.Name,
                                     CdistrictText = resultCdistrict.Name
-
-
-
+                                     
                                 }).ToListAsync(cancellationToken);
             }
 
@@ -144,7 +138,7 @@ namespace NHCM.Application.Recruitment.Queries
                                     LocationId = ad.LocationId,
                                     DistrictId = ad.DistrictId,
                                     Village = ad.Village,
-                                    Address1 = ad.Address1,
+                                    Address1 = ad.Address1, //change it to Address also in database
                                     StreetNo = ad.StreetNo,
                                     HouseNo = ad.HouseNo,
                                     Phone = ad.Phone,
@@ -162,17 +156,9 @@ namespace NHCM.Application.Recruitment.Queries
                                     DistrictText = resultDistrict.Name,
                                     ClocationText = resultCLocation.Name,
                                     CdistrictText = resultCdistrict.Name
-
-
-
+                                     
                                 }).ToListAsync(cancellationToken);
-            }
-
-
-
-
-
-
+            } 
             return result;
         }
     }

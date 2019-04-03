@@ -26,7 +26,8 @@ namespace NHCM.Application.Recruitment.Queries
         public string Remarks { get; set; }
 
 
-       
+        public String ReportDateText { get; set; } 
+
     }
 
     public class SearchPersonHealthReportQueryHandler : IRequestHandler<SearchPersonHealthReportQuery, List<SearchedPersonHealthReport>>
@@ -52,19 +53,17 @@ namespace NHCM.Application.Recruitment.Queries
                                         Id = phr.Id,
                                         PersonId = phr.PersonId,
                                         ReportDate = phr.ReportDate,
-                                        StatusId = phr.StatusId,
-                                       
-                                      
-                                        ReferenceNo = phr.ReferenceNo,
-                                        
-                                        
+                                        ReportDateText = PersianLibrary.PersianDate.GetFormatedString(phr.ReportDate), 
+
+                                        StatusId = phr.StatusId, 
+                                        ReferenceNo = phr.ReferenceNo, 
                                         Approved = phr.Approved,
                                         Remarks = phr.Remarks,
 
                                         StatusText = resulths.Dari
                                        
 
-                                    }).ToListAsync(cancellationToken);
+                                    }).OrderBy(h => h.ReportDate).ToListAsync(cancellationToken);
                 }
             }
 
@@ -84,19 +83,17 @@ namespace NHCM.Application.Recruitment.Queries
                                         Id = phr.Id,
                                         PersonId = phr.PersonId,
                                         ReportDate = phr.ReportDate,
-                                        StatusId = phr.StatusId,
 
-
-                                        ReferenceNo = phr.ReferenceNo,
-
-
+                                        ReportDateText = PersianLibrary.PersianDate.GetFormatedString(phr.ReportDate),
+                                        StatusId = phr.StatusId, 
+                                        ReferenceNo = phr.ReferenceNo, 
                                         Approved = phr.Approved,
                                         Remarks = phr.Remarks,
 
                                         StatusText = resulths.Dari
 
 
-                                    }).ToListAsync(cancellationToken);
+                                    }).OrderBy(h => h.ReportDate).ToListAsync(cancellationToken);
                 }
             }
             return result;

@@ -19,9 +19,9 @@ namespace NHCM.Application.Recruitment.Queries
         public short PublicationTypeId { get; set; }
         public string Subject { get; set; }
         public DateTime PublishDate { get; set; }
-      
-        public string ReferenceNo { get; set; }
-       
+
+        public String PublishDateText { get; set; }
+        public string ReferenceNo { get; set; } 
         public string Isbn { get; set; }
         public int? NoofPages { get; set; }
 
@@ -58,6 +58,7 @@ namespace NHCM.Application.Recruitment.Queries
                                     PublicationTypeId = pu.PublicationTypeId,
                                     Subject = pu.Subject,
                                     PublishDate = pu.PublishDate,
+                                    PublishDateText = PersianLibrary.PersianDate.GetFormatedString(pu.PublishDate),
                                     ReferenceNo = pu.ReferenceNo,
                                     Isbn = pu.Isbn,
                                     NoofPages = pu.NoofPages,
@@ -65,7 +66,7 @@ namespace NHCM.Application.Recruitment.Queries
                                     PublicationTypeText = pt.Dari
 
 
-                                }).ToListAsync(cancellationToken);
+                                }).OrderBy(p => p.PublishDate).ToListAsync(cancellationToken);
             }
 
 
@@ -84,6 +85,8 @@ namespace NHCM.Application.Recruitment.Queries
                                     PublicationTypeId = pu.PublicationTypeId,
                                     Subject = pu.Subject,
                                     PublishDate = pu.PublishDate,
+
+                                    PublishDateText = PersianLibrary.PersianDate.GetFormatedString(pu.PublishDate),
                                     ReferenceNo = pu.ReferenceNo,
                                     Isbn = pu.Isbn,
                                     NoofPages = pu.NoofPages,
@@ -91,7 +94,7 @@ namespace NHCM.Application.Recruitment.Queries
                                     PublicationTypeText = pt.Dari
 
 
-                                }).ToListAsync(cancellationToken);
+                                }).OrderBy(p => p.PublishDate).ToListAsync(cancellationToken);
             }
 
 

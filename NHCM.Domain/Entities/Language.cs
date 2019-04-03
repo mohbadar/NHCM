@@ -6,8 +6,15 @@ namespace NHCM.Domain.Entities
 {
     public class Language
     {
-        public int ID { get; set; }
+        public Language()
+        {
+            PersonLanguage = new HashSet<PersonLanguage>();
+        }
+
+        public short Id { get; set; }
         public string Name { get; set; }
         public string Category { get; set; }
+
+        public virtual ICollection<PersonLanguage> PersonLanguage { get; set; }
     }
 }
