@@ -16,7 +16,7 @@ using NHCM.WebUI.Types;
 namespace NHCM.WebUI.Pages.Organogram
 {
    
-    [Authorize(Roles = "Profiler")]
+    
     public class PositionsModel : BasePage
     {
         

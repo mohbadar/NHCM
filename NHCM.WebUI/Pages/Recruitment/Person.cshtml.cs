@@ -15,9 +15,12 @@ using NHCM.Application.Document.Disk;
 using NHCM.Application.Document.Disk.Cropper.Models;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Authorization;
 
 namespace NHCM.WebUI.Pages.Recruitment
 {
+
+   
     public class PersonModel : BasePage
     {
         public string SubScreens { get; set; } = "";

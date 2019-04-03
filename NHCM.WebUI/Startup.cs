@@ -62,6 +62,7 @@ namespace NHCM.WebUI
             services.AddDbContext<HCMIdentityDbContext>();
 
             services.AddIdentity<HCMUser, HCMRole>(options => { options.User.RequireUniqueEmail = true; })
+                .AddRoles<HCMRole>()
                 .AddErrorDescriber<IdentityLocalizedErrorDescribers>()
                 .AddEntityFrameworkStores<HCMIdentityDbContext>()
                 .AddDefaultTokenProviders();
@@ -91,7 +92,13 @@ namespace NHCM.WebUI
 
 
 
-            // Add MVC with fluent validation, Razor pages option
+            // Add authorization Policy
+            services.AddAuthorization(options => {
+
+                options.AddPolicy("ProfilerPolicy", policy => { policy.RequireRole("Profiler"); });
+            });
+
+            // Add MVC with fluent validation, Razor pages
             services.AddMvc()
                 .AddFluentValidation(fv => fv.RegisterValidatorsFromAssemblyContaining<CreatePersonCommandValidator>())
                 .AddRazorPagesOptions
@@ -103,7 +110,7 @@ namespace NHCM.WebUI
                          options.Conventions.AllowAnonymousToPage("/Security/Register");
 
                         options.Conventions.AuthorizeFolder("/Security");
-                        options.Conventions.AuthorizeFolder("/Recruitment");
+                        options.Conventions.AuthorizeFolder("/Recruitment", "ProfilerPolicy");
                         options.Conventions.AuthorizeFolder("/Shared");
                         options.Conventions.AuthorizePage("/index");
 
