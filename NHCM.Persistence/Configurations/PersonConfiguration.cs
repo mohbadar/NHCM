@@ -82,6 +82,8 @@ namespace NHCM.Persistence.Configurations
                 .HasColumnName("NID")
                 .HasMaxLength(50);
 
+            builder.Property(e => e.OrganizationId).HasColumnName("OrganizationID");
+
             builder.Property(e => e.PhotoPath).HasMaxLength(200);
 
             builder.Property(e => e.PreFix).HasMaxLength(14);
@@ -98,6 +100,11 @@ namespace NHCM.Persistence.Configurations
                 .WithMany(p => p.Person)
                 .HasForeignKey(d => d.DocumentTypeId)
                 .HasConstraintName("Person_DocumentTypeID_fkey");
+
+            builder.HasOne(d => d.Organization)
+                .WithMany(p => p.Person)
+                .HasForeignKey(d => d.OrganizationId)
+                .HasConstraintName("Person_OrganizationID_fkey");
 
         }
     }

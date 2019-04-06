@@ -126,12 +126,13 @@ namespace NHCM.WebUI.Pages.Recruitment
         {
             try
             {
+
+               
                 // Untill application of Identity
                 command.ModifiedBy = "TEST USER";
                 command.CreatedBy = 10;
                 command.CreatedOn = DateTime.Now;
                 List<SearchedPersonModel> SaveResult = new List<SearchedPersonModel>();
-
                 SaveResult = await Mediator.Send(command);
                 return new JsonResult(new UIResult()
                 {
@@ -140,23 +141,18 @@ namespace NHCM.WebUI.Pages.Recruitment
                     Text = "اطلاعات مستخدم موفقانه ثبت سیستم شد",
                     Description = string.Empty
                 });
+
+              
             }
             catch (Exception ex)
             {
-                return new JsonResult(new UIResult()
-                {
-                    Data = null,
-                    Status = UIStatus.Failure,
-                    Text = CustomMessages.StateExceptionTitle(ex),
-                    Description = CustomMessages.DescribeException(ex)
-
-                });
+                return new JsonResult(CustomMessages.FabricateException(ex)); 
             }
         }
 
         public async Task<IActionResult> OnPostSearch([FromBody]SearchPersonQuery searchQuery)
         {
-          UIResult result = new UIResult();
+         
             try
             {
                 List<SearchedPersonModel> SearchedResult = new List<SearchedPersonModel>();
@@ -171,14 +167,9 @@ namespace NHCM.WebUI.Pages.Recruitment
             }
             catch (Exception ex)
             {
-                return new JsonResult(new UIResult()
-                {
-                    Data = null,
-                    Status = UIStatus.Failure,
-                    Text = CustomMessages.StateExceptionTitle(ex),
-                    Description = CustomMessages.DescribeException(ex)
-                });
 
+                return new JsonResult(CustomMessages.FabricateException(ex));
+               
             }
         }
 

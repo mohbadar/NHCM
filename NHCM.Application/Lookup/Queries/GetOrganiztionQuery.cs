@@ -29,7 +29,10 @@ namespace NHCM.Application.Lookup.Queries
         {
             List<Organization> list = new List<Organization>();
 
-            list = await  _dbContext.Organization.ToListAsync(cancellationToken);
+            if (request.Id != null && request.Id != default(int))
+                list = await _dbContext.Organization.Where(o => o.Id == request.Id).ToListAsync(cancellationToken);
+            else
+                list = await _dbContext.Organization.ToListAsync(cancellationToken);
 
             return list;
         }

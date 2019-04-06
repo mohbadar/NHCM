@@ -9,21 +9,37 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using NHCM.Application.Lookup.Queries;
+using NHCM.Application.Recruitment.Models;
+using NHCM.Application.Recruitment.Queries;
 using NHCM.Domain.Entities;
 using NHCM.Persistence.Infrastructure.Identity;
 using NHCM.WebUI.Types;
 namespace NHCM.WebUI.Areas.Security.Pages
 {
-    [AllowAnonymous]
+    [Authorize("UserRegistrar")]
     public class RegisterModel : BasePage
     {
 
 
-        public string ErrorMessage { get; set; }
+        // Employee Search Terms
+        [BindProperty]
+        public string EmployeeName { get; set; }
+        [BindProperty]
+        public string EmployeeLastName { get; set; }
+        [BindProperty]
+        public string EmployeeFatherName { get; set; }
+        [BindProperty]
+        public string EmployeeGrandFatherName { get; set; }
 
+        public List<SearchedPersonModel> ListOfPersons = new List<SearchedPersonModel>();
+
+
+
+
+        public int? SignedInUserOrganizationID { get; set; }
+        public string ErrorMessage { get; set; }
         private readonly SignInManager<HCMUser> _signInManager;
         private readonly UserManager<HCMUser> _userManager;
-
         public string ReturnUrl { get; set; }
 
 
@@ -73,16 +89,17 @@ namespace NHCM.WebUI.Areas.Security.Pages
         {
             ReturnUrl = url;
 
+            HCMUser signedInUser = await _userManager.GetUserAsync(User);
+            SignedInUserOrganizationID = signedInUser.OrganizationID;
+
 
             //Get Organization
             ListOfOrganization = new List<SelectListItem>();
             List<Organization> organizations = new List<Organization>();
-            organizations = await Mediator.Send(new GetOrganiztionQuery() { Id = null });
+            organizations = await Mediator.Send(new GetOrganiztionQuery() { Id = SignedInUserOrganizationID ?? default(int) });
             foreach (Organization organization in organizations)
                 ListOfOrganization.Add(new SelectListItem(organization.Dari, organization.Id.ToString()));
         }
-
-
 
         public async Task<IActionResult> OnPostAsync(string returnUrl = null)
         {
@@ -110,5 +127,23 @@ namespace NHCM.WebUI.Areas.Security.Pages
             return Page();
 
         }
+
+
+
+
+        public async Task OnPostSearch()
+        {
+
+
+            
+            ListOfPersons = new List<SearchedPersonModel>();
+            ListOfPersons = await Mediator.Send(new SearchPersonQuery() { FirstName = EmployeeName, LastName = EmployeeLastName, FatherName = EmployeeFatherName, GrandFatherName = EmployeeGrandFatherName });
+
+          //  return Page();
+           
+        }
+
     }
+
+        
 }

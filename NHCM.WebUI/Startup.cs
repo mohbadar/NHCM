@@ -47,7 +47,8 @@ namespace NHCM.WebUI
 
 
 
-           
+
+          
             // 1 Antiforgery
             services.AddAntiforgery(options => options.HeaderName = "XSRF-TOKEN");
             
@@ -87,15 +88,23 @@ namespace NHCM.WebUI
 
             // Add MediatR
             services.AddTransient(typeof(IPipelineBehavior<,>), typeof(RequestPreProcessorBehavior<,>));
-             services.AddTransient(typeof(IPipelineBehavior<,>), typeof(RequestValidationBehavior<,>));
+            services.AddTransient(typeof(IPipelineBehavior<,>), typeof(RequestValidationBehavior<,>));
             services.AddMediatR(typeof(CreatePersonCommandHandler).GetTypeInfo().Assembly);
 
 
 
-            // Add authorization Policy
-            services.AddAuthorization(options => {
+            // Add authorization Policies
+            services.AddAuthorization(options =>
+            {
 
-                options.AddPolicy("ProfilerPolicy", policy => { policy.RequireRole("Profiler"); });
+            options.AddPolicy("ProfilerPolicy", policy => { policy.RequireRole("Profiler"); });
+            options.AddPolicy("UserRegistrar", policy => { policy.RequireRole("UserRegistrar"); });
+            options.AddPolicy("AuthenticatedPolicy", polic => { polic.RequireAuthenticatedUser(); });
+            options.AddPolicy("SuperAdminPolicy", policy => { policy.RequireRole("SuperAdmin"); });
+            options.AddPolicy("OrganizationAdminPolicy", policy => { policy.RequireRole("OrganizationAdmin"); } );
+
+
+
             });
 
             // Add MVC with fluent validation, Razor pages
@@ -117,24 +126,26 @@ namespace NHCM.WebUI
                         options.Conventions.AuthorizeFolder("/Shared");
                         options.Conventions.AuthorizePage("/index");
 
-                        // Comment it in production
-                        options.Conventions.AllowAnonymousToPage("/Security/Register");
+                       
 
+                        // Comment it in production
+                      //  options.Conventions.AllowAnonymousToPage("/Security/Register");
 
                         options.AllowMappingHeadRequestsToGetHandler = true;
-
                     }
                 )
                 .SetCompatibilityVersion(CompatibilityVersion.Version_2_2);
 
-            services.ConfigureApplicationCookie
-                (
-                    options =>
-                    {
-                        options.LoginPath = "/Security/Login";
-                    }
-                );
 
+
+            services.ConfigureApplicationCookie
+              (
+                  options =>
+                  {
+                      options.LoginPath = "/Security/Login";
+                      options.AccessDeniedPath = "/Security/AccessDenied";
+                  }
+              );
 
 
 
