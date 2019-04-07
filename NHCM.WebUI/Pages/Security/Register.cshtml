@@ -17,128 +17,114 @@
 
 
     <div class="row">
-        <div class="col-md-6">
+        <div class="col-md-6 pull-right">
             <form asp-route-returnUrl="@Model.ReturnUrl" method="post" class="form main-form page-component" type="form">
                 <fieldset class="content-group">
                     <legend>برای ایجاد حساب کاربری لطفا از فورم ذیل استفاده کنید</legend>
+
+
+
+
                     <div class="row">
-
-
-                        <div class="col-md-6 pull-right">
-
-                            <div class="row">
-                                <div class="col-md-12 col-sm-12 col-xs-12 pull-right">
-                                    <div class="form-group">
-                                        <label class="text-bold">
-                                            موسسه
-                                            <span class="text-danger"></span>
-                                        </label>
-                                        <select asp-for="@Model.OrganizationID" asp-items="@Model.ListOfOrganization" class="form-control select"></select>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="row">
-                                <div class="col-md-12 col-sm-12 col-xs-12 pull-right">
-                                    <div class="form-group has-feedback has-feedback-left">
-                                        <label asp-for="@Model.Email" class="text-bold">
-
-
-                                        </label>
-
-                                        <span asp-validation-for="@Model.Email" class="text-danger"></span>
-                                        <input asp-for="@Model.Email" class="form-control" />
-                                        <div class="form-control-feedback">
-                                            <i class="icon-mail5 text-size-base">
-
-                                            </i>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="row">
-                                <div class="col-md-12 col-sm-12 col-xs-12 pull-right">
-                                    <div class="form-group has-feedback has-feedback-left">
-                                        <label asp-for="@Model.UserName" class="text-bold">
-
-
-                                        </label>
-
-                                        <span asp-validation-for="@Model.UserName" class="text-danger"></span>
-                                        <input asp-for="@Model.UserName" class="form-control" />
-                                        <div class="form-control-feedback">
-                                            <i class="icon-user text-size-base">
-
-                                            </i>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="row">
-                                <div class="col-md-12 col-sm-12 col-xs-12 pull-right">
-                                    <div class="form-group has-feedback has-feedback-left">
-                                        <label asp-for="@Model.Password" class="text-bold">
-
-
-                                        </label>
-
-                                        <span asp-validation-for="@Model.Password" class="text-danger"></span>
-                                        <input asp-for="@Model.Password" class="form-control" />
-                                        <div class="form-control-feedback">
-                                            <i class="icon-lock text-size-base">
-
-                                            </i>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="row">
-                                <div class="col-md-12 col-sm-12 col-xs-12 pull-right">
-                                    <div class="form-group has-feedback has-feedback-left">
-                                        <label asp-for="@Model.ConfirmPassword" class="text-bold">
-
-                                        </label>
-
-
-                                        <span asp-validation-for="@Model.ConfirmPassword" class="text-danger"></span>
-                                        <input asp-for="@Model.ConfirmPassword" class="form-control" />
-                                        <div class="form-control-feedback">
-                                            <i class="icon-lock text-size-base"></i>
-                                        </div>
-                                    </div>
-                                </div>
+                        <div class="col-md-12 col-sm-12 col-xs-12 pull-right">
+                            <div class="form-group">
+                                <label asp-for="@Model.EmployeeID" class="text-bold">
+                                </label>
+                                <span asp-validation-for="@Model.ListOfPerson" class="text-danger"></span>
+                                <select asp-items="@Model.ListOfPerson" class="select required">
+                                    <option value="">--</option>
+                                </select>
                             </div>
                         </div>
-
-
                     </div>
 
                     <div class="row">
-                        <div class="col-md-6 pull-right">
-                            <div class="row">
-                                <div class="col-md-12">
+                        <div class="col-md-12 col-sm-12 col-xs-12 pull-right">
+                            <div class="form-group">
+                                <label asp-for="@Model.OrganizationID" class="text-bold">
 
 
-                                    @if (ModelState.ErrorCount > 0)
-                                    {
-                                        <label class="control-label text-bold text-danger">
-                                            لطفا دقت نماید
-                                        </label>
-                                        <ul>
-                                            @foreach (var item in ViewData.ModelState.Values)
-                                            {
-                                                foreach (var error in item.Errors)
-                                                {
-                                                    <li style="color:red">@error.ErrorMessage</li>
-                                                }
-                                            }
-                                        </ul>
-                                    }
+                                </label>
+                                <span asp-validation-for="@Model.OrganizationID" class="text-danger"></span>
+                                <select asp-for="@Model.OrganizationID" asp-items="@Model.ListOfOrganization" class="select">
+                                    <option value=""></option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-12 col-sm-12 col-xs-12 pull-right">
+                            <div class="form-group has-feedback has-feedback-left">
+                                <label asp-for="@Model.Email" class="text-bold">
 
 
+                                </label>
+
+                                <span asp-validation-for="@Model.Email" class="text-danger"></span>
+                                <input asp-for="@Model.Email" class="form-control" />
+                                <div class="form-control-feedback">
+                                    <i class="icon-mail5 text-size-base">
+
+                                    </i>
                                 </div>
                             </div>
                         </div>
                     </div>
+                    <div class="row">
+                        <div class="col-md-12 col-sm-12 col-xs-12 pull-right">
+                            <div class="form-group has-feedback has-feedback-left">
+                                <label asp-for="@Model.UserName" class="text-bold">
+
+
+                                </label>
+
+                                <span asp-validation-for="@Model.UserName" class="text-danger"></span>
+                                <input asp-for="@Model.UserName" class="form-control" />
+                                <div class="form-control-feedback">
+                                    <i class="icon-user text-size-base">
+
+                                    </i>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-12 col-sm-12 col-xs-12 pull-right">
+                            <div class="form-group has-feedback has-feedback-left">
+                                <label asp-for="@Model.Password" class="text-bold">
+
+
+                                </label>
+
+                                <span asp-validation-for="@Model.Password" class="text-danger"></span>
+                                <input asp-for="@Model.Password" class="form-control" />
+                                <div class="form-control-feedback">
+                                    <i class="icon-lock text-size-base">
+
+                                    </i>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-12 col-sm-12 col-xs-12 pull-right">
+                            <div class="form-group has-feedback has-feedback-left">
+                                <label asp-for="@Model.ConfirmPassword" class="text-bold">
+
+                                </label>
+
+
+                                <span asp-validation-for="@Model.ConfirmPassword" class="text-danger"></span>
+                                <input asp-for="@Model.ConfirmPassword" class="form-control" />
+                                <div class="form-control-feedback">
+                                    <i class="icon-lock text-size-base"></i>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+
+
                 </fieldset>
 
 
@@ -156,147 +142,29 @@
             </form>
         </div>
         <div class="col-md-6">
-            <form method="post" class="form main-form page-component" type="form">
+            <div class="row">
+                <div class="col-md-12">
 
 
-
-                <div class="row">
-                    <div class="col-md-6">
-                        <div class="form-group has-feedback has-feedback-left">
-                            <label asp-for="@Model.EmployeeName" class="text-bold">
-
-                                نام کارمند
-                            </label>
-
-                            <span asp-validation-for="@Model.EmployeeName" class="text-danger"></span>
-                            <input asp-for="@Model.EmployeeName" class="form-control" />
-                            <div class="form-control-feedback">
-                                <i class="icon-search4 text-size-base">
-
-                                </i>
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class="col-md-6">
-                        <div class="form-group has-feedback has-feedback-left">
-                            <label asp-for="@Model.EmployeeFatherName" class="text-bold">
-
-                                نام پدر
-                            </label>
-
-                            <span asp-validation-for="@Model.EmployeeFatherName" class="text-danger"></span>
-                            <input asp-for="@Model.EmployeeFatherName" class="form-control" />
-                            <div class="form-control-feedback">
-                                <i class="icon-search4 text-size-base">
-
-                                </i>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <div class="row">
-                    <div class="col-md-6">
-                        <div class="form-group has-feedback has-feedback-left">
-                            <label asp-for="@Model.EmployeeGrandFatherName" class="text-bold">
-
-                                نام پدر کلان
-                            </label>
-
-                            <span asp-validation-for="@Model.EmployeeGrandFatherName" class="text-danger"></span>
-                            <input asp-for="@Model.EmployeeGrandFatherName" class="form-control" />
-                            <div class="form-control-feedback">
-                                <i class="icon-search4 text-size-base">
-
-                                </i>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col-md-6">
-                        <div class="form-group has-feedback has-feedback-left">
-                            <label asp-for="@Model.EmployeeLastName" class="text-bold">
-
-                                تخلص
-                            </label>
-
-                            <span asp-validation-for="@Model.EmployeeLastName" class="text-danger"></span>
-                            <input asp-for="@Model.EmployeeLastName" class="form-control" />
-                            <div class="form-control-feedback">
-                                <i class="icon-search4 text-size-base">
-
-                                </i>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="row">
-                    <div class="col-md-12">
-                        <div class="form-group">
-                            <button type="submit" asp-page-handler="Search" class="btn btn-primary" ><i class="icon-floppy-disk position-right"></i>جستجو</button>
-
-                        </div>
-                    </div>
-                </div>
-
-                <div class="row">
-                    <div class="col-md-12 form-grid main-form-details">
-                        <table style="direction: rtl;" >
-                            <thead>
-                                <tr>
-                                    <th colname="firstname">نام</th>
-                                    <th colname="lastname">تخلص</th>
-                                    <th colname="fathername">نام پدر</th>
-                                    <th colname="grandfathername">نام پدر کلان</th>
-                                    <th colname="gendertext">جنسیت</th>
-                                    <th colname="ethnicitytext">قومیت</th>
-                                    <th colname="dobtext">تاریخ تولد</th>
-                                    <th colname="nidtext">سند هویت</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-
-                                @if (Model.ListOfPersons.Count > 0)
+                    @if (ModelState.ErrorCount > 0)
+                    {
+                        <label class="control-label text-bold text-danger">
+                            لطفا دقت نماید
+                        </label>
+                        <ul>
+                            @foreach (var item in ViewData.ModelState.Values)
+                            {
+                                foreach (var error in item.Errors)
                                 {
-
-                                    @foreach (SearchedPersonModel sp in Model.ListOfPersons)
-                                    {
-                                        <tr>
-                                            <td>
-                                                @sp.FirstName
-                                            </td>
-                                            <td>
-                                                @sp.LastName
-                                            </td>
-                                            <td>
-                                                @sp.FatherName
-                                            </td>
-                                            <td>
-                                                @sp.GrandFatherName
-                                            </td>
-                                            <td>
-                                                @sp.GenderText
-                                            </td>
-                                            <td>
-                                                @sp.EthnicityText
-                                            </td>
-                                            <td>
-                                                @sp.DoBText
-                                            </td>
-                                            <td>
-                                                @sp.NIDText
-                                            </td>
-
-                                        </tr>
-                                    }
+                                    <li style="color:red">@error.ErrorMessage</li>
                                 }
+                            }
+                        </ul>
+                    }
 
-                            </tbody>
-                        </table>
 
-                    </div>
                 </div>
-            </form>
+            </div>
         </div>
     </div>
     
@@ -314,4 +182,14 @@
 @section Scripts{ 
 
     <partial name="Security/Shared/_ValidationScriptsPartial" />
+
+ 
+    <script>
+        $(document).ready(function () {
+
+            $('.select').select2();
+        });
+    </script>
+    
+
 }

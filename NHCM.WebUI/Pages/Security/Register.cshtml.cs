@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
+using System.Text;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
@@ -13,6 +14,7 @@ using NHCM.Application.Recruitment.Models;
 using NHCM.Application.Recruitment.Queries;
 using NHCM.Domain.Entities;
 using NHCM.Persistence.Infrastructure.Identity;
+using NHCM.Persistence.Infrastructure.Services;
 using NHCM.WebUI.Types;
 namespace NHCM.WebUI.Areas.Security.Pages
 {
@@ -21,31 +23,33 @@ namespace NHCM.WebUI.Areas.Security.Pages
     {
 
 
-        // Employee Search Terms
-        [BindProperty]
-        public string EmployeeName { get; set; }
-        [BindProperty]
-        public string EmployeeLastName { get; set; }
-        [BindProperty]
-        public string EmployeeFatherName { get; set; }
-        [BindProperty]
-        public string EmployeeGrandFatherName { get; set; }
-
-        public List<SearchedPersonModel> ListOfPersons = new List<SearchedPersonModel>();
-
-
-
-
+      
         public int? SignedInUserOrganizationID { get; set; }
-        public string ErrorMessage { get; set; }
+       
+
+        
+       
+
         private readonly SignInManager<HCMUser> _signInManager;
         private readonly UserManager<HCMUser> _userManager;
+        private readonly ICurrentUser _currentUser;
+
+        public string ErrorMessage { get; set; }
         public string ReturnUrl { get; set; }
 
 
+
         [BindProperty]
-        [Required]
-        public string OrganizationID { get; set; }
+        [Display(Name = "لست افراد ارگان")]
+        [Required(ErrorMessage = "انتخاب کارمند ضروری میباش")]
+        public int EmployeeID { get; set; }
+
+
+        [BindProperty]
+        [Display(Name = "ارگان")]
+        [Required(ErrorMessage = "انتخاب موسسه ضروری میباشد")]
+        public int OrganizationID { get; set; }
+
 
 
         [BindProperty]
@@ -78,11 +82,12 @@ namespace NHCM.WebUI.Areas.Security.Pages
 
         public RegisterModel(
            UserManager<HCMUser> userManager,
-           SignInManager<HCMUser> signInManager)
+           SignInManager<HCMUser> signInManager, ICurrentUser currentUser)
            
         {
             _userManager = userManager;
             _signInManager = signInManager;
+            _currentUser = currentUser;
            
         }
         public async Task OnGetAsync(string url = null)
@@ -99,6 +104,24 @@ namespace NHCM.WebUI.Areas.Security.Pages
             organizations = await Mediator.Send(new GetOrganiztionQuery() { Id = SignedInUserOrganizationID ?? default(int) });
             foreach (Organization organization in organizations)
                 ListOfOrganization.Add(new SelectListItem(organization.Dari, organization.Id.ToString()));
+
+
+            // Get List Of  Persons
+            ListOfPerson = new List<SelectListItem>();
+            List<SearchedPersonModel> searchedPeople = new List<SearchedPersonModel>();
+            // CHANGE: change the SearchPersonQuery Request to include a property to bring all records not only 10000
+            searchedPeople = await Mediator.Send(new SearchPersonQuery() { OrganizationId = await _currentUser.GetUserOrganizationID(), NoOfRecords = 10000 });
+
+            foreach (SearchedPersonModel person in searchedPeople)
+            {
+                ListOfPerson.Add(new SelectListItem()
+                {
+                    Text = new StringBuilder() { }.Append( person.FirstName ). Append(" فرزند ").Append(" ").Append(person.FatherName).ToString(),
+                    Value = person.Id.ToString()
+                });
+            }
+                
+          
         }
 
         public async Task<IActionResult> OnPostAsync(string returnUrl = null)
@@ -108,7 +131,7 @@ namespace NHCM.WebUI.Areas.Security.Pages
 
             if (ModelState.IsValid)
             {
-                HCMUser user = new HCMUser { UserName = UserName, Email = Email, OrganizationID = Convert.ToInt32(OrganizationID) };
+                HCMUser user = new HCMUser { UserName = UserName, Email = Email, OrganizationID = Convert.ToInt32(OrganizationID), EmployeeID = EmployeeID };
                 IdentityResult result = await _userManager.CreateAsync(user, Password);
 
                 if (result.Succeeded)
@@ -131,17 +154,17 @@ namespace NHCM.WebUI.Areas.Security.Pages
 
 
 
-        public async Task OnPostSearch()
-        {
+        //public async Task OnPostSearch()
+        //{
 
 
             
-            ListOfPersons = new List<SearchedPersonModel>();
-            ListOfPersons = await Mediator.Send(new SearchPersonQuery() { FirstName = EmployeeName, LastName = EmployeeLastName, FatherName = EmployeeFatherName, GrandFatherName = EmployeeGrandFatherName });
+        //    ListOfPersons = new List<SearchedPersonModel>();
+        //    ListOfPersons = await Mediator.Send(new SearchPersonQuery() {  OrganizationId = OrganizationID });
 
-          //  return Page();
+        //  //  return Page();
            
-        }
+        //}
 
     }
 

@@ -9,15 +9,19 @@ using NHCM.Application.Recruitment.Queries;
 using Microsoft.EntityFrameworkCore;
 using System.Threading;
 using Newtonsoft.Json;
+using NHCM.Persistence.Infrastructure.Services;
 
 namespace NHCM.Application.Common
 {
     public class PersonCommon
     {
         private readonly HCMContext _context;
+       
+      
         public PersonCommon(HCMContext context)
         {
             _context = context;
+           
         }
 
         public string ConvertJSONToString(String JSON, String Type)
@@ -44,13 +48,14 @@ namespace NHCM.Application.Common
 
         public async Task<List<SearchedPersonModel>> SearchPerson(SearchPersonQuery request)
         {
+           
 
             List<SearchedPersonModel> searchResult = new List<SearchedPersonModel>();
 
 
 
             // If specific person is required. Searched based on Id or HrCode
-            if (request.Id != null || request.Hrcode != null)
+            if (request.Id != null)
             {
                 searchResult = await (from p in _context.Person
                                       join g in _context.Gender on p.GenderId equals g.ID into pg
@@ -104,7 +109,7 @@ namespace NHCM.Application.Common
             }
 
             // Else search based on search terms
-            else
+            else if (request.OrganizationId != null)
             {
                 searchResult = await (from p in _context.Person
                                       join g in _context.Gender on p.GenderId equals g.ID into pg
@@ -128,6 +133,7 @@ namespace NHCM.Application.Common
                                             && (p.FirstNameEng.Contains(request.FirstNameEng) || string.IsNullOrEmpty(request.FirstNameEng))
                                             && (p.LastNameEng.Contains(request.LastNameEng) || string.IsNullOrEmpty(request.LastNameEng))
                                             && (p.GrandFatherNameEng.Contains(request.GrandFatherNameEng) || string.IsNullOrEmpty(request.GrandFatherNameEng))
+                                            && (p.OrganizationId ==  request.OrganizationId )
                                       select new SearchedPersonModel
                                       {
                                           FirstName = p.FirstName,

@@ -40,6 +40,7 @@ namespace NHCM.Application.Recruitment.Queries
         public string PhotoPath { get; set; }
         public string Nid { get; set; }
 
+        public int? OrganizationId { get; set; }
 
     }
 

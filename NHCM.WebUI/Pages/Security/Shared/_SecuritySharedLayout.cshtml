@@ -34,7 +34,7 @@
     @* CSS for the persian datepicker *@
     <link href="~/custom/css/jquery.md.bootstrap.datetimepicker.style.css" rel="stylesheet" />
     @* Overriden other classes*@
-    <link href="~/custom/css/overridenclasses.css" rel="stylesheet" />
+    
     <link href="~/custom/css/hrmis.css" rel="stylesheet" />
 </head>
 <body class="rtl" dir="rtl">
@@ -139,13 +139,9 @@
         <script src="~/assets/js/plugins/forms/validation/localization/messages_fa.js"></script>
         <script src="~/assets/js/plugins/croppic/croppic.js"></script>
 
-        @*<script src="~/custom/js/nhcm.js"></script>*@
+        @RenderSection("Scripts", required: false)
     </environment>
-    @*<script>
-        $(document).ready(function () {
-            clean.init();
-        });
-    </script>*@
-    @RenderSection("Scripts", required: false)
+    
+    
 </body>
 </html>

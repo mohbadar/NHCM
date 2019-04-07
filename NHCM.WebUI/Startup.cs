@@ -20,7 +20,9 @@ using NHCM.Application.Recruitment.Validators;
 using NHCM.Persistence;
 using NHCM.Persistence.Identity.Infrastructure;
 using NHCM.Persistence.Infrastructure.Identity;
+using NHCM.Persistence.Infrastructure.Services;
 using NHCM.WebUI.Areas.Security;
+
 using NHCM.WebUI.Types;
 
 namespace NHCM.WebUI
@@ -47,6 +49,10 @@ namespace NHCM.WebUI
 
 
 
+            services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
+
+            // Registering custom services
+            services.AddScoped<ICurrentUser, CurrentUser>();
 
           
             // 1 Antiforgery
@@ -75,25 +81,14 @@ namespace NHCM.WebUI
             });
 
 
-          
-
-         
-
-
-
-            
-
-
-
-
-            // Add MediatR
+            // 4 Add MediatR
             services.AddTransient(typeof(IPipelineBehavior<,>), typeof(RequestPreProcessorBehavior<,>));
             services.AddTransient(typeof(IPipelineBehavior<,>), typeof(RequestValidationBehavior<,>));
             services.AddMediatR(typeof(CreatePersonCommandHandler).GetTypeInfo().Assembly);
 
 
 
-            // Add authorization Policies
+            // 5 Add authorization Policies
             services.AddAuthorization(options =>
             {
 
@@ -107,7 +102,7 @@ namespace NHCM.WebUI
 
             });
 
-            // Add MVC with fluent validation, Razor pages
+            // 6 Add MVC with fluent validation, Razor pages
             services.AddMvc()
                 .AddFluentValidation(fv => fv.RegisterValidatorsFromAssemblyContaining<CreatePersonCommandValidator>())
                 .AddRazorPagesOptions
@@ -146,9 +141,6 @@ namespace NHCM.WebUI
                       options.AccessDeniedPath = "/Security/AccessDenied";
                   }
               );
-
-
-
         }
 
 

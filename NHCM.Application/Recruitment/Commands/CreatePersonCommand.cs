@@ -58,6 +58,8 @@ namespace NHCM.Application.Recruitment.Commands
         public string PhotoPath { get; set; }
         public string Nid { get; set; }
 
+        public int? OrganizationId { get; set; }
+
     }
 
 
@@ -144,7 +146,9 @@ namespace NHCM.Application.Recruitment.Commands
 
                         Nid = request.Nid,
                         PhotoPath = request.PhotoPath,
-                        DocumentTypeId = request.DocumentTypeId
+                        DocumentTypeId = request.DocumentTypeId,
+
+                        OrganizationId = request.OrganizationId
 
                     };
 
@@ -194,6 +198,7 @@ namespace NHCM.Application.Recruitment.Commands
                     UpdateablePerson.DocumentTypeId = request.DocumentTypeId;
 
 
+                    UpdateablePerson.OrganizationId = request.OrganizationId;
 
                     await _context.SaveChangesAsync();
 

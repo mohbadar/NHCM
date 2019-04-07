@@ -16,6 +16,7 @@ using NHCM.Application.Document.Disk.Cropper.Models;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Authorization;
+using NHCM.Persistence.Infrastructure.Services;
 
 namespace NHCM.WebUI.Pages.Recruitment
 {
@@ -29,10 +30,12 @@ namespace NHCM.WebUI.Pages.Recruitment
                                     ";
 
         private readonly IConfiguration _configuration;
+        private readonly ICurrentUser _currentUser;
 
-        public PersonModel(IConfiguration configuration)
+        public PersonModel(IConfiguration configuration, ICurrentUser currentUser)
         {
             _configuration = configuration;
+            _currentUser = currentUser;
         }
 
 
@@ -132,6 +135,9 @@ namespace NHCM.WebUI.Pages.Recruitment
                 command.ModifiedBy = "TEST USER";
                 command.CreatedBy = 10;
                 command.CreatedOn = DateTime.Now;
+
+                command.OrganizationId = await _currentUser.GetUserOrganizationID();
+
                 List<SearchedPersonModel> SaveResult = new List<SearchedPersonModel>();
                 SaveResult = await Mediator.Send(command);
                 return new JsonResult(new UIResult()
@@ -155,6 +161,9 @@ namespace NHCM.WebUI.Pages.Recruitment
          
             try
             {
+
+                searchQuery.OrganizationId = await _currentUser.GetUserOrganizationID();
+
                 List<SearchedPersonModel> SearchedResult = new List<SearchedPersonModel>();
                 SearchedResult = await Mediator.Send(searchQuery);
                 return new JsonResult(new UIResult()
