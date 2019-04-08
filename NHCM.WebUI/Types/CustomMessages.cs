@@ -63,16 +63,13 @@ namespace NHCM.WebUI.Types
 
         public static UIResult FabricateException(Exception ex)
         {
-
             return new UIResult()
             {
                 Data = null,
                 Status = UIStatus.Failure,
                 Text = StateExceptionTitle(ex),
                 Description = DescribeException(ex)
-
             };
-           
         }
     }
 }

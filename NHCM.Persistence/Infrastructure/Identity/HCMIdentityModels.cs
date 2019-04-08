@@ -11,6 +11,7 @@ namespace NHCM.Persistence.Infrastructure.Identity
         public bool SuperAdmin { get; set; }
         public bool OrganizationAdmin { get; set; }
         public int EmployeeID { get; set; }
+        public bool PasswordChanged { get; set;  }
     }
 
     public class HCMRole : IdentityRole<int>

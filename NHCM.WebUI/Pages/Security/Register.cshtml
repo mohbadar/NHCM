@@ -1,43 +1,33 @@
 ﻿@page
+
 @model NHCM.WebUI.Areas.Security.Pages.RegisterModel
 @using NHCM.Application.Recruitment.Models
-@{ 
+@{
     Layout = "Security/Shared/_SecuritySharedLayout";
 }
-
-
-
-
 
 <div class="panel-heading">
     <h1 class="panel-title">ایجاد نام کاربری</h1>
 </div>
 
 <div class="panel-body">
-
-
     <div class="row">
         <div class="col-md-6 pull-right">
-            <form asp-route-returnUrl="@Model.ReturnUrl" method="post" class="form main-form page-component" type="form">
+            <form method="post" class="form main-form page-component" type="form">
                 <fieldset class="content-group">
                     <legend>برای ایجاد حساب کاربری لطفا از فورم ذیل استفاده کنید</legend>
-
-
-
-
                     <div class="row">
                         <div class="col-md-12 col-sm-12 col-xs-12 pull-right">
                             <div class="form-group">
                                 <label asp-for="@Model.EmployeeID" class="text-bold">
                                 </label>
-                                <span asp-validation-for="@Model.ListOfPerson" class="text-danger"></span>
-                                <select asp-items="@Model.ListOfPerson" class="select required">
+                                <span asp-validation-for="@Model.EmployeeID" class="text-danger"></span>
+                                <select asp-for="@Model.EmployeeID" asp-items="@Model.ViewData["ListOfOrgs"] as IEnumerable<SelectListItem>" class="select required">
                                     <option value="">--</option>
                                 </select>
                             </div>
                         </div>
                     </div>
-
                     <div class="row">
                         <div class="col-md-12 col-sm-12 col-xs-12 pull-right">
                             <div class="form-group">
@@ -46,7 +36,7 @@
 
                                 </label>
                                 <span asp-validation-for="@Model.OrganizationID" class="text-danger"></span>
-                                <select asp-for="@Model.OrganizationID" asp-items="@Model.ListOfOrganization" class="select">
+                                <select asp-for="@Model.OrganizationID" asp-items="@Model.ViewData["ListOfPersons"] as IEnumerable<SelectListItem>" class="select">
                                     <option value=""></option>
                                 </select>
                             </div>
@@ -88,53 +78,12 @@
                             </div>
                         </div>
                     </div>
-                    <div class="row">
-                        <div class="col-md-12 col-sm-12 col-xs-12 pull-right">
-                            <div class="form-group has-feedback has-feedback-left">
-                                <label asp-for="@Model.Password" class="text-bold">
-
-
-                                </label>
-
-                                <span asp-validation-for="@Model.Password" class="text-danger"></span>
-                                <input asp-for="@Model.Password" class="form-control" />
-                                <div class="form-control-feedback">
-                                    <i class="icon-lock text-size-base">
-
-                                    </i>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="row">
-                        <div class="col-md-12 col-sm-12 col-xs-12 pull-right">
-                            <div class="form-group has-feedback has-feedback-left">
-                                <label asp-for="@Model.ConfirmPassword" class="text-bold">
-
-                                </label>
-
-
-                                <span asp-validation-for="@Model.ConfirmPassword" class="text-danger"></span>
-                                <input asp-for="@Model.ConfirmPassword" class="form-control" />
-                                <div class="form-control-feedback">
-                                    <i class="icon-lock text-size-base"></i>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-
-
 
                 </fieldset>
-
-
-
-
-
                 <div class="row div-form-control">
                     <div class="col-md-12">
                         <div class="form-group">
-                            <button type="submit" class="btn btn-primary" action="save"><i class="icon-floppy-disk position-right"></i>ثبت کاربر</button>
+                            <button type="submit" asp-page-handler="Register" class="btn btn-primary"><i class="icon-floppy-disk position-right"></i>ثبت کاربر</button>
 
                         </div>
                     </div>
@@ -144,8 +93,6 @@
         <div class="col-md-6">
             <div class="row">
                 <div class="col-md-12">
-
-
                     @if (ModelState.ErrorCount > 0)
                     {
                         <label class="control-label text-bold text-danger">
@@ -161,35 +108,23 @@
                             }
                         </ul>
                     }
-
-
+                    else
+                    {
+                        <div style="width:100%; text-align:center">
+                            <label class="control-label text-bold text-success">@Model.SuccessMessage</label>
+                        </div>
+                    }
                 </div>
             </div>
         </div>
     </div>
-    
-
-
-    
 </div>
-
-
-
-
-
-
-
-@section Scripts{ 
-
+@section Scripts{
     <partial name="Security/Shared/_ValidationScriptsPartial" />
-
- 
     <script>
         $(document).ready(function () {
 
             $('.select').select2();
         });
     </script>
-    
-
 }

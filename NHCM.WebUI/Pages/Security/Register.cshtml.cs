@@ -13,6 +13,7 @@ using NHCM.Application.Lookup.Queries;
 using NHCM.Application.Recruitment.Models;
 using NHCM.Application.Recruitment.Queries;
 using NHCM.Domain.Entities;
+using NHCM.Persistence.Identity.Infrastructure;
 using NHCM.Persistence.Infrastructure.Identity;
 using NHCM.Persistence.Infrastructure.Services;
 using NHCM.WebUI.Types;
@@ -21,43 +22,29 @@ namespace NHCM.WebUI.Areas.Security.Pages
     [Authorize("UserRegistrar")]
     public class RegisterModel : BasePage
     {
-
-
-      
-        public int? SignedInUserOrganizationID { get; set; }
-       
-
-        
-       
-
         private readonly SignInManager<HCMUser> _signInManager;
         private readonly UserManager<HCMUser> _userManager;
         private readonly ICurrentUser _currentUser;
 
+        public int? SignedInUserOrganizationID { get; set; }
         public string ErrorMessage { get; set; }
-        public string ReturnUrl { get; set; }
-
-
-
-        [BindProperty]
-        [Display(Name = "لست افراد ارگان")]
-        [Required(ErrorMessage = "انتخاب کارمند ضروری میباش")]
-        public int EmployeeID { get; set; }
-
-
+        public string SuccessMessage { get; set; }
+        
         [BindProperty]
         [Display(Name = "ارگان")]
         [Required(ErrorMessage = "انتخاب موسسه ضروری میباشد")]
         public int OrganizationID { get; set; }
 
-
+        [BindProperty]
+        [Display(Name = "کارمند")]
+        [Required(ErrorMessage = "انتخاب کارمند ضروری میباشد")]
+        public int EmployeeID { get; set; }
 
         [BindProperty]
-        [DataType(DataType.EmailAddress, ErrorMessage = "لطفا ایمل درست را وارد کنید")]
         [Display(Name = "ایمیل")]
         [Required(ErrorMessage = "ایمیل فرد ضروری میباشد")]
+        [DataType(DataType.EmailAddress, ErrorMessage = "لطفا ایمل درست را وارد کنید")]
         public string Email { get; set; }
-
 
         [BindProperty]
         [Display(Name = "نام کاربری")]
@@ -65,34 +52,30 @@ namespace NHCM.WebUI.Areas.Security.Pages
         public string UserName { get; set; }
 
 
-        [BindProperty]
-        [StringLength(100, ErrorMessage = "رمز عبور باید حد اقل دارای 6 حرف باشد", MinimumLength = 6)]
-        [DataType(DataType.Password)]
-        [Display(Name = "رمز عبور")]
-        [Required(ErrorMessage = "رمز عبور ضروری میباشد")]
-        public string Password { get; set; }
-
-       
-        [DataType(DataType.Password)]
-        [Display(Name = "تایید رمز عبور")]
-        [Compare("Password", ErrorMessage = "رمز عبور و تاییدی آن مطابقت ندارد")]
-        [Required(ErrorMessage = "تایید رمز عبور ضروری میباشد")]
-        public string ConfirmPassword { get; set; }
+        //[BindProperty]
+        //[StringLength(100, ErrorMessage = "رمز عبور باید حد اقل دارای 6 حرف باشد", MinimumLength = 6)]
+        //[DataType(DataType.Password)]
+        //[Display(Name = "رمز عبور")]
+        //[Required(ErrorMessage = "رمز عبور ضروری میباشد")]
+        //public string Password { get; set; }
 
 
-        public RegisterModel(
-           UserManager<HCMUser> userManager,
-           SignInManager<HCMUser> signInManager, ICurrentUser currentUser)
-           
+        //[DataType(DataType.Password)]
+        //[Display(Name = "تایید رمز عبور")]
+        //[Compare("Password", ErrorMessage = "رمز عبور و تاییدی آن مطابقت ندارد")]
+        //[Required(ErrorMessage = "تایید رمز عبور ضروری میباشد")]
+        //public string ConfirmPassword { get; set; }
+
+
+        public RegisterModel(UserManager<HCMUser> userManager, SignInManager<HCMUser> signInManager, ICurrentUser currentUser)
         {
-            _userManager = userManager;
-            _signInManager = signInManager;
-            _currentUser = currentUser;
-           
+            _userManager    =   userManager;
+            _signInManager  =   signInManager;
+            _currentUser    =   currentUser;
         }
-        public async Task OnGetAsync(string url = null)
+        public async Task OnGetAsync()
         {
-            ReturnUrl = url;
+
 
             HCMUser signedInUser = await _userManager.GetUserAsync(User);
             SignedInUserOrganizationID = signedInUser.OrganizationID;
@@ -105,6 +88,7 @@ namespace NHCM.WebUI.Areas.Security.Pages
             foreach (Organization organization in organizations)
                 ListOfOrganization.Add(new SelectListItem(organization.Dari, organization.Id.ToString()));
 
+            ViewData["ListOfOrgs"] = ListOfOrganization;
 
             // Get List Of  Persons
             ListOfPerson = new List<SelectListItem>();
@@ -116,57 +100,52 @@ namespace NHCM.WebUI.Areas.Security.Pages
             {
                 ListOfPerson.Add(new SelectListItem()
                 {
-                    Text = new StringBuilder() { }.Append( person.FirstName ). Append(" فرزند ").Append(" ").Append(person.FatherName).ToString(),
+                    Text = new StringBuilder() { }.Append(person.FirstName).Append(" فرزند ").Append(" ").Append(person.FatherName).ToString(),
                     Value = person.Id.ToString()
                 });
             }
-                
-          
+
+            ViewData["ListOfPersons"] = ListOfPerson;
+
+
         }
 
-        public async Task<IActionResult> OnPostAsync(string returnUrl = null)
+        public async Task OnPostRegister()
         {
-
-            returnUrl = returnUrl ?? Url.Content("~/");
 
             if (ModelState.IsValid)
             {
-                HCMUser user = new HCMUser { UserName = UserName, Email = Email, OrganizationID = Convert.ToInt32(OrganizationID), EmployeeID = EmployeeID };
-                IdentityResult result = await _userManager.CreateAsync(user, Password);
+                string GeneratedPassword = CredentialHelper.GenerateRandomPassowrd(CredentialHelper.SystemPasswordPolicy);
+                HCMUser user = new HCMUser()
+                {
+
+                    UserName = UserName,
+                    Email = Email,
+                    OrganizationID = OrganizationID,
+                    EmployeeID = EmployeeID,
+                    PasswordChanged = false
+                };
+
+
+                IdentityResult result = await _userManager.CreateAsync(user, GeneratedPassword);
 
                 if (result.Succeeded)
                 {
-                    await _signInManager.SignInAsync(user, false);
-                    return LocalRedirect(returnUrl);
+                    SuccessMessage = GeneratedPassword;
                 }
-
-                foreach(var error in result.Errors)
+                else
                 {
-                    ModelState.AddModelError(string.Empty, error.Description);
-                    ErrorMessage +="\n " +error.Description;
+                    foreach (var error in result.Errors)
+                    {
+                        ModelState.AddModelError(string.Empty, error.Description);
+                        ErrorMessage += "\n " + error.Description;
+                    }
                 }
             }
-
-            return Page();
-
         }
 
-
-
-
-        //public async Task OnPostSearch()
-        //{
-
-
-            
-        //    ListOfPersons = new List<SearchedPersonModel>();
-        //    ListOfPersons = await Mediator.Send(new SearchPersonQuery() {  OrganizationId = OrganizationID });
-
-        //  //  return Page();
-           
-        //}
-
+        public  void OnPost()
+        {
+        }
     }
-
-        
 }
