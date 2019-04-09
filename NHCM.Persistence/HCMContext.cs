@@ -14,6 +14,7 @@ namespace NHCM.Persistence
             : base(options)
         {
         }
+        public virtual DbSet<Audit> Audits { get; set;  }
         public virtual DbSet<Address> Address { get; set; }
         public virtual DbSet<AssetType> AssetType { get; set; }
         public virtual DbSet<Gender> Gender { get; set; }
@@ -283,6 +284,13 @@ namespace NHCM.Persistence
             modelBuilder.HasSequence("relative_id_seq");
 
             modelBuilder.HasSequence("travel_id_seq");
+
+
+
+            modelBuilder.HasSequence("Audit_ID_seq");
+
+            modelBuilder.HasSequence<int>("auditversion_ID_seq");
+
         }
     }
 }

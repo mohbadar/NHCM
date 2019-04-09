@@ -58,7 +58,10 @@ namespace NHCM.WebUI
             services.AddDbContext<HCMIdentityDbContext>();
             services.AddIdentity<HCMUser, HCMRole>(options => {
                 options.Password.RequireNonAlphanumeric = false;
-                options.Password.RequiredLength = 6;
+                options.Password.RequiredLength = 5;
+                options.Password.RequireLowercase = false;
+                options.Password.RequireUppercase = false;
+                options.Password.RequireDigit = false;
                 options.User.RequireUniqueEmail = true;
                 
             }).AddRoles<HCMRole>()

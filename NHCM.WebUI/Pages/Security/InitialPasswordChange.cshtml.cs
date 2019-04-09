@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
+using NHCM.Persistence;
 using NHCM.Persistence.Infrastructure.Identity;
 
 namespace NHCM.WebUI.Pages.Security
@@ -18,36 +19,65 @@ namespace NHCM.WebUI.Pages.Security
         #region VM
         [BindProperty]
         [Display(Name = "رمز عبور")]
-        [Required]
+        [Required(ErrorMessage = "رمز عبور فعلی ضروری میباشد")]
+        [DataType(DataType.Password)]
         public string CurrentPassword { get; set; }
 
-        [BindProperty]
+       
         [Display(Name = "رمز عبور جدید")]
-        [Required]
+        [Required(ErrorMessage = "رمز عبور ضروری میباشد")]
+        [DataType(DataType.Password)]
+        [BindProperty]
         public string NewPassword { get; set; }
 
-        [BindProperty]
+        
         [Display(Name = "تکرار رمز عبور جدید")]
-        [Compare("NewPassword", ErrorMessage = "رمز جدید و تاییدی آن مطابقت ندارد")]
-        [Required]
+     //   [Compare("NewPassword", ErrorMessage = "رمز جدید و تاییدی آن مطابقت ندارد")]
+        [Required(ErrorMessage ="لطفا رمز عبور خود را دوباره بنویسید")]
+        [DataType(DataType.Password)]
+        [BindProperty]
         public string NewPasswordConfirmation { get; set; }
-        #endregion VM
 
+        [BindProperty]
+        public string Message { get; set; }
+        #endregion VM
         #region DI
         private readonly UserManager<HCMUser> _userManager;
         private readonly SignInManager<HCMUser> _signInManager;
-        public InitialPasswordChangeModel(UserManager<HCMUser> usermanager, SignInManager<HCMUser> signInManager)
+        private readonly HCMContext _context;
+        public InitialPasswordChangeModel(UserManager<HCMUser> usermanager, SignInManager<HCMUser> signInManager, HCMContext context)
         {
             _userManager = usermanager;
             _signInManager = signInManager;
+            _context = context;
         }
         #endregion DI
 
 
-        public async Task OnPostChangePassword()
+        public async Task<IActionResult> OnPostChangePassword()
         {
+            HCMUser CurrentUser = await _userManager.FindByNameAsync(User.Identity.Name);
+            IdentityResult PaswordChangeResult = await _userManager.ChangePasswordAsync(CurrentUser, CurrentPassword, NewPassword);
 
-            await _userManager.FindByNameAsync(User.Identity.Name);
+            if (PaswordChangeResult.Succeeded)
+            {
+                CurrentUser.PasswordChanged = true;
+                await _userManager.UpdateAsync(CurrentUser);
+                Message = "کاربر عزیز رمز عبور شما موفقانه تعغیر یافت";
+
+                return Page();
+
+            }
+            else
+            {
+                foreach (var error in PaswordChangeResult.Errors)
+                {
+                    ModelState.AddModelError(string.Empty, error.Description);
+                    Message += "\n " + error.Description;
+                }
+                return Page();
+            }
+            
             
    
         }
