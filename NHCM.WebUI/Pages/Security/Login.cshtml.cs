@@ -51,7 +51,7 @@ namespace NHCM.WebUI.Pages.Security
                 if (result.Succeeded)
                 {
                     if (!(await _userManager.FindByNameAsync(UserName)).PasswordChanged)
-                        return LocalRedirect("~/Security/ChangePassword");
+                        return LocalRedirect("~/Security/InitialPasswordChange");
                     else
                         return LocalRedirect("/index");
                 }

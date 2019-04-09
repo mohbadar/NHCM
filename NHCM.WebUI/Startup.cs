@@ -3,6 +3,7 @@ using System.Reflection;
 using FluentValidation.AspNetCore;
 using MediatR;
 using MediatR.Pipeline;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
@@ -16,6 +17,7 @@ using NHCM.Application.Recruitment.Validators;
 using NHCM.Persistence;
 using NHCM.Persistence.Identity.Infrastructure;
 using NHCM.Persistence.Infrastructure.Identity;
+using NHCM.Persistence.Infrastructure.Identity.Policies;
 using NHCM.Persistence.Infrastructure.Services;
 using NHCM.WebUI.Types;
 
@@ -73,12 +75,16 @@ namespace NHCM.WebUI
             services.AddAuthorization(options =>
             {
                 options.AddPolicy("ProfilerPolicy", policy => { policy.RequireRole("Profiler"); });
-                options.AddPolicy("InitialPasswordChange", policy => { policy.RequireRole("InitialPasswordChange"); });
+               
                 options.AddPolicy("UserRegistrar", policy => { policy.RequireRole("UserRegistrar"); });
                 options.AddPolicy("AuthenticatedPolicy", policy => { policy.RequireAuthenticatedUser(); });
                 options.AddPolicy("SuperAdminPolicy", policy => { policy.RequireRole("SuperAdmin"); });
                 options.AddPolicy("OrganizationAdminPolicy", policy => { policy.RequireRole("OrganizationAdmin"); });
+                options.AddPolicy("FreshUserPolicy", policy => { policy.Requirements.Add(new NewlyRegisteredUsers(true)); });
             });
+            services.AddScoped<IAuthorizationHandler, NewlyRegisteredUsersHandler>();
+
+
 
             // 6 Add MVC with fluent validation, Razor pages
             services.AddMvc()

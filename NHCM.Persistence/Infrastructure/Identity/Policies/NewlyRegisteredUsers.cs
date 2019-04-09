@@ -11,11 +11,11 @@ namespace NHCM.Persistence.Infrastructure.Identity.Policies
    public  class NewlyRegisteredUsers : IAuthorizationRequirement
     {
 
-        public bool IsPaswordChanged { get; set; }
+        public bool _PasswordMustNotBeChanged { get; set; }
 
-        public NewlyRegisteredUsers(bool PasswordChanged)
+        public NewlyRegisteredUsers(bool PasswordMustNotBeChanged)
         {
-            IsPaswordChanged = PasswordChanged;
+            _PasswordMustNotBeChanged = PasswordMustNotBeChanged;
         }
 
 
@@ -32,7 +32,7 @@ namespace NHCM.Persistence.Infrastructure.Identity.Policies
         {
             HCMUser currentUser = await _userManager.FindByNameAsync(context.User.Identity.Name);
 
-            if (currentUser.PasswordChanged)
+            if (currentUser.PasswordChanged == requirement._PasswordMustNotBeChanged)
             {
                 context.Fail();
             }
