@@ -19,10 +19,7 @@ namespace NHCM.Persistence.Configurations
 
             builder.Property(e => e.AuditId).HasColumnName("AuditID");
 
-            builder.HasOne(d => d.Audit)
-                .WithMany(p => p.Auditversion)
-                .HasForeignKey(d => d.AuditId)
-                .HasConstraintName("auditversion_AuditID_fkey");
+         
         }
     }
 }
