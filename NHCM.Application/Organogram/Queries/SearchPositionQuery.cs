@@ -58,6 +58,7 @@ namespace NHCM.Application.Organogram.Queries
                                 where p.Id == request.Id || p.ParentId == request.Id
                                 select new SearchedPosition
                                 {
+
                                     Id = p.Id,
                                     ParentId = p.ParentId,
                                     WorkingAreaId = p.WorkingAreaId,
@@ -78,6 +79,7 @@ namespace NHCM.Application.Organogram.Queries
 
 
                                 }).OrderBy(c=>c.Sorter).DefaultIfEmpty().ToListAsync(cancellationToken);
+
             }
             if (request.ParentId != null)
             {
@@ -85,8 +87,10 @@ namespace NHCM.Application.Organogram.Queries
                                 join w in _context.WorkArea on p.WorkingAreaId equals w.Id into pw
                                 from rpw in pw.DefaultIfEmpty()
 
+
                                 join OP in OrgPositions on p.PositionTypeId equals OP.Id into OPs
                                 from rops in OPs.DefaultIfEmpty()
+
 
                                 join ST in _context.SalaryType on p.SalaryTypeId equals ST.Id into STs
                                 from str in STs.DefaultIfEmpty()
@@ -100,6 +104,7 @@ namespace NHCM.Application.Organogram.Queries
                                 where p.ParentId == request.ParentId
                                 select new SearchedPosition
                                 {
+
                                     Id = p.Id,
                                     ParentId = p.ParentId,
                                     WorkingAreaId = p.WorkingAreaId,
@@ -120,6 +125,7 @@ namespace NHCM.Application.Organogram.Queries
 
 
                                 }).OrderBy(c => c.Sorter).DefaultIfEmpty().ToListAsync(cancellationToken);
+
             }
 
             else if (request.OrganoGramId != null)
@@ -143,7 +149,9 @@ namespace NHCM.Application.Organogram.Queries
                                 {
                                     Id = position.Id,
                                     ParentId = position.ParentId,
+
                                     WorkingAreaId = position.WorkingAreaId,
+
                                     Code = position.Code,
                                     PositionTypeId = position.PositionTypeId,
                                     LocationId = position.LocationId,

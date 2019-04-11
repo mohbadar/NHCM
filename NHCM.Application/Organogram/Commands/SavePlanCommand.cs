@@ -108,11 +108,13 @@ namespace NHCM.Application.Organogram.Commands
                 await _context.SaveChangesAsync(cancellationToken);
                 result = await _mediator.Send(new Queries.SearchPlanQuery()
                 {
+
                     Id = toUpdateRecord.Id
                 });
             }
             return result;
         }
+
 
         public async Task<List<SearchedPosition>> AddPositionAsync(Position p, int PlanID, int? ParentID)
         {

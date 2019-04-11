@@ -5,12 +5,13 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 
-namespace NHCM.WebUI.Pages
+namespace NHCM.WebUI.Pages.Organogram
 {
-    public class PrivacyModel : PageModel
+    public class PositionControllModel : PageModel
     {
         public void OnGet()
         {
+
         }
     }
 }

@@ -5,22 +5,23 @@
     ViewData["Title"] = "Person";
     Layout = "~/Pages/Shared/_CustomLayout.cshtml";
 
+    var cultureInfo = System.Globalization.CultureInfo.CurrentCulture;
 }
 @Html.AntiForgeryToken()
 <div class="panel-heading">
-    <h1 class="panel-title">سوانح کارمند</h1>
+    <h1 class="panel-title">@Localizer.Text("EmployeeBio")</h1>
 </div>
 <div class="panel-body" style="padding-bottom:5px;">
-    <legend class="text-bold">برای درج معلومات شخصی کارمند، لطفاً از فورم ذیل استفاده نمائید</legend>
     <form id="dv_Recruitment_Person" class="form main-form page-component" type="form" attachment="true" prefix="ux">
         <fieldset class="content-group">
+            <legend class="text-bold">@Localizer.Text("ToInsertPersonProfile")</legend>
             <div class="row">
                 <div class="col-md-10 pull-right">
                     <div class="row">
                         <div class="col-md-3 col-sm-12 col-xs-12 pull-right">
                             <div class="form-group">
                                 <label class="text-bold">
-                                    کود کادری
+                                    @Localizer.Text("CodeKadri")
                                     <span class="text-danger">&nbsp;*</span>
                                 </label>
                                 <input id="uxhrcode" name="uxHRCode" type="text" class="form-control " disabled />
@@ -29,7 +30,7 @@
                         <div class="col-md-6 col-sm-12 col-xs-12 pull-right">
                             <div class="form-group">
                                 <label class="text-bold">
-                                    نوع و نمبر ثبت شده سند هویت
+                                    @Localizer.Text("Identity Type and number")
                                     <span class="text-danger">&nbsp;*</span>
                                 </label>
                                 <input id="uxnidtext" name="uxnidtext" type="text" class="form-control " disabled />
@@ -40,7 +41,7 @@
                         <div class="col-md-3 col-sm-12 col-xs-12 pull-right">
                             <div class="form-group has-feedback has-feedback-left">
                                 <label class="text-bold">
-                                    نام کارمند
+                                    @Localizer.Text("Name")
                                     <span class="text-danger">&nbsp;*</span>
                                 </label>
                                 <input id="uxfirstname" name="uxFirstName" type="text" class="form-control search" required />
@@ -52,7 +53,7 @@
                         <div class="col-md-3 col-sm-12 col-xs-12 pull-right">
                             <div class="form-group has-feedback has-feedback-left">
                                 <label class="text-bold">
-                                    تخلص
+                                    @Localizer.Text("LastName")
                                     <span class="text-danger">&nbsp;*</span>
                                 </label>
                                 <input id="uxlastname" name="uxLastName" type="text" class="form-control search" required />
@@ -64,7 +65,7 @@
                         <div class="col-md-3 col-sm-12 col-xs-12 pull-right">
                             <div class="form-group has-feedback has-feedback-left">
                                 <label class="text-bold">
-                                    نام پدر
+                                    @Localizer.Text("FatherName")
                                     <span class="text-danger">&nbsp;*</span>
                                 </label>
                                 <input id="uxfathername" name="uxFatherName" type="text" class="form-control search" required />
@@ -76,7 +77,7 @@
                         <div class="col-md-3 col-sm-12 col-xs-12 pull-right">
                             <div class="form-group has-feedback has-feedback-left">
                                 <label class="text-bold">
-                                    نام پدر کلان
+                                    @Localizer.Text("GrandFatherName")
                                     <span class="text-danger">&nbsp;*</span>
                                 </label>
                                 <input id="uxgrandfathername" name="uxGrandFatherName" type="text" class="form-control search" required />
@@ -90,10 +91,10 @@
                         <div class="col-md-3 col-sm-12 col-xs-12 pull-right">
                             <div class="form-group has-feedback has-feedback-left">
                                 <label class="text-bold">
-                                    نام کارمند به انگلیسی
+                                    @Localizer.Text("NameEn")
                                     <span class="text-danger">&nbsp;*</span>
                                 </label>
-                                <input id="uxfirstnameeng" name="uxFirstNameEng" type="text" class="form-control search" placeholder="به انگلیسی" required />
+                                <input id="uxfirstnameeng" name="uxFirstNameEng" type="text" class="form-control search" placeholder=@Localizer.Text("InEnglish") required />
                                 <div class="form-control-feedback">
                                     <i class="icon-search4 text-size-base"></i>
                                 </div>
@@ -102,10 +103,10 @@
                         <div class="col-md-3 col-sm-12 col-xs-12 pull-right">
                             <div class="form-group has-feedback has-feedback-left">
                                 <label class="text-bold">
-                                    تخلص به انگلیسی
+                                    @Localizer.Text("LastNameEn")
                                     <span class="text-danger">&nbsp;*</span>
                                 </label>
-                                <input id="uxlastnameeng" name="uxLastNameEng" type="text" class="form-control search" placeholder="به انگلیسی" required />
+                                <input id="uxlastnameeng" name="uxLastNameEng" type="text" class="form-control search" placeholder=@Localizer.Text("InEnglish") required />
                                 <div class="form-control-feedback">
                                     <i class="icon-search4 text-size-base"></i>
                                 </div>
@@ -114,10 +115,10 @@
                         <div class="col-md-3 col-sm-12 col-xs-12 pull-right">
                             <div class="form-group has-feedback has-feedback-left">
                                 <label class="text-bold">
-                                    نام پدر به انگلیسی
+                                    @Localizer.Text("FatherNameEn")
                                     <span class="text-danger">&nbsp;*</span>
                                 </label>
-                                <input id="uxfathernameeng" name="uxFatherNameEng" type="text" class="form-control search" placeholder="به انگلیسی" required />
+                                <input id="uxfathernameeng" name="uxFatherNameEng" type="text" class="form-control search" placeholder=@Localizer.Text("InEnglish") required />
                                 <div class="form-control-feedback">
                                     <i class="icon-search4 text-size-base"></i>
                                 </div>
@@ -126,10 +127,10 @@
                         <div class="col-md-3 col-sm-12 col-xs-12 pull-right">
                             <div class="form-group has-feedback has-feedback-left">
                                 <label class="text-bold">
-                                    نام پدر کلان به انگلیسی
+                                    @Localizer.Text("GrandFatherNameEn")
                                     <span class="text-danger">&nbsp;*</span>
                                 </label>
-                                <input id="uxgrandfathernameeng" name="uxGrandFatherNameEng" type="text" class="form-control search" placeholder="به انگلیسی" required />
+                                <input id="uxgrandfathernameeng" name="uxGrandFatherNameEng" type="text" class="form-control search" placeholder=@Localizer.Text("InEnglish") required />
                                 <div class="form-control-feedback">
                                     <i class="icon-search4 text-size-base"></i>
                                 </div>
@@ -152,7 +153,7 @@
                     <div class="col-md-3 col-sm-12 col-xs-12 pull-right">
                         <div class="form-group">
                             <label class="text-bold">
-                                تاریخ تولد (هجری شمسی)
+                                @Localizer.Text("DateOfBirthShamsi")
                                 <span class="text-danger">&nbsp;*</span>
                             </label>
                             <div class="input-group">
@@ -165,7 +166,7 @@
                     <div class="col-md-3 col-sm-12 col-xs-12 pull-right">
                         <div class="form-group">
                             <label class="text-bold">
-                                تاریخ تولد (میلادی)
+                                @Localizer.Text("DateOfBirth")
                                 <span class="text-danger">&nbsp;*</span>
                             </label>
                             <div class="input-group">
@@ -178,7 +179,7 @@
                     <div class="col-md-2 col-sm-12 col-xs-12 pull-right">
                         <div class="form-group">
                             <label class="text-bold">
-                                محل تولد
+                                @Localizer.Text("BirthLocation")
                                 <span class="text-danger">&nbsp;*</span>
                             </label>
                             <select id="uxbirthlocationid" name="uxBirthLocationId" class="select" asp-items="@Model.ListOfLocations" required>
@@ -191,7 +192,7 @@
                     <div class="col-md-2 col-sm-12 col-xs-12 pull-right">
                         <div class="form-group">
                             <label class="text-bold">
-                                گروپ خون
+                                @Localizer.Text("BloodGroup")
                                 <span class="text-danger">&nbsp;*</span>
                             </label>
 
@@ -204,7 +205,7 @@
                     <div class="col-md-2 col-sm-12 col-xs-12 pull-right">
                         <div class="form-group">
                             <label class="text-bold">
-                                جنسیت
+                                @Localizer.Text("Gander")
                                 <span class="text-danger">&nbsp;*</span>
                             </label>
                             <select id="uxgenderid" name="uxGenderId" class="select" asp-items="@Model.ListOfGenders" required>
@@ -216,7 +217,7 @@
                     <div class="col-md-2 col-sm-12 col-xs-12 pull-right">
                         <div class="form-group">
                             <label class="text-bold">
-                                حالت مدنی
+                                @Localizer.Text("MaritalStatus")
                                 <span class="text-danger">&nbsp;*</span>
                             </label>
                             <select id="uxmaritalstatusid" name="uxMaritalStatusId" class="select" asp-items="@Model.ListOfMaritalStatus" required>

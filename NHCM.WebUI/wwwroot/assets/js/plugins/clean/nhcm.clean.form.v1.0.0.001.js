@@ -422,13 +422,17 @@
                     var colname = self.grid.cols[i].toLowerCase();
                     for (var key in ob) {
                         if (key.toLowerCase() == colname) {
+
                             if (colname != 'path' && colname != 'remarks') {
+
                                 var va = ob[key];
                                 if (clean.isEmpty(ob[key]))
                                     va = 'درج نگردیده';
                                 column = column + "<td col='" + key.toLowerCase() + "'>" + va + "</td>";
                             }
+
                             else if (colname == 'path') {
+
                                 var temp = '<button type="button" downloadpath="$path" class="btn-link download-on-click"><i class="icon-download position-right"></i>دریافت فایل</button>'
                                 column = column + "<td col='" + key.toLowerCase() + "'>" + temp.replace('$path', ob[key]) + "</td>";
                             }
@@ -462,7 +466,6 @@
                 else
                     row = row + "<tr role='row' data-tt-id='" + ob.id + "' data-tt-parent-id='" + ob.parentId + "' class='" + rowclick + "' data='" + ob.id + "'>" + column + "</tr>";
             });
-
             $('#' + self.grid.table).find('tbody').empty().html(row);
 
             var tableheight = !$('#' + self.grid.table).attr('fullheight') ? 150 : null;
@@ -494,12 +497,12 @@
                 $(this).siblings().removeClass('row-selected');
                 $(this).addClass('row-selected');
             });
-
             $('#' + self.grid.table).find('.fetch-record').click(function () {
                 self.record = {};
                 self.record.id = $(this).attr('data');
                 self.fetch(self);
             });
+
 
             $('#' + self.grid.table).find('.grid-action').click(function () {
                 var act = $(this).attr('action');
@@ -507,9 +510,11 @@
                 return false;
             });
 
+
             $('#' + self.grid.table).find('.download-on-click').click(function () {
                 self.download($(this).attr('downloadpath'));
             });
+
 
             $.each(self.actions, function (i, v) {
                 var el = $(v);
@@ -520,7 +525,9 @@
 
             if (!$('#' + self.grid.table).attr('ignoreinitialformbind'))
                 self.bindtoform(d[0]);
+
         },
+
         attach: function () {
             var self = this;
             if (!$.isEmptyObject(self.record)) {
@@ -566,6 +573,7 @@
                 clean.widget.error(title, des);
             }
         },
+
         next: function () {
             var self = this;
             var path = self.path + '/next';
@@ -574,6 +582,7 @@
             clean.data.post({
                 async: false, url: path, data: clean.data.json.write(data), dataType: 'json',
                 success: function (msg) {
+
 
 
                 }

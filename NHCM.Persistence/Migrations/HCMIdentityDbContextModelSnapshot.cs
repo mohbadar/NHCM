@@ -75,6 +75,8 @@ namespace NHCM.Persistence.Migrations
 
                     b.Property<bool>("EmailConfirmed");
 
+                    b.Property<int>("EmployeeID");
+
                     b.Property<bool>("LockoutEnabled");
 
                     b.Property<DateTimeOffset?>("LockoutEnd");
@@ -85,7 +87,11 @@ namespace NHCM.Persistence.Migrations
                     b.Property<string>("NormalizedUserName")
                         .HasMaxLength(256);
 
+                    b.Property<bool>("OrganizationAdmin");
+
                     b.Property<int?>("OrganizationID");
+
+                    b.Property<bool>("PasswordChanged");
 
                     b.Property<string>("PasswordHash");
 
@@ -94,6 +100,8 @@ namespace NHCM.Persistence.Migrations
                     b.Property<bool>("PhoneNumberConfirmed");
 
                     b.Property<string>("SecurityStamp");
+
+                    b.Property<bool>("SuperAdmin");
 
                     b.Property<bool>("TwoFactorEnabled");
 

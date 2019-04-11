@@ -51,6 +51,7 @@ namespace NHCM.WebUI.Pages.Organogram
         {
             try
             {
+
                 List<SearchedPlan> dbResult = await Mediator.Send(command);
                 if (dbResult.Any())
                 {
@@ -58,6 +59,7 @@ namespace NHCM.WebUI.Pages.Organogram
                     int ProcessID = HttpContext.Session.GetInt32("ProcessID").Value;
                     await Mediator.Send(new SaveProcessTracksCommand() { ModuleId = ModuleID, ProcessId = ProcessID, RecordId = dbResult.FirstOrDefault().Id });
                 }
+
                 return new JsonResult(new NHCM.WebUI.Types.UIResult()
                 {
                     Data = new { list = dbResult },

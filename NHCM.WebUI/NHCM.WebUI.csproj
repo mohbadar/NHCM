@@ -6,14 +6,31 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Compile Remove="wwwroot\custom\lib\**" />
     <Compile Remove="wwwroot\old\**" />
+    <Content Remove="wwwroot\custom\lib\**" />
     <Content Remove="wwwroot\old\**" />
+    <EmbeddedResource Remove="wwwroot\custom\lib\**" />
     <EmbeddedResource Remove="wwwroot\old\**" />
+    <None Remove="wwwroot\custom\lib\**" />
     <None Remove="wwwroot\old\**" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Compile Remove="Pages\Organogram\CheckOrganogram.cshtml.cs" />
+    <Compile Remove="Pages\Organogram\CheckPositions.cshtml.cs" />
+    <Compile Remove="Pages\Organogram\Confirm.cshtml.cs" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Content Remove="Pages\Organogram\CheckOrganogram.cshtml" />
+    <Content Remove="Pages\Organogram\CheckPositions.cshtml" />
+    <Content Remove="Pages\Organogram\Confirm.cshtml" />
   </ItemGroup>
 
 
   <ItemGroup>
+    <PackageReference Include="Microsoft.AspNetCore.Localization" Version="2.2.0" />
     <PackageReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Design" Version="2.2.0" />
     <PackageReference Include="MediatR" Version="6.0.0" />
     <PackageReference Include="MediatR.Extensions.Microsoft.DependencyInjection" Version="6.0.1" />
@@ -31,6 +48,7 @@
 
   <ItemGroup>
     <Folder Include="Pages\Employment\" />
+    <Folder Include="Utilities\" />
   </ItemGroup>
 
   

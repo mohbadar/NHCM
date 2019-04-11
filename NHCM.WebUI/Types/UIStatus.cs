@@ -10,6 +10,5 @@ namespace NHCM.WebUI.Types
         public static byte Success { get; } = 1;
         public static byte Failure { get; } = 0;
         public static byte SuccessWithoutMessage { get; } = 2;
-
     }
 }
