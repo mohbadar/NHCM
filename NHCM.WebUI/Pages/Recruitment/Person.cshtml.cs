@@ -93,13 +93,12 @@ namespace NHCM.WebUI.Pages.Recruitment
                 ListOfDocumentTypes.Add(new SelectListItem() { Text = documentType.Name, Value = documentType.Id.ToString() });
 
 
-            string screen = RijndaelManagedEncryption.RijndaelManagedEncryption.DecryptRijndael(HttpContext.Request.Query["p"], "P@33word");
-            int ID = Convert.ToInt32(screen);
-            // int ID = Convert.ToInt32(HttpContext.Request.Query["p"]);
+            string Screen = EncryptionHelper.Decrypt(HttpContext.Request.Query["p"]);
+            int ScreenID = Convert.ToInt32(Screen);
             try
             {
                 List<Screens> screens = new List<Screens>();
-                screens = await Mediator.Send(new GetSubScreens() { ID = ID });
+                screens = await Mediator.Send(new GetSubScreens() { ID = ScreenID });
                 string listout = "";
                 foreach (Screens s in screens)
                 {

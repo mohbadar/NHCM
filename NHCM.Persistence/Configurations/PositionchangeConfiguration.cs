@@ -43,11 +43,7 @@ namespace NHCM.Persistence.Configurations
                     .OnDelete(DeleteBehavior.ClientSetNull)
                     .HasConstraintName("fk_positionchange_organogram");
 
-                builder.HasOne(d => d.Position)
-                    .WithMany(p => p.PositionChange)
-                    .HasForeignKey(d => d.PositionId)
-                    .OnDelete(DeleteBehavior.ClientSetNull)
-                    .HasConstraintName("fk_positionchange_position");
+   
             
         }
     }

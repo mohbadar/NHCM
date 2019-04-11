@@ -69,13 +69,7 @@ namespace NHCM.Persistence.Configurations
                     .WithMany(p => p.Selection)
                     .HasForeignKey(d => d.OrganizationId)
                     .HasConstraintName("fk_selection_organization");
-
-                builder.HasOne(d => d.Position)
-                    .WithMany(p => p.Selection)
-                    .HasForeignKey(d => d.PositionId)
-                    .OnDelete(DeleteBehavior.ClientSetNull)
-                    .HasConstraintName("fk_selection_position");
-            
+           
         }
     }
 }

@@ -16,6 +16,7 @@ namespace NHCM.Application.Organogram.Queries
 
         public decimal? Id { get; set; }
         public int? OrganoGramId { get; set; }
+        public int? ParentId { get; set; }
         public short? PositionTypeId { get; set; }
         public short? RankId { get; set; }
     }
@@ -23,243 +24,141 @@ namespace NHCM.Application.Organogram.Queries
     public class SearchPositionQueryHandler : IRequestHandler<SearchPositionQuery, List<SearchedPosition>>
     {
         private HCMContext _context;
-        public SearchPositionQueryHandler(HCMContext context)
+        private readonly IMediator _mediator;
+        public SearchPositionQueryHandler(HCMContext context, IMediator mediator)
         {
             _context = context;
+            _mediator = mediator;
         }
 
         public async Task<List<SearchedPosition>> Handle(SearchPositionQuery request, CancellationToken cancellationToken)
         {
             List<SearchedPosition> result = new List<SearchedPosition>();
+            List<SearchedOrgPosition> OrgPositions = await _mediator.Send(new Queries.SearchOrgPositionQuery() { }).ConfigureAwait(false);
+
+
             if (request.Id != null)
             {
-                result = await (from position in _context.Position
+                result = await (from p in _context.Position
+                                join w in _context.WorkArea on p.WorkingAreaId equals w.Id into pw
+                                from rpw in pw.DefaultIfEmpty()
 
-                                join pt in _context.PositionType on position.PositionTypeId equals pt.Id into pot
-                                from resultpot in pot.DefaultIfEmpty()
-                                join locatin in _context.Location on position.LocationId equals locatin.Id into poslo
-                                from resultposlo in poslo.DefaultIfEmpty()
-                                join rank in _context.Rank on position.RankId equals rank.Id into posr
-                                from resultposr in posr.DefaultIfEmpty()
-                                join parent in _context.Position on position.ParentId equals parent.Id into posp
-                                from resultposp in posp.DefaultIfEmpty()
-                                join status in _context.Status on position.StatusId equals status.Id into PS
-                                from resultPS in PS.DefaultIfEmpty()
-                                join plantype in _context.PlanType on position.PlanTypeId equals plantype.Id into ppt
-                                from resultppt in ppt.DefaultIfEmpty()
-                                join salarytype in _context.SalaryType on position.SalaryTypeId equals salarytype.Id into pst
-                                from resultpst in pst.DefaultIfEmpty()
+                                join OP in OrgPositions on p.PositionTypeId equals OP.Id into OPs
+                                from rops in OPs.DefaultIfEmpty()
 
-                                //join orgPyear in _context.OrganoGram on position.OrganoGramId equals orgPyear.Id into orgy
-                                //from resultorgy in orgy.DefaultIfEmpty()
+                                join ST in _context.SalaryType on p.SalaryTypeId equals ST.Id into STs
+                                from str in STs.DefaultIfEmpty()
 
+                                join L in _context.Location on p.LocationId equals L.Id into Ls
+                                from Lr in Ls.DefaultIfEmpty()
 
-                                where position.Id == request.Id
+                                join PT in _context.PlanType on p.PlanTypeId equals PT.Id into PTs
+                                from PTr in PTs.DefaultIfEmpty()
+
+                                where p.Id == request.Id || p.ParentId == request.Id
                                 select new SearchedPosition
                                 {
-                                    Id = position.Id,
-                                    ParentId = position.ParentId,
-                                    OrgunitId = position.OrgunitId,
-                                    PositionTypeId = position.PositionTypeId,
-                                    RankId = position.RankId,
-                                    //StatusId = position.StatusId,
-                                    Code = position.Code,
-                                    LocationId = position.LocationId,
-                                    DirectorateId = position.DirectorateId,
-                                    Profession = position.Profession,
-                                    Kadr = position.Kadr,
-                                    //Remarks = position.Remarks,
-                                    SalaryTypeId = position.SalaryTypeId,
-                                    Sorter = position.Sorter,
-                                    OrganoGramId = position.OrganoGramId,
-                                    TransferPositionId = position.TransferPositionId,
-                                    PlanTypeId = position.PlanTypeId,
-                                    EducationLevelId = position.EducationLevelId,
-                                    ExperienceNoOfYear = position.ExperienceNoOfYear,
-                                   // PositionResponsibilityAndPurpose = position.PositionResponsibilityAndPurpose,
+                                    Id = p.Id,
+                                    ParentId = p.ParentId,
+                                    WorkingAreaId = p.WorkingAreaId,
+                                    Code = p.Code,
+                                    PositionTypeId = p.PositionTypeId,
+                                    LocationId = p.LocationId,
+                                    SalaryTypeId = p.SalaryTypeId,
+                                    Sorter = p.Sorter,
+                                    OrganoGramId = p.OrganoGramId,
+                                    PlanTypeId = p.PlanTypeId,
+                                    WorkAreaText = rpw.Title,
+                                    RankText = rops.RankText,
+                                    PositionTypeText = rops.PositionTypeText,
+                                    OrgUnitText = rops.OrgUnitText,
+                                    SalaryTypeText = str.Dari,
+                                    LocationText = Lr.Dari,
+                                    PlanTypeText = PTr.Name,
 
-                                    Name = position.Name,
-                                    PlanTypeText = resultppt.Name,
-                                    PositionTypeText = resultpot.Name,
-                                    LocationText = resultposlo.Dari,
-                                    RankText = resultposr.Name,
-                                    ParentText = resultposp.Name,
-                                    StatusText = resultPS.Dari,
-                                    SalaryTypeText = resultpst.Dari
 
-                                }).ToListAsync(cancellationToken);
+                                }).OrderBy(c=>c.Sorter).DefaultIfEmpty().ToListAsync(cancellationToken);
+            }
+            if (request.ParentId != null)
+            {
+                result = await (from p in _context.Position
+                                join w in _context.WorkArea on p.WorkingAreaId equals w.Id into pw
+                                from rpw in pw.DefaultIfEmpty()
+
+                                join OP in OrgPositions on p.PositionTypeId equals OP.Id into OPs
+                                from rops in OPs.DefaultIfEmpty()
+
+                                join ST in _context.SalaryType on p.SalaryTypeId equals ST.Id into STs
+                                from str in STs.DefaultIfEmpty()
+
+                                join L in _context.Location on p.LocationId equals L.Id into Ls
+                                from Lr in Ls.DefaultIfEmpty()
+
+                                join PT in _context.PlanType on p.PlanTypeId equals PT.Id into PTs
+                                from PTr in PTs.DefaultIfEmpty()
+
+                                where p.ParentId == request.ParentId
+                                select new SearchedPosition
+                                {
+                                    Id = p.Id,
+                                    ParentId = p.ParentId,
+                                    WorkingAreaId = p.WorkingAreaId,
+                                    Code = p.Code,
+                                    PositionTypeId = p.PositionTypeId,
+                                    LocationId = p.LocationId,
+                                    SalaryTypeId = p.SalaryTypeId,
+                                    Sorter = p.Sorter,
+                                    OrganoGramId = p.OrganoGramId,
+                                    PlanTypeId = p.PlanTypeId,
+                                    WorkAreaText = rpw.Title,
+                                    RankText = rops.RankText,
+                                    PositionTypeText = rops.PositionTypeText,
+                                    OrgUnitText = rops.OrgUnitText,
+                                    SalaryTypeText = str.Dari,
+                                    LocationText = Lr.Dari,
+                                    PlanTypeText = PTr.Name,
+
+
+                                }).OrderBy(c => c.Sorter).DefaultIfEmpty().ToListAsync(cancellationToken);
             }
 
-            else if (request.RankId != null)
+            else if (request.OrganoGramId != null)
             {
                 result = await (from position in _context.Position
+                                join w in _context.WorkArea on position.WorkingAreaId equals w.Id into pw
+                                from rpw in pw.DefaultIfEmpty()
+                                join OP in OrgPositions on position.PositionTypeId equals OP.Id into OPs
+                                from rops in OPs.DefaultIfEmpty()
+                                join ST in _context.SalaryType on position.SalaryTypeId equals ST.Id into STs
+                                from str in STs.DefaultIfEmpty()
 
-                                join pt in _context.PositionType on position.PositionTypeId equals pt.Id into pot
-                                from resultpot in pot.DefaultIfEmpty() 
-                                join locatin in _context.Location on position.LocationId equals locatin.Id into poslo
-                                from resultposlo in poslo.DefaultIfEmpty() 
-                                join rank in _context.Rank on position.RankId equals rank.Id into posr
-                                from resultposr in posr.DefaultIfEmpty() 
-                                join parent in _context.Position on position.ParentId equals parent.Id into posp
-                                from resultposp in posp.DefaultIfEmpty() 
-                                join status in _context.Status on position.StatusId equals status.Id into PS
-                                from resultPS in PS.DefaultIfEmpty() 
-                                join plantype in _context.PlanType on position.PlanTypeId equals plantype.Id into ppt
-                                from resultppt in ppt.DefaultIfEmpty() 
-                                join salarytype in _context.SalaryType on position.SalaryTypeId equals salarytype.Id into pst
-                                from resultpst in pst.DefaultIfEmpty()
-                                
+                                join L in _context.Location on position.LocationId equals L.Id into Ls
+                                from Lr in Ls.DefaultIfEmpty()
 
-                                where (position.OrganoGramId == request.OrganoGramId) && (position.RankId == request.RankId)
-                                select new SearchedPosition
-                                {
-                                    Id=position.Id,
-                                    ParentId = position.ParentId,
-                                    OrgunitId = position.OrgunitId,
-                                    PositionTypeId = position.PositionTypeId,
-                                    RankId = position.RankId,
-                                    //StatusId = position.StatusId,
-                                    Code = position.Code,
-                                    LocationId = position.LocationId,
-                                    DirectorateId = position.DirectorateId,
-                                    Profession = position.Profession,
-                                    Kadr = position.Kadr,
-                                   // Remarks = position.Remarks,
-                                    SalaryTypeId = position.SalaryTypeId,
-                                    Sorter = position.Sorter,
-                                    OrganoGramId = position.OrganoGramId,
-                                    TransferPositionId = position.TransferPositionId,
-                                    PlanTypeId = position.PlanTypeId,
-                                    EducationLevelId=position.EducationLevelId,
-                                    ExperienceNoOfYear=position.ExperienceNoOfYear,
-                                    //PositionResponsibilityAndPurpose=position.PositionResponsibilityAndPurpose,
-                                     
-                                    Name = position.Name,
-                                    PlanTypeText = resultppt.Name,
-                                    PositionTypeText = resultpot.Name,
-                                    LocationText = resultposlo.Dari,
-                                    RankText = resultposr.Name,
-                                    ParentText = resultposp.Name,
-                                    StatusText = resultPS.Dari,
-                                    SalaryTypeText = resultpst.Dari
+                                join PT in _context.PlanType on position.PlanTypeId equals PT.Id into PTs
+                                from PTr in PTs.DefaultIfEmpty()
 
-
-                                     
-                                }).ToListAsync(cancellationToken);
-            }
-            else if(request.OrganoGramId != null)
-            {
-                result = await (from position in _context.Position
-
-                                join pt in _context.PositionType on position.PositionTypeId equals pt.Id into pot
-                                from resultpot in pot.DefaultIfEmpty()
-                                join locatin in _context.Location on position.LocationId equals locatin.Id into poslo
-                                from resultposlo in poslo.DefaultIfEmpty()
-                                join rank in _context.Rank on position.RankId equals rank.Id into posr
-                                from resultposr in posr.DefaultIfEmpty()
-                                join parent in _context.Position on position.ParentId equals parent.Id into posp
-                                from resultposp in posp.DefaultIfEmpty()
-                                join status in _context.Status on position.StatusId equals status.Id into PS
-                                from resultPS in PS.DefaultIfEmpty()
-                                join plantype in _context.PlanType on position.PlanTypeId equals plantype.Id into ppt
-                                from resultppt in ppt.DefaultIfEmpty()
-                                join salarytype in _context.SalaryType on position.SalaryTypeId equals salarytype.Id into pst
-                                from resultpst in pst.DefaultIfEmpty()
-
-                                   where position.OrganoGramId == request.OrganoGramId 
+                                where position.OrganoGramId == request.OrganoGramId
                                 select new SearchedPosition
                                 {
                                     Id = position.Id,
                                     ParentId = position.ParentId,
-                                    OrgunitId = position.OrgunitId,
-                                    PositionTypeId = position.PositionTypeId,
-                                    RankId = position.RankId,
-                                    // StatusId = position.StatusId,
+                                    WorkingAreaId = position.WorkingAreaId,
                                     Code = position.Code,
+                                    PositionTypeId = position.PositionTypeId,
                                     LocationId = position.LocationId,
-                                    DirectorateId = position.DirectorateId,
-                                    Profession = position.Profession,
-                                    Kadr = position.Kadr,
-                                    // Remarks = position.Remarks,
                                     SalaryTypeId = position.SalaryTypeId,
                                     Sorter = position.Sorter,
                                     OrganoGramId = position.OrganoGramId,
-                                    TransferPositionId = position.TransferPositionId,
                                     PlanTypeId = position.PlanTypeId,
-                                    EducationLevelId = position.EducationLevelId,
-                                    ExperienceNoOfYear = position.ExperienceNoOfYear,
-                                    //PositionResponsibilityAndPurpose = position.PositionResponsibilityAndPurpose,
-
-                                    Name = position.Name,
-                                    PlanTypeText = resultppt.Name,
-                                    PositionTypeText = resultpot.Name,
-                                    LocationText = resultposlo.Dari,
-                                    RankText = resultposr.Name,
-                                    ParentText = resultposp.Name,
-                                    StatusText = resultPS.Dari,
-                                    SalaryTypeText = resultpst.Dari
-
-
-
-                                }).ToListAsync(cancellationToken);
-            }
-
-            // Used in tayenat
-            else
-            { 
-                result = await (from position in _context.Position
-
-                                join pt in _context.PositionType on position.PositionTypeId equals pt.Id into pot
-                                from resultpot in pot.DefaultIfEmpty()
-                                join locatin in _context.Location on position.LocationId equals locatin.Id into poslo
-                                from resultposlo in poslo.DefaultIfEmpty()
-                                join rank in _context.Rank on position.RankId equals rank.Id into posr
-                                from resultposr in posr.DefaultIfEmpty()
-                                join parent in _context.Position on position.ParentId equals parent.Id into posp
-                                from resultposp in posp.DefaultIfEmpty()
-                                join status in _context.Status on position.StatusId equals status.Id into PS
-                                from resultPS in PS.DefaultIfEmpty()
-                                join plantype in _context.PlanType on position.PlanTypeId equals plantype.Id into ppt
-                                from resultppt in ppt.DefaultIfEmpty()
-                                join salarytype in _context.SalaryType on position.SalaryTypeId equals salarytype.Id into pst
-                                from resultpst in pst.DefaultIfEmpty()
-
-                              //  where position.OrganoGramId == request.OrganoGramId
-                                select new SearchedPosition
-                                {
-                                    Id = position.Id,
-                                    ParentId = position.ParentId,
-                                    OrgunitId = position.OrgunitId,
-                                    PositionTypeId = position.PositionTypeId,
-                                    RankId = position.RankId,
-                                    // StatusId = position.StatusId,
-                                    Code = position.Code,
-                                    LocationId = position.LocationId,
-                                    DirectorateId = position.DirectorateId,
-                                    Profession = position.Profession,
-                                    Kadr = position.Kadr,
-                                    // Remarks = position.Remarks,
-                                    SalaryTypeId = position.SalaryTypeId,
-                                    Sorter = position.Sorter,
-                                    OrganoGramId = position.OrganoGramId,
-                                    TransferPositionId = position.TransferPositionId,
-                                    PlanTypeId = position.PlanTypeId,
-                                    EducationLevelId = position.EducationLevelId,
-                                    ExperienceNoOfYear = position.ExperienceNoOfYear,
-                                    //PositionResponsibilityAndPurpose = position.PositionResponsibilityAndPurpose,
-
-                                    Name = position.Name,
-                                    PlanTypeText = resultppt.Name,
-                                    PositionTypeText = resultpot.Name,
-                                    LocationText = resultposlo.Dari,
-                                    RankText = resultposr.Name,
-                                    ParentText = resultposp.Name,
-                                    StatusText = resultPS.Dari,
-                                    SalaryTypeText = resultpst.Dari
-
-
-
-                                }).Take(100).ToListAsync(cancellationToken);
+                                    WorkAreaText = rpw.Title,
+                                    RankText = rops.RankText,
+                                    PositionTypeText = rops.PositionTypeText,
+                                    OrgUnitText = rops.OrgUnitText,
+                                    SalaryTypeText = str.Dari,
+                                    LocationText = Lr.Dari,
+                                    PlanTypeText = PTr.Name,
+                                }).OrderBy(c => c.Sorter).ToListAsync(cancellationToken);
             }
 
             return result;

@@ -15,11 +15,11 @@ using NHCM.WebUI.Types;
 
 namespace NHCM.WebUI.Pages.Organogram
 {
-   
-    
+
+
     public class PositionsModel : BasePage
     {
-        
+
         public async Task OnGetAsync()
         {
             // Page Specific Lookups
@@ -29,28 +29,17 @@ namespace NHCM.WebUI.Pages.Organogram
             foreach (PlanType planT in plantype)
                 ListOfPlanType.Add(new SelectListItem() { Text = planT.Name, Value = planT.Id.ToString() });
 
+            ListOfPositionType = new List<SelectListItem>();
+            List<SearchedOrgPosition> PositionType = new List<SearchedOrgPosition>();
+            PositionType = await Mediator.Send(new SearchOrgPositionQuery() { });
+            foreach (SearchedOrgPosition po in PositionType)
+                ListOfPositionType.Add(new SelectListItem() { Text = po.PositionTypeText + " | " + po.RankText, Value = po.Id.ToString() });
 
-            /// change organogramid to dynamic id 
-            ListOfReportTo = new List<SelectListItem>();
-            List<Position> reportTo = new List<Position>();
-            reportTo = await Mediator.Send(new GetReportToQuery() { organogramid = 3 });
-            foreach (Position reportto in reportTo)
-                ListOfReportTo.Add(new SelectListItem() { Text = reportto.Name, Value = reportto.Id.ToString() });
-
-
-           ListOfPositionType = new List<SelectListItem>();
-            List<PositionType> Positiontype = new List<PositionType>();
-            Positiontype = await Mediator.Send(new GetPositionTypeQuery() { Id = null });
-            foreach (PositionType planT in Positiontype)
-                ListOfPositionType.Add(new SelectListItem() { Text = planT.Name, Value = planT.Id.ToString() });
-
-
-
-            ListOfRanks = new List<SelectListItem>();
-            List<Rank> ranks = new List<Rank>();
-            ranks = await Mediator.Send(new GetRankQuery() { ID = null });
-            foreach (Rank rank in ranks)
-                ListOfRanks.Add(new SelectListItem() { Text = rank.Name, Value = rank.Id.ToString() });
+            ListOfWorkAreas = new List<SelectListItem>();
+            List<WorkArea> WorkAreas = new List<WorkArea>();
+            WorkAreas = await Mediator.Send(new GetWorkAreaQuery() { });
+            foreach (WorkArea wa in WorkAreas)
+                ListOfWorkAreas.Add(new SelectListItem() { Text = wa.Title, Value = wa.Id.ToString() });
 
 
             ListOfSalaryType = new List<SelectListItem>();
@@ -59,19 +48,11 @@ namespace NHCM.WebUI.Pages.Organogram
             foreach (SalaryType salary in salaryTypes)
                 ListOfSalaryType.Add(new SelectListItem() { Text = salary.Dari, Value = salary.Id.ToString() });
 
-
-            //Get Locations
             ListOfLocations = new List<SelectListItem>();
             List<Location> locations = new List<Location>();
             locations = await Mediator.Send(new GetLocationQuery() { ID = null });
             foreach (Location l in locations)
                 ListOfLocations.Add(new SelectListItem(l.Dari, l.Id.ToString()));
-
-            ListOfEducationLevels = new List<SelectListItem>();
-            List<EducationLevel> educationLevels = new List<EducationLevel>();
-            educationLevels = await Mediator.Send(new GetEducationLevelQuery() { ID = null });
-            foreach (EducationLevel level in educationLevels)
-                ListOfEducationLevels.Add(new SelectListItem() { Text = level.Name, Value = level.Id.ToString() });
 
         }
 
@@ -80,15 +61,8 @@ namespace NHCM.WebUI.Pages.Organogram
         {
             try
             {
-                command.CreatedBy = 10;
-                command.ModifiedBy = "Test";
-                command.CreatedOn = DateTime.Now;
-                command.ModifiedOn = DateTime.Now;
-                command.StatusId = 51;
-
                 List<SearchedPosition> dbResult = new List<SearchedPosition>();
                 dbResult = await Mediator.Send(command);
-
                 return new JsonResult(new NHCM.WebUI.Types.UIResult()
                 {
                     Data = new { list = dbResult },
@@ -97,31 +71,67 @@ namespace NHCM.WebUI.Pages.Organogram
                     Description = string.Empty
 
                 });
-
             }
             catch (Exception ex)
             {
                 return new JsonResult(new NHCM.WebUI.Types.UIResult()
                 {
-
                     Data = null,
                     Status = NHCM.WebUI.Types.UIStatus.Failure,
                     Text = CustomMessages.InternalSystemException,
                     Description = ex.Message + " \n StackTrace : " + ex.StackTrace
-
                 });
             }
 
         }
 
+        public async Task<IActionResult> OnPostRemove([FromBody] DeletePositionCommand command)
+        {
+            try
+            {
+                List<SearchedPosition> theParentOfDeletedPosition = new List<SearchedPosition>();
+                theParentOfDeletedPosition = await Mediator.Send(command);
+                return new JsonResult(new NHCM.WebUI.Types.UIResult()
+                {
+                    Data = new { list = theParentOfDeletedPosition },
+                    Status = UIStatus.Success,
+                    Text = "بست انتخاب شده موفقانه حذف گردید",
+                    Description = string.Empty
 
-        public async Task<IActionResult> OnPostSearch([FromBody] SearchPositionQuery command)
+                });
+
+            }
+            catch(Exception ex)
+            {
+                return new JsonResult(new NHCM.WebUI.Types.UIResult()
+                {
+                    Data = new { },
+                    Status = UIStatus.Failure,
+                    Text = CustomMessages.StateExceptionTitle(ex),
+                    Description =CustomMessages.DescribeException(ex)
+                });
+
+            }
+        }
+
+
+
+
+        public async Task<IActionResult> OnPostPositions([FromBody] SearchPositionQuery command)
         {
 
             try
             {
-                List<SearchedPosition> result = new List<SearchedPosition>();
-                 result = await Mediator.Send(command);
+                List<SearchedPosition> presult = new List<SearchedPosition>();
+                presult = await Mediator.Send(command);
+
+                List<object> result = new List<object>();
+                List<SearchedOrgPosition> PositionType = new List<SearchedOrgPosition>();
+                PositionType = await Mediator.Send(new SearchOrgPositionQuery() { Id = presult.FirstOrDefault().PositionTypeId, Children = true });
+
+                foreach (SearchedOrgPosition po in PositionType)
+                    result.Add(new { Text = po.PositionTypeText + " | " + po.RankText, ID = po.Id.ToString() });
+
 
                 return new JsonResult(new NHCM.WebUI.Types.UIResult()
                 {
@@ -129,9 +139,34 @@ namespace NHCM.WebUI.Pages.Organogram
                     Status = NHCM.WebUI.Types.UIStatus.Success,
                     Text = string.Empty,
                     Description = string.Empty
-
                 });
+            }
+            catch (Exception ex)
+            {
+                return new JsonResult(new NHCM.WebUI.Types.UIResult()
+                {
+                    Data = null,
+                    Status = NHCM.WebUI.Types.UIStatus.Failure,
+                    Text = CustomMessages.InternalSystemException,
+                    Description = ex.Message
+                });
+            }
+        }
 
+
+        public async Task<IActionResult> OnPostSearch([FromBody] SearchPositionQuery command)
+        {
+            try
+            {
+                List<SearchedPosition> result = new List<SearchedPosition>();
+                result = await Mediator.Send(command);
+                return new JsonResult(new NHCM.WebUI.Types.UIResult()
+                {
+                    Data = new { list = result },
+                    Status = NHCM.WebUI.Types.UIStatus.Success,
+                    Text = string.Empty,
+                    Description = string.Empty
+                });
             }
             catch (Exception ex)
             {

@@ -23,8 +23,6 @@ namespace NHCM.WebUI.Types
         {
             Type exceptionType = ex.GetType();
             StringBuilder ExceptionTitleBuilder = new StringBuilder();
-
-
             if (exceptionType.Equals(typeof(ValidationException)))
             {
                 ExceptionTitleBuilder.Append(ValidationExceptionTitle);
@@ -37,17 +35,8 @@ namespace NHCM.WebUI.Types
             {
                 ExceptionTitleBuilder.Append(InternalSystemException);
             }
-
             return ExceptionTitleBuilder.ToString();
         }
-
-
-
-
-
-
-
-    
         public static string DescribeException(Exception ex)
         {
             bool ShowStackTrace = false;

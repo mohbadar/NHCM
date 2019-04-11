@@ -47,15 +47,15 @@ namespace NHCM.WebUI
 
 
 
-           
+
             // 1 Antiforgery
             services.AddAntiforgery(options => options.HeaderName = "XSRF-TOKEN");
-            
+
 
 
             // 2 Add DbContext
             services.AddDbContext<HCMContext>();
-
+            services.AddSession();
 
             // 3 Identity
 
@@ -67,34 +67,21 @@ namespace NHCM.WebUI
                 .AddEntityFrameworkStores<HCMIdentityDbContext>()
                 .AddDefaultTokenProviders();
 
-            services.Configure<IdentityOptions>(options => {
+            services.Configure<IdentityOptions>(options =>
+            {
                 options.Password.RequireNonAlphanumeric = false;
                 options.Password.RequiredLength = 6;
-               
+
             });
-
-
-          
-
-         
-
-
-
-            
-
-
-
 
             // Add MediatR
             services.AddTransient(typeof(IPipelineBehavior<,>), typeof(RequestPreProcessorBehavior<,>));
-             services.AddTransient(typeof(IPipelineBehavior<,>), typeof(RequestValidationBehavior<,>));
+            services.AddTransient(typeof(IPipelineBehavior<,>), typeof(RequestValidationBehavior<,>));
             services.AddMediatR(typeof(CreatePersonCommandHandler).GetTypeInfo().Assembly);
 
-
-
             // Add authorization Policy
-            services.AddAuthorization(options => {
-
+            services.AddAuthorization(options =>
+            {
                 options.AddPolicy("ProfilerPolicy", policy => { policy.RequireRole("Profiler"); });
             });
 
@@ -105,21 +92,16 @@ namespace NHCM.WebUI
                 (
                     options =>
                     {
-
                         // Comment it in production
-                         options.Conventions.AllowAnonymousToPage("/Security/Register");
-
+                        options.Conventions.AllowAnonymousToPage("/Security/Register");
                         options.Conventions.AuthorizeFolder("/Security");
                         options.Conventions.AuthorizeFolder("/Recruitment", "ProfilerPolicy");
                         options.Conventions.AuthorizeFolder("/Shared");
                         options.Conventions.AuthorizePage("/index");
-
                         options.AllowMappingHeadRequestsToGetHandler = true;
-
                     }
                 )
                 .SetCompatibilityVersion(CompatibilityVersion.Version_2_2);
-
             services.ConfigureApplicationCookie
                 (
                     options =>
@@ -132,14 +114,6 @@ namespace NHCM.WebUI
 
 
         }
-
-
-
-
-
-
-
-
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public async void Configure(IApplicationBuilder app, IHostingEnvironment env, IServiceProvider serviceProvider)
         {
@@ -153,19 +127,14 @@ namespace NHCM.WebUI
                 // The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
                 app.UseHsts();
             }
-
-
             // User type extension method used for providing configuration from config file in static methods.
             serviceProvider.SetConfigurationProvider(Configuration);
-
             app.UseHttpsRedirection();
             app.UseStaticFiles();
             app.UseAuthentication();
             app.UseCookiePolicy();
+            app.UseSession();
             app.UseMvc();
         }
-
-
-       
     }
 }

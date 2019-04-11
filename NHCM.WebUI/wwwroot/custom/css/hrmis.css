@@ -139,6 +139,29 @@
         box-shadow: 0px 4px 5px #808080;
     }
 
+.next {
+    background: #4ca851 !important;
+    border: 1px solid #4ca851 !important;
+    float: left;
+}
+
+    .next:hover, .next:focus, .next:active {
+        background: #4cb051 !important;
+        border: 1px solid #4cb051 !important;
+    }
+
+.previous {
+    background: #ef5350 !important;
+    border: 1px solid #ef5350 !important;
+    float: left;
+    margin-left: 5px;
+}
+
+    .previous:hover, .previous:focus, .previous:active {
+        background: #ee322f !important;
+        border: 1px solid #ee322f !important;
+    }
+
 .validation-error-label {
     font-size: 12px;
 }
@@ -398,8 +421,7 @@ td .label {
 
 .navbar-nav {
     text-align: right;
-    margin-left:10px;
-
+    margin-left: 10px;
 }
 
 .dropdown-user, .dropdown-user a {
@@ -425,4 +447,40 @@ td .label {
 
 .nav .open > a, .nav .open > a:hover, .nav .open > a:focus {
     color: #1b3b62;
+}
+
+.dataTables_filter {
+    position: relative;
+    display: block;
+    float: right;
+    margin: 10px 0px 10px 0;
+    padding-right: 20px;
+    padding-left: 20px;
+    width: 100%;
+}
+
+    .dataTables_filter input {
+        border: 1px solid #aaa;
+    }
+
+
+.modal-content .panel {
+    margin-bottom: 0px !important;
+}
+
+.row-selected, expanded, .row-selected .link {
+    background: #1b3b62;
+    color: #f5f5f5;
+}
+
+    .row-selected:hover {
+        background: #1b3b62 !important;
+        color: #f5f5f5;
+    }
+
+
+.tooltip-inner {
+    padding: 7px 12px;
+    font-family: calibri;
+    font-weight: bold;
 }

@@ -31,7 +31,7 @@ namespace NHCM.WebUI.Pages.Employment
             List<SearchedPosition> Positions = new List<SearchedPosition>();
             Positions = await Mediator.Send(new SearchPositionQuery() { });
             foreach (SearchedPosition p in Positions)
-                ListOfPosition.Add(new SelectListItem(p.Name, p.Id.ToString()));
+                ListOfPosition.Add(new SelectListItem(p.Id.ToString(), p.Id.ToString()));
 
             ListOfEventType = new List<SelectListItem>();
             List<EventType> EventTypes = new List<EventType>();

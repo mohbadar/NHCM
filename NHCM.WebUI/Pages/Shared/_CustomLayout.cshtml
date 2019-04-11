@@ -29,6 +29,8 @@
     <link href="~/assets/css/minified/colors.min.css" rel="stylesheet" type="text/css">
     <link href="~/assets/css/croppic.css" rel="stylesheet" />
 
+    <link href="~/assets/css/jquery.treetable.theme.default.css" rel="stylesheet" />
+
 
     @* CSS for the persian datepicker *@
     <link href="~/custom/css/jquery.md.bootstrap.datetimepicker.style.css" rel="stylesheet" />
@@ -87,18 +89,8 @@
                 <div class="content">
                     <div class="row">
                         <div class="col-md-12 pull-right">
-                            <div class="col-md-2 pull-right">
-                                <div class="sidebar sidebar-secondary sidebar-default">
-                                    <div class="sidebar-content">
-                                        <div class="sidebar-category">
-                                            <div class="category-content no-padding page-component" type="actionmenu">
-
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="col-md-10 pull-right">
+                         
+                            <div class="col-md-10 col-md-offset-1 main-content">
                                 <div class="panel panel-flat" style="direction: rtl;">
                                     @RenderBody()
                                 </div>
@@ -118,17 +110,19 @@
         <script type="text/javascript" src="~/assets/js/plugins/tables/datatables/datatables.min.js"></script>
         <script type="text/javascript" src="~/assets/js/plugins/notifications/jgrowl.min.js"></script>
         <script type="text/javascript" src="~/assets/js/plugins/forms/validation/validate.min.js"></script>
-
-
         <script src="~/assets/js/plugins/uploaders/fileinput.min.js"></script>
-
-
         <script src="~/assets/js/plugins/forms/selects/select2.min.js"></script>
         <script src="~/custom/js/jquery.md.bootstrap.datetimepicker.js"></script>
         <script src="~/assets/js/plugins/forms/validation/localization/messages_fa.js"></script>
         <script src="~/assets/js/plugins/croppic/croppic.js"></script>
-        <script src="~/custom/js/app.js"></script>
-        <script src="~/custom/js/nhcm.js"></script>
+        <script src="~/assets/js/plugins/treetable/jquery.treetable.js"></script>
+
+        <script src="~/assets/js/plugins/clean/nhcm.clean.v1.0.0.001.js"></script>
+        <script src="~/assets/js/plugins/clean/nhcm.clean.page.v1.0.0.001.js"></script>
+        <script src="~/assets/js/plugins/clean/nhcm.clean.form.v1.0.0.001.js"></script>
+        <script src="~/assets/js/plugins/clean/nhcm.clean.actionmenu.v1.0.0.001.js"></script>
+        <script src="~/assets/js/plugins/clean/nhcm.clean.tazkira.v1.0.0.001.js"></script>
+
     </environment>
     <script>
         $(document).ready(function () {
