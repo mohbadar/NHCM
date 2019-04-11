@@ -1,14 +1,6 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations.Schema;
-using System.Linq;
-using System.Threading;
-using System.Threading.Tasks;
-using System.Transactions;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.EntityFrameworkCore.ChangeTracking;
 using Microsoft.EntityFrameworkCore.Metadata;
-using Microsoft.EntityFrameworkCore.Metadata.Internal;
 using NHCM.Domain.Entities;
 
 namespace NHCM.Persistence
@@ -22,8 +14,6 @@ namespace NHCM.Persistence
             : base(options)
         {
         }
-
-        #region DbSets
         public virtual DbSet<Audit> Audits { get; set;  }
         public virtual DbSet<Address> Address { get; set; }
         public virtual DbSet<AssetType> AssetType { get; set; }
@@ -82,9 +72,7 @@ namespace NHCM.Persistence
         public virtual DbSet<SalaryType> SalaryType { get; set; }
         public virtual DbSet<MilitaryServiceType> MilitaryServiceType { get; set; }
 
-        #endregion DbSets
 
-        
 
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
@@ -297,7 +285,10 @@ namespace NHCM.Persistence
 
             modelBuilder.HasSequence("travel_id_seq");
 
+
+
             modelBuilder.HasSequence("Audit_ID_seq");
+
             modelBuilder.HasSequence<int>("auditversion_ID_seq");
 
         }
