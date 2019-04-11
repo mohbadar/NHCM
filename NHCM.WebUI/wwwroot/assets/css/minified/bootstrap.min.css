@@ -1366,7 +1366,7 @@ button, input, select, textarea {
 }
 
 a {
-    color: #337ab7;
+    color: #1b3b62;
     text-decoration: none
 }
 
@@ -1566,7 +1566,7 @@ p {
 }
 
 .text-primary {
-    color: #337ab7
+    color: #1b3b62
 }
 
 a.text-primary:focus, a.text-primary:hover {
@@ -1607,7 +1607,7 @@ a.text-danger:focus, a.text-danger:hover {
 
 .bg-primary {
     color: #fff;
-    background-color: #337ab7
+    background-color: #1b3b62
 }
 
 a.bg-primary:focus, a.bg-primary:hover {
@@ -3531,7 +3531,7 @@ a.btn.disabled, fieldset[disabled] a.btn {
 }
 
 .btn-primary .badge {
-    color: #337ab7;
+    color: #1b3b62;
     background-color: #fff
 }
 
@@ -3713,7 +3713,7 @@ a.btn.disabled, fieldset[disabled] a.btn {
 
 .btn-link {
     font-weight: 400;
-    color: #337ab7;
+    color: #1b3b62;
     border-radius: 0
 }
 
@@ -3888,7 +3888,7 @@ tbody.collapse.in {
     .dropdown-menu > .active > a, .dropdown-menu > .active > a:focus, .dropdown-menu > .active > a:hover {
         color: #fff;
         text-decoration: none;
-        background-color: #337ab7;
+        background-color: #1b3b62;
         outline: 0
     }
 
@@ -4332,7 +4332,7 @@ select[multiple].input-group-sm > .form-control, select[multiple].input-group-sm
 
     .nav .open > a, .nav .open > a:focus, .nav .open > a:hover {
         background-color: #eee;
-        border-color: #337ab7
+        border-color: #1b3b62
     }
 
     .nav .nav-divider {
@@ -4438,7 +4438,7 @@ select[multiple].input-group-sm > .form-control, select[multiple].input-group-sm
 
     .nav-pills > li.active > a, .nav-pills > li.active > a:focus, .nav-pills > li.active > a:hover {
         color: #fff;
-        background-color: #337ab7
+        background-color: #1b3b62
     }
 
 .nav-stacked > li {
@@ -5132,7 +5132,7 @@ select[multiple].input-group-sm > .form-control, select[multiple].input-group-sm
             padding: 6px 12px;
             margin-left: -1px;
             line-height: 1.42857143;
-            color: #337ab7;
+            color: #1b3b62;
             text-decoration: none;
             background-color: #fff;
             border: 1px solid #ddd
@@ -5160,8 +5160,8 @@ select[multiple].input-group-sm > .form-control, select[multiple].input-group-sm
         z-index: 3;
         color: #fff;
         cursor: default;
-        background-color: #337ab7;
-        border-color: #337ab7
+        background-color: #1b3b62;
+        border-color: #1b3b62
     }
 
     .pagination > .disabled > a, .pagination > .disabled > a:focus, .pagination > .disabled > a:hover, .pagination > .disabled > span, .pagination > .disabled > span:focus, .pagination > .disabled > span:hover {
@@ -5278,7 +5278,7 @@ a.label:focus, a.label:hover {
     }
 
 .label-primary {
-    background-color: #337ab7
+    background-color: #1b3b62
 }
 
     .label-primary[href]:focus, .label-primary[href]:hover {
@@ -5353,7 +5353,7 @@ a.badge:focus, a.badge:hover {
 }
 
 .list-group-item.active > .badge, .nav-pills > .active > a > .badge {
-    color: #337ab7;
+    color: #1b3b62;
     background-color: #fff
 }
 
@@ -5436,7 +5436,7 @@ a.badge:focus, a.badge:hover {
     }
 
 a.thumbnail.active, a.thumbnail:focus, a.thumbnail:hover {
-    border-color: #337ab7
+    border-color: #1b3b62
 }
 
 .thumbnail .caption {
@@ -5583,7 +5583,7 @@ a.thumbnail.active, a.thumbnail:focus, a.thumbnail:hover {
     line-height: 20px;
     color: #fff;
     text-align: center;
-    background-color: #337ab7;
+    background-color: #1b3b62;
     -webkit-box-shadow: inset 0 -1px 0 rgba(0,0,0,.15);
     box-shadow: inset 0 -1px 0 rgba(0,0,0,.15);
     -webkit-transition: width .6s ease;
@@ -5762,8 +5762,8 @@ button.list-group-item {
 .list-group-item.active, .list-group-item.active:focus, .list-group-item.active:hover {
     z-index: 2;
     color: #fff;
-    background-color: #337ab7;
-    border-color: #337ab7
+    background-color: #1b3b62;
+    border-color: #1b3b62
 }
 
     .list-group-item.active .list-group-item-heading, .list-group-item.active .list-group-item-heading > .small, .list-group-item.active .list-group-item-heading > small, .list-group-item.active:focus .list-group-item-heading, .list-group-item.active:focus .list-group-item-heading > .small, .list-group-item.active:focus .list-group-item-heading > small, .list-group-item.active:hover .list-group-item-heading, .list-group-item.active:hover .list-group-item-heading > .small, .list-group-item.active:hover .list-group-item-heading > small {
@@ -6088,26 +6088,26 @@ a.list-group-item-danger, button.list-group-item-danger {
     }
 
 .panel-primary {
-    border-color: #337ab7
+    border-color: #1b3b62
 }
 
     .panel-primary > .panel-heading {
         color: #fff;
-        background-color: #337ab7;
-        border-color: #337ab7
+        background-color: #1b3b62;
+        border-color: #1b3b62
     }
 
         .panel-primary > .panel-heading + .panel-collapse > .panel-body {
-            border-top-color: #337ab7
+            border-top-color: #1b3b62
         }
 
         .panel-primary > .panel-heading .badge {
-            color: #337ab7;
+            color: #1b3b62;
             background-color: #fff
         }
 
     .panel-primary > .panel-footer + .panel-collapse > .panel-body {
-        border-bottom-color: #337ab7
+        border-bottom-color: #1b3b62
     }
 
 .panel-success {

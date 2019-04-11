@@ -55,12 +55,12 @@ namespace NHCM.Persistence
         public virtual DbSet<DocumentType> DocumentTypes { get; set; }
         public virtual DbSet<FolderPath> FolderPath { get; set; }
         public virtual DbSet<Documents> Document { get; set; }
-
-
+        public virtual DbSet<Process> Process { get; set; }
+        public virtual DbSet<Module> Module { get; set; }
 
         public virtual DbSet<Selection> Selection { get; set; }
         public virtual DbSet<EventType> EventType { get; set; }
-
+        public virtual DbSet<ProcessTracking> ProcessTracking { get; set; }
         public virtual DbSet<OrgUnit> OrgUnit { get; set; }
         public virtual DbSet<OrganoGram> OrganoGram { get; set; }
         public virtual DbSet<Organization> Organization { get; set; }
@@ -72,7 +72,10 @@ namespace NHCM.Persistence
         public virtual DbSet<SalaryType> SalaryType { get; set; }
         public virtual DbSet<MilitaryServiceType> MilitaryServiceType { get; set; }
 
-
+        public virtual DbSet<WorkArea> WorkArea { get; set; }
+        public virtual DbSet<OrgPosition> OrgPosition { get; set; }
+        public virtual DbSet<OrgUnitType> OrgUnitType { get; set; }
+        public virtual DbSet<ProcessConnection> ProcessConnection { get; set; }
 
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
@@ -286,10 +289,7 @@ namespace NHCM.Persistence
             modelBuilder.HasSequence("travel_id_seq");
 
 
-
-            modelBuilder.HasSequence("Audit_ID_seq");
-
-            modelBuilder.HasSequence<int>("auditversion_ID_seq");
+            modelBuilder.HasSequence("processtracking_id_seq");
 
         }
     }

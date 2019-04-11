@@ -2,6 +2,8 @@ using System;
 using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
+
+
 using System.Reflection;
 using FluentValidation.AspNetCore;
 using MediatR;
@@ -24,10 +26,12 @@ using NHCM.Application.Recruitment.Validators;
 using NHCM.Persistence;
 using NHCM.Persistence.Identity.Infrastructure;
 using NHCM.Persistence.Infrastructure.Identity;
+
+using NHCM.WebUI.Resources;
+
 using NHCM.Persistence.Infrastructure.Identity.Policies;
 using NHCM.Persistence.Infrastructure.Services;
 
-using NHCM.WebUI.Resources;
 using NHCM.WebUI.Types;
 using NHCM.WebUI.Utilities;
 
@@ -58,17 +62,32 @@ namespace NHCM.WebUI
             // Registering custom services
             services.AddScoped<ICurrentUser, CurrentUser>();
 
+
+
             // 1 Antiforgery
             services.AddAntiforgery(options => options.HeaderName = "XSRF-TOKEN");
 
+
+
             // 2 Add DbContext
             services.AddDbContext<HCMContext>();
+            services.AddSession();
+
 
             // 3 Identity
              
            
             services.AddDbContext<HCMIdentityDbContext>();
-            services.AddIdentity<HCMUser, HCMRole>(options => {
+
+
+            services.AddIdentity<HCMUser, HCMRole>(options => { options.User.RequireUniqueEmail = true; })
+                .AddRoles<HCMRole>()
+                .AddErrorDescriber<IdentityLocalizedErrorDescribers>()
+                .AddEntityFrameworkStores<HCMIdentityDbContext>()
+                .AddDefaultTokenProviders();
+
+            services.Configure<IdentityOptions>(options =>
+            {
                 options.Password.RequireNonAlphanumeric = false;
                 options.Password.RequiredLength = 5;
                 options.Password.RequireLowercase = false;
@@ -86,7 +105,8 @@ namespace NHCM.WebUI
             services.AddTransient(typeof(IPipelineBehavior<,>), typeof(RequestValidationBehavior<,>));
             services.AddMediatR(typeof(CreatePersonCommandHandler).GetTypeInfo().Assembly);
 
-            // 5 Add authorization Policies
+
+            // Add authorization Policy
             services.AddAuthorization(options =>
             {
                 options.AddPolicy("ProfilerPolicy", policy => { policy.RequireRole("Profiler"); });
@@ -123,7 +143,8 @@ namespace NHCM.WebUI
                         options.Conventions.AddPageRoute("/Organogram/Plan", "/Organogram");
                         options.Conventions.AddPageRoute("/Employment/Selection", "/Employment");
 
-                        // Limiting access to folders
+                        // Comment it in production
+                        options.Conventions.AllowAnonymousToPage("/Security/Register");
                         options.Conventions.AuthorizeFolder("/Security");
                         options.Conventions.AuthorizeFolder("/Recruitment", "ProfilerPolicy");
                         options.Conventions.AuthorizeFolder("/Shared");
@@ -134,17 +155,8 @@ namespace NHCM.WebUI
                         options.AllowMappingHeadRequestsToGetHandler = true;
                     }
                 )
-                .SetCompatibilityVersion(CompatibilityVersion.Version_2_2)
 
-             // Option A: use this for localization with shared resource
-                .AddDataAnnotationsLocalization(o => {
-                     var type = typeof(ViewResource);
-                     var assemblyName = new AssemblyName(type.GetTypeInfo().Assembly.FullName);
-                     var factory = services.BuildServiceProvider().GetService<IStringLocalizerFactory>();
-                     var localizer = factory.Create("ViewResource", assemblyName.Name);
-                     o.DataAnnotationLocalizerProvider = (t, f) => localizer;
-                 });
-                /////////////////////////////////////////////////////
+                .SetCompatibilityVersion(CompatibilityVersion.Version_2_2);
 
             services.ConfigureApplicationCookie
               (
@@ -180,7 +192,10 @@ namespace NHCM.WebUI
             app.UseStaticFiles(); 
             app.UseAuthentication();
             app.UseCookiePolicy();
+
+            app.UseSession();
             app.UseMvc();
-        }  
+        }
+
     }
 }

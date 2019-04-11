@@ -14,30 +14,32 @@ namespace NHCM.Persistence.Configurations
 
 
 
-          
-                builder.ToTable("Screens", "look");
 
-                builder.Property(e => e.Id)
-                    .HasColumnName("ID")
-                    .HasDefaultValueSql("nextval('look.screens_id_seq'::regclass)");
+            builder.ToTable("Screens", "look");
 
-                builder.Property(e => e.Description).HasMaxLength(500);
+            builder.Property(e => e.Id)
+                .HasColumnName("ID")
+                .HasDefaultValueSql("nextval('look.screens_id_seq'::regclass)");
 
-                builder.Property(e => e.Icon).HasMaxLength(100);
+            builder.Property(e => e.Description).HasMaxLength(500);
 
-                builder.Property(e => e.ParentId).HasColumnName("ParentID");
+            builder.Property(e => e.Icon).HasMaxLength(100);
 
-                builder.Property(e => e.Path).HasMaxLength(500);
+            builder.Property(e => e.ModuleId).HasColumnName("ModuleID");
 
-                builder.Property(e => e.Title)
-                    .IsRequired()
-                    .HasMaxLength(100);
+            builder.Property(e => e.ParentId).HasColumnName("ParentID");
 
-                builder.HasOne(d => d.Parent)
-                    .WithMany(p => p.InverseParent)
-                    .HasForeignKey(d => d.ParentId)
-                    .HasConstraintName("Screens_ParentID_fkey");
-           
+            builder.Property(e => e.Path).HasMaxLength(500);
+
+            builder.Property(e => e.Title)
+                .IsRequired()
+                .HasMaxLength(100);
+
+            builder.HasOne(d => d.Parent)
+                .WithMany(p => p.InverseParent)
+                .HasForeignKey(d => d.ParentId)
+                .HasConstraintName("Screens_ParentID_fkey");
+
 
 
 

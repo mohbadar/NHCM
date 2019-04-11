@@ -19,7 +19,7 @@ namespace NHCM.Domain.Entities
         public string Icon { get; set; }
         public short? Sorter { get; set; }
         public int? ParentId { get; set; }
-
+        public int? ModuleId { get; set; }
         public virtual Screens Parent { get; set; }
         public virtual ICollection<DocumentType> DocumentType { get; set; }
         public virtual ICollection<Screens> InverseParent { get; set; }

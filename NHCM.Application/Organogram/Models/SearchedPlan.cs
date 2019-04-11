@@ -5,26 +5,20 @@ using System.Text;
 
 namespace NHCM.Application.Organogram.Models
 {
-    public class SearchedPlan
+    public class SearchedOrgPosition
     {
+     
 
 
-        public int Id { get; set; }
-        public int OrganizationId { get; set; }
-        public short StatusId { get; set; }
-        public DateTime ModifiedOn { get; set; }
-        public string ModifiedBy { get; set; }
-        public DateTime CreatedOn { get; set; }
-        public int CreatedBy { get; set; }
-        public string ReferenceNo { get; set; }
-        public int? Year { get; set; }
-        public DateTime? PreparedDate { get; set; }
-        public DateTime? AppreovedDate { get; set; }
-        public int? NumberOfPositions { get; set; }
+        public int PositionTypeId { get; set; }
+        public int OrgUnitTypeId { get; set; }
+        public int? ParentId { get; set; }
+        public short Id { get; set; }
+        public short RankId { get; set; }
 
-        public string statustext { get; set; }
-        public string TitleText { get; set; }
-        public string OrganizationText { get; set; }
+        public string RankText { get; set; }
+        public string PositionTypeText { get; set; }
+        public string OrgUnitText { get; set; }
     }
 
 

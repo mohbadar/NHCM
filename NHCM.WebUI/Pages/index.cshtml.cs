@@ -60,7 +60,7 @@ namespace NHCM.WebUI.Pages
                     if (list.Count > 0)
                     {
                         Screens s = l[0];
-                        String screenid = RijndaelManagedEncryption.RijndaelManagedEncryption.EncryptRijndael(s.Id.ToString(), "P@33word");
+                        String screenid = EncryptionHelper.Encrypt(s.Id.ToString());
                         cols = cols + htmltemplate.Replace("$id", screenid).Replace("$title", s.Title).Replace("$icon", s.Icon).Replace("$des", s.Description).Replace("$link", s.Path);
                         l.RemoveAt(0);
                     }
