@@ -200,7 +200,7 @@ namespace NHCM.Application.Recruitment.Commands
 
                     UpdateablePerson.OrganizationId = request.OrganizationId;
 
-                    await _context.SaveChangesAsync();
+                    await _context.SaveChangesAsync( cancellationToken);
 
 
                     result = await _personCommon.SearchPerson(new SearchPersonQuery() { Id = UpdateablePerson.Id });
