@@ -16,7 +16,7 @@ namespace NHCM.Application.Infrastructure.Validations
 
         protected override bool IsValid(PropertyValidatorContext context)
         {
-            if (Regex.IsMatch(context.PropertyValue.ToString(), @"^[0-9]"))
+            if (Regex.IsMatch(context.PropertyValue.ToString(), @"^[0-9]$"))
             {
                 return true;
             }

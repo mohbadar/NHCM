@@ -67,7 +67,7 @@ namespace NHCM.Application.Recruitment.Validators
             RuleFor(a => a.Phone).MaximumLength(10).WithMessage(" نمبر تلیفون دارای ده عدد بوده میتواند");
             RuleFor(a => a.Phone).CannotInclude(ValidationHelper.ForbiddenSymbols).WithMessage(" دارای ده عدد بوده میتواند نمیتواند یکی از حرف های ذیل را داشته باشد");
             RuleFor(a => a.Phone).MobileNumberOnly().WithMessage("نمبر تلیفون درست نمیباشد لطفا شماره را درست وارد نمایید");
-            RuleFor(a => a.Phone).NotEmpty().WithMessage("نمبر موبایل خالی بوده نمیتواند");
+            RuleFor(a => a.Phone).NotEmpty().WithMessage("نمبر تلیفون خالی بوده نمیتواند");
 
             //Email address
             RuleFor(a => a.EmailAddress)
