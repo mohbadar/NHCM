@@ -91,7 +91,7 @@ namespace NHCM.Persistence
         {
             if (!optionsBuilder.IsConfigured)
             {
-                optionsBuilder.UseNpgsql("Server=localhost; Database =HCM; Username=postgres; Password=kasperskyantigeral");
+                optionsBuilder.UseNpgsql("Server=localhost; Database =HCM; Username=postgres; Password=root");
             }
         }
 
