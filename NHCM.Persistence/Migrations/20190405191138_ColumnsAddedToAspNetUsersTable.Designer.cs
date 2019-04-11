@@ -2,6 +2,7 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using NHCM.Persistence.Identity.Infrastructure;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
@@ -9,9 +10,10 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace NHCM.Persistence.Migrations
 {
     [DbContext(typeof(HCMIdentityDbContext))]
-    partial class HCMIdentityDbContextModelSnapshot : ModelSnapshot
+    [Migration("20190405191138_ColumnsAddedToAspNetUsersTable")]
+    partial class ColumnsAddedToAspNetUsersTable
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -90,8 +92,6 @@ namespace NHCM.Persistence.Migrations
                     b.Property<bool>("OrganizationAdmin");
 
                     b.Property<int?>("OrganizationID");
-
-                    b.Property<bool>("PasswordChanged");
 
                     b.Property<string>("PasswordHash");
 

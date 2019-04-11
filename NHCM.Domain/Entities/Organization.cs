@@ -22,5 +22,6 @@ namespace NHCM.Domain.Entities
         public string Sorter { get; set; }
         public decimal? ParentId { get; set; }
         public short? AndssectorId { get; set; }
+        public virtual ICollection<Person> Person { get; set; }
     }
 }

@@ -1,23 +1,14 @@
-﻿using Microsoft.Extensions.Configuration;
-using System;
+﻿using System;
 using NHCM.Application.Infrastructure.Exceptions;
-using System.Collections.Generic;
-using System.Linq;
 using System.Text;
-using System.Threading.Tasks;
 
 namespace NHCM.WebUI.Types
 {
     public class CustomMessages
     {
-
-      
-
         public static string InternalSystemException { get; } = "کاربر محترم درخواست شما مواجه با مشکل تخنیکی میباشد. لطفا با مسول سیستم به تماس شوید";
         public static string ValidationExceptionTitle { get; } = "اطلاعات فورم درست نمیباشد";
         public static string BusinessRuleExceptionTitle { get; } = "کوشش خلاف اصول";
-
-
 
         public static string StateExceptionTitle(Exception ex)
         {
@@ -41,13 +32,6 @@ namespace NHCM.WebUI.Types
             return ExceptionTitleBuilder.ToString();
         }
 
-
-
-
-
-
-
-    
         public static string DescribeException(Exception ex)
         {
             bool ShowStackTrace = false;
@@ -75,6 +59,17 @@ namespace NHCM.WebUI.Types
 
             return DescriptionBuilder.ToString();
 
+        }
+
+        public static UIResult FabricateException(Exception ex)
+        {
+            return new UIResult()
+            {
+                Data = null,
+                Status = UIStatus.Failure,
+                Text = StateExceptionTitle(ex),
+                Description = DescribeException(ex)
+            };
         }
     }
 }

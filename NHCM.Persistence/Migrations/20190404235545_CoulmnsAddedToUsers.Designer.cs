@@ -2,6 +2,7 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using NHCM.Persistence.Identity.Infrastructure;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
@@ -9,9 +10,10 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace NHCM.Persistence.Migrations
 {
     [DbContext(typeof(HCMIdentityDbContext))]
-    partial class HCMIdentityDbContextModelSnapshot : ModelSnapshot
+    [Migration("20190404235545_CoulmnsAddedToUsers")]
+    partial class CoulmnsAddedToUsers
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -75,8 +77,6 @@ namespace NHCM.Persistence.Migrations
 
                     b.Property<bool>("EmailConfirmed");
 
-                    b.Property<int>("EmployeeID");
-
                     b.Property<bool>("LockoutEnabled");
 
                     b.Property<DateTimeOffset?>("LockoutEnd");
@@ -90,8 +90,6 @@ namespace NHCM.Persistence.Migrations
                     b.Property<bool>("OrganizationAdmin");
 
                     b.Property<int?>("OrganizationID");
-
-                    b.Property<bool>("PasswordChanged");
 
                     b.Property<string>("PasswordHash");
 

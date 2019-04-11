@@ -53,7 +53,10 @@ namespace NHCM.Domain.Entities
         public string Nid { get; set; }
         public string PhotoPath { get; set; }
         public int? DocumentTypeId { get; set; }
+        public int? OrganizationId { get; set; }
 
+
+        public virtual Organization Organization { get; set; }
         public virtual DocumentType DocumentType { get; set; }
         public virtual ICollection<HealthReport> HealthReport { get; set; }
         //public virtual ICollection<IdCard> IdCard { get; set; }
