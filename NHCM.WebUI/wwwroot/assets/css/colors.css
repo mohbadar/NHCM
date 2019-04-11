@@ -19,8 +19,8 @@
 *
 * ---------------------------------------------------------------------------- */
 .bg-primary {
-  background-color: #2196f3;
-  border-color: #2196f3;
+  background-color: #1b3b62;
+  border-color: #1b3b62;
   color: #fff;
 }
 .bg-primary-300 {
@@ -567,7 +567,7 @@
   border-color: #546e7a;
 }
 .border-primary {
-  border-color: #2196f3;
+  border-color: #1b3b62;
 }
 .border-primary-300 {
   border-color: #64b5f6;
@@ -861,7 +861,7 @@
   border-color: #dddddd;
 }
 .border-top-primary {
-  border-top-color: #2196f3;
+  border-top-color: #1b3b62;
 }
 .border-top-primary-300 {
   border-top-color: #64b5f6;
@@ -1152,7 +1152,7 @@
   border-top-color: #fff;
 }
 .border-bottom-primary {
-  border-bottom-color: #2196f3;
+  border-bottom-color: #1b3b62;
 }
 .border-bottom-primary-300 {
   border-bottom-color: #64b5f6;
@@ -1443,7 +1443,7 @@
   border-bottom-color: #fff;
 }
 .border-left-primary {
-  border-left-color: #2196f3;
+  border-left-color: #1b3b62;
 }
 .border-left-primary-300 {
   border-left-color: #64b5f6;
@@ -1734,7 +1734,7 @@
   border-left-color: #fff;
 }
 .border-right-primary {
-  border-right-color: #2196f3;
+  border-right-color: #1b3b62;
 }
 .border-right-primary-300 {
   border-right-color: #64b5f6;
@@ -2027,12 +2027,12 @@
 .text-primary,
 .text-primary:hover,
 .text-primary:focus {
-  color: #2196f3;
+  color: #1b3b62;
 }
 .text-primary-300,
 .text-primary-300:hover,
 .text-primary-300:focus {
-  color: #2196f3;
+  color: #1b3b62;
 }
 .text-primary-400,
 .text-primary-400:hover,

@@ -1200,8 +1200,8 @@
   text-align: center;
   background-color: #fcfcfc;
   border-radius: 3px;
-  -webkit-box-shadow: 0 0 0 0 #2196f3;
-  box-shadow: 0 0 0 0 #2196f3;
+  -webkit-box-shadow: 0 0 0 0 #1b3b62;
+  box-shadow: 0 0 0 0 #1b3b62;
 }
 .demo-velocity-box > span {
   float: left;
@@ -2210,7 +2210,7 @@ label.switchery-double.checkbox-switchery {
 .bootstrap-switch-handle-on.bootstrap-switch-primary,
 .bootstrap-switch-handle-off.bootstrap-switch-primary {
   color: #fff;
-  background-color: #2196f3;
+  background-color: #1b3b62;
 }
 .bootstrap-switch-handle-on.bootstrap-switch-danger,
 .bootstrap-switch-handle-off.bootstrap-switch-danger {
@@ -4610,7 +4610,7 @@ a.editable-empty:focus {
   margin-left: 10px;
 }
 .wizard > .actions > ul > li > a {
-  background: #2196f3;
+  background: #1b3b62;
   color: #fff;
   display: block;
   padding: 7px 12px;
@@ -4859,9 +4859,9 @@ a.editable-empty:focus {
   position: absolute;
   z-index: 1;
   display: none;
-  color: #2196f3;
+  color: #1b3b62;
   background-color: #fff;
-  border: 2px dashed #2196f3;
+  border: 2px dashed #1b3b62;
   pointer-events: none;
   opacity: 0.95;
   filter: alpha(opacity=95);
@@ -4874,8 +4874,8 @@ a.editable-empty:focus {
   vertical-align: middle;
 }
 .note-editor .note-dropzone.hover {
-  color: #2196f3;
-  border: 2px dashed #2196f3;
+  color: #1b3b62;
+  border: 2px dashed #1b3b62;
 }
 .note-editor.dragover .note-dropzone {
   display: table;
@@ -5985,7 +5985,7 @@ a.editable-empty:focus {
   display: inline-block;
   top: -1px;
   width: 0;
-  border-top: 6px solid #2196f3;
+  border-top: 6px solid #1b3b62;
   border-left: 6px solid transparent;
 }
 .picker__button--close:before {
@@ -6174,7 +6174,7 @@ a.editable-empty:focus {
 .AnyTime-body-yr-selector .ui-state-highlight,
 .AnyTime-dom-table .ui-state-highlight:hover,
 .AnyTime-body-yr-selector .ui-state-highlight:hover {
-  background-color: #2196f3;
+  background-color: #1b3b62;
   color: #fff;
 }
 .AnyTime-yrs-past-btn,
@@ -7013,7 +7013,7 @@ a.editable-empty:focus {
 .datepaginator .pagination > li > .dp-today,
 .datepaginator .pagination > li > .dp-today:hover,
 .datepaginator .pagination > li > .dp-today:focus {
-  background-color: #2196f3;
+  background-color: #1b3b62;
   color: #fff;
 }
 .datepaginator .pagination > li > .dp-selected,
@@ -7297,7 +7297,7 @@ body > .jGrowl {
   position: relative;
 }
 .sweet-alert button {
-  background-color: #2196f3;
+  background-color: #1b3b62;
   color: #fff;
   border: 0;
   border-radius: 3px;
@@ -7478,7 +7478,7 @@ body > .jGrowl {
   background-color: #ff5722;
 }
 .sweet-alert .icon.info {
-  border-color: #2196f3;
+  border-color: #1b3b62;
 }
 .sweet-alert .icon.info:before {
   content: "";
@@ -7489,7 +7489,7 @@ body > .jGrowl {
   bottom: 17px;
   border-radius: 2px;
   margin-left: -2px;
-  background-color: #2196f3;
+  background-color: #1b3b62;
 }
 .sweet-alert .icon.info:after {
   content: "";
@@ -7499,7 +7499,7 @@ body > .jGrowl {
   border-radius: 50%;
   margin-left: -3px;
   top: 19px;
-  background-color: #2196f3;
+  background-color: #1b3b62;
 }
 .sweet-alert .icon.custom {
   background-size: contain;
@@ -8467,8 +8467,8 @@ body > .jGrowl {
   filter: alpha(opacity=75);
 }
 .noui-slider-solid.noui-slider-primary .noUi-handle {
-  background-color: #2196f3;
-  border-color: #2196f3;
+  background-color: #1b3b62;
+  border-color: #1b3b62;
 }
 .noui-slider-solid.noui-slider-danger .noUi-handle {
   background-color: #f44336;
@@ -8488,7 +8488,7 @@ body > .jGrowl {
 }
 .noui-slider-primary .noUi-connect,
 .noui-slider-primary.noUi-connect {
-  background-color: #2196f3;
+  background-color: #1b3b62;
 }
 .noui-slider-danger .noUi-connect,
 .noui-slider-danger.noUi-connect {
@@ -8662,7 +8662,7 @@ body > .jGrowl {
   color: #fff;
 }
 .ui-datepicker table td.ui-datepicker-today .ui-state-highlight {
-  background-color: #2196f3;
+  background-color: #1b3b62;
   color: #fff;
 }
 .ui-datepicker table td.ui-datepicker-today .ui-state-highlight:after {
@@ -8974,8 +8974,8 @@ body > .jGrowl {
 }
 .ui-slider-primary .ui-slider-range,
 .ui-slider-solid.ui-slider-primary .ui-slider-handle {
-  background-color: #2196f3;
-  border-color: #2196f3;
+  background-color: #1b3b62;
+  border-color: #1b3b62;
 }
 .ui-slider-danger .ui-slider-range,
 .ui-slider-solid.ui-slider-danger .ui-slider-handle {
@@ -9262,7 +9262,7 @@ pre[class*="language-"] {
   overflow: auto;
   position: relative;
   border-left-width: 3px;
-  border-left-color: #2196f3;
+  border-left-color: #1b3b62;
   border-bottom-left-radius: 0;
   border-top-left-radius: 0;
 }
@@ -9525,7 +9525,7 @@ img.fancytree-icon {
   color: #333333;
 }
 .fancytree-drop-target.fancytree-drop-accept a {
-  background-color: #2196f3 !important;
+  background-color: #1b3b62 !important;
   color: #fff !important;
   text-decoration: none;
 }
@@ -9553,7 +9553,7 @@ img.fancytree-icon {
   color: #333333;
 }
 .fancytree-treefocus .fancytree-selected .fancytree-title {
-  background-color: #2196f3;
+  background-color: #1b3b62;
   color: #fff;
 }
 .fancytree-active .fancytree-title {
@@ -9565,7 +9565,7 @@ img.fancytree-icon {
   color: #fff;
 }
 .sidebar:not(.sidebar-default) .fancytree-treefocus .fancytree-selected .fancytree-title {
-  background-color: #2196f3;
+  background-color: #1b3b62;
   color: #fff;
 }
 .fancytree-ext-table .fancytree-node {
@@ -9601,7 +9601,7 @@ img.fancytree-icon {
   background-color: #f5f5f5;
 }
 .fancytree-ext-table tbody tr.fancytree-selected {
-  background-color: #2196f3;
+  background-color: #1b3b62;
   color: #fff;
 }
 .fancytree-ext-table tbody tr.fancytree-selected .fancytree-checkbox {
@@ -10706,7 +10706,7 @@ a.fc-more:hover {
 .plupload_button {
   display: inline-block;
   color: #fff;
-  background-color: #2196f3;
+  background-color: #1b3b62;
   border: 1px solid transparent;
   padding: 6px 11px;
   border-radius: 2px;
@@ -11113,7 +11113,7 @@ a.plupload_disabled:focus {
 .file-preview-text {
   display: table-cell;
   height: 200px;
-  color: #2196f3;
+  color: #1b3b62;
   font-size: 12px;
   vertical-align: middle;
   text-align: center;
@@ -11134,7 +11134,7 @@ a.plupload_disabled:focus {
 }
 .wrap-indicator {
   font-weight: 500;
-  color: #2196f3;
+  color: #1b3b62;
   cursor: pointer;
 }
 /* ------------------------------------------------------------------------------
@@ -11662,7 +11662,7 @@ a.plupload_disabled:focus {
 .cropper-point {
   width: 5px;
   height: 5px;
-  background-color: #2196f3;
+  background-color: #1b3b62;
   opacity: 0.75;
   filter: alpha(opacity=75);
 }
@@ -11722,7 +11722,7 @@ a.plupload_disabled:focus {
   display: block;
   width: 200%;
   height: 200%;
-  background-color: #2196f3;
+  background-color: #1b3b62;
   opacity: 0;
   filter: alpha(opacity=0);
 }
@@ -12490,7 +12490,7 @@ a.plupload_disabled:focus {
 }
 .DTCR_pointer {
   width: 1px;
-  background-color: #2196f3;
+  background-color: #1b3b62;
   z-index: 201;
 }
 /* ------------------------------------------------------------------------------

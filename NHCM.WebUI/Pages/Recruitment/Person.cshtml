@@ -294,12 +294,14 @@
                 <tbody></tbody>
             </table>
         </div>
-        <div class="page-sidebar" type="subscreen">
-            <ul class="navigation navigation-alt navigation-accordion">
-                @Html.Raw(@Model.SubScreens)
-            </ul>
-        </div>
+
     </form>
+</div>
+
+<div class="page-sidebar page-component" type="actionmenu">
+    <ul class="navigation navigation-alt navigation-accordion">
+        @Html.Raw(@Model.SubScreens)
+    </ul>
 </div>
 
 

@@ -2,32 +2,28 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.AspNetCore.Mvc.Rendering;
+using NHCM.Application.Lookup.Models;
 using NHCM.Application.Lookup.Queries;
 using NHCM.Application.Organogram.Commands;
 using NHCM.Application.Organogram.Models;
 using NHCM.Application.Organogram.Queries;
+using NHCM.Application.ProcessTracks.Commands;
+using NHCM.Application.ProcessTracks.Models;
+using NHCM.Application.ProcessTracks.Queries;
 using NHCM.Domain.Entities;
 using NHCM.WebUI.Types;
+using PersianLibrary;
 
 namespace NHCM.WebUI.Pages.Organogram
 {
     public class PlanModel : BasePage
     {
-
-        public string SubScreens { get; set; } = "";
-        public string Title { get; set; } = "adfasdfadf";
-
-        private string htmltemplate = @"
-                         <li><a href='#' data='$id' page='$path' class='sidebar-items' action='subscreen'><i class='$icon'></i>$title</a></li>
-                                    ";
-
-
         public async Task OnGetAsync()
         {
-
             //Get Organization
             ListOfOrganization = new List<SelectListItem>();
             List<Organization> organizations = new List<Organization>();
@@ -35,27 +31,19 @@ namespace NHCM.WebUI.Pages.Organogram
             foreach (Organization organization in organizations)
                 ListOfOrganization.Add(new SelectListItem(organization.Dari, organization.Id.ToString()));
 
-
-
-            // string screen = RijndaelManagedEncryption.RijndaelManagedEncryption.DecryptRijndael(HttpContext.Request.Query["p"], "P@33word");
-
-            //int ID = Convert.ToInt32(screen);
-
-            //int ID = Convert.ToInt32(HttpContext.Request.Query["p"]);
-            try
+            List<int> years = Enumerable.Range(PersianDate.Now.Year - 1, 3).ToList();
+            foreach (int i in years)
             {
-                List<Screens> screens = new List<Screens>();
-                screens = await Mediator.Send(new GetSubScreens() { ID = 17 });
-                string listout = "";
-                foreach (Screens s in screens)
-                {
-                    listout = listout + htmltemplate.Replace("$path", "dv_" + s.Path.Replace("/", "_")).Replace("$icon", s.Icon).Replace("$title", s.Title).Replace("$id", s.Id.ToString());
-                }
-                SubScreens = listout;
+                SelectListItem x = new SelectListItem();
+                ListOfPersianYears.Add(new SelectListItem { Value = i.ToString(), Text = i.ToString() });
             }
-            catch (Exception ex)
-            {
 
+            int ScreenID = Convert.ToInt32(EncryptionHelper.Decrypt(HttpContext.Request.Query["p"]));
+            List<SearchedProcess> Processes = await Mediator.Send(new GetProcess() { ScreenId = ScreenID });
+            if (Processes.Any())
+            {
+                HttpContext.Session.SetInt32("ModuleID", Processes.FirstOrDefault().ModuleId);
+                HttpContext.Session.SetInt32("ProcessID", Processes.FirstOrDefault().Id);
             }
         }
 
@@ -63,14 +51,14 @@ namespace NHCM.WebUI.Pages.Organogram
         {
             try
             {
-                command.CreatedBy = 10;
-                command.ModifiedBy = "Test";
-                command.CreatedOn = DateTime.Now;
-                command.ModifiedOn = DateTime.Now;
-                command.StatusId = 24; // پیشنهاد شده change to dynamic
 
-                List<SearchedPlan> dbResult = new List<SearchedPlan>();
-                dbResult = await Mediator.Send(command);
+                List<SearchedPlan> dbResult = await Mediator.Send(command);
+                if (dbResult.Any())
+                {
+                    int ModuleID = HttpContext.Session.GetInt32("ModuleID").Value;
+                    int ProcessID = HttpContext.Session.GetInt32("ProcessID").Value;
+                    await Mediator.Send(new SaveProcessTracksCommand() { ModuleId = ModuleID, ProcessId = ProcessID, RecordId = dbResult.FirstOrDefault().Id });
+                }
 
                 return new JsonResult(new NHCM.WebUI.Types.UIResult()
                 {
@@ -78,92 +66,44 @@ namespace NHCM.WebUI.Pages.Organogram
                     Status = NHCM.WebUI.Types.UIStatus.Success,
                     Text = "تشکیل موفقانه ثبت سیستم شد",
                     Description = string.Empty
-
                 });
-
             }
             catch (Exception ex)
             {
                 return new JsonResult(new NHCM.WebUI.Types.UIResult()
                 {
-
                     Data = null,
                     Status = NHCM.WebUI.Types.UIStatus.Failure,
                     Text = CustomMessages.InternalSystemException,
                     Description = ex.Message + " \n StackTrace : " + ex.StackTrace
-
                 });
             }
-
         }
-        
+
         public async Task<IActionResult> OnPostSearch([FromBody] SearchPlanQuery command)
         {
-
             try
             {
                 List<SearchedPlan> result = new List<SearchedPlan>();
-                 result = await Mediator.Send(command);
-
+                result = await Mediator.Send(command);
                 return new JsonResult(new NHCM.WebUI.Types.UIResult()
                 {
                     Data = new { list = result },
                     Status = NHCM.WebUI.Types.UIStatus.Success,
                     Text = string.Empty,
                     Description = string.Empty
-
                 });
-
             }
             catch (Exception ex)
             {
                 return new JsonResult(new NHCM.WebUI.Types.UIResult()
                 {
-
                     Data = null,
                     Status = NHCM.WebUI.Types.UIStatus.Failure,
                     Text = CustomMessages.InternalSystemException,
-
                     Description = ex.Message
                 });
             }
         }
-
-        public async Task<IActionResult> OnPostNext([FromBody] ConfirmPlanCommand command)
-        {
-
-            try
-            {
-                // change status id to dynamic id
-                command.StatusId = 52;
-
-                List<SearchedPlan> dbResult = new List<SearchedPlan>();
-                dbResult = await Mediator.Send(command);
-
-                return new JsonResult(new NHCM.WebUI.Types.UIResult()
-                {
-                    Data = new { list = dbResult },
-                    Status = NHCM.WebUI.Types.UIStatus.Success,
-                    Text = "تشکیل موفقانه ارسال شد",
-                    Description = string.Empty
-
-                });
-
-            }
-            catch (Exception ex)
-            {
-                return new JsonResult(new NHCM.WebUI.Types.UIResult()
-                {
-
-                    Data = null,
-                    Status = NHCM.WebUI.Types.UIStatus.Failure,
-                    Text = CustomMessages.InternalSystemException,
-                    Description = ex.Message + " \n StackTrace : " + ex.StackTrace
-
-                });
-            }
-        }
-
-
     }
 }
