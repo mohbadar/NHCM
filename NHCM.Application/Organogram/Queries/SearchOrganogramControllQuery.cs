@@ -65,8 +65,6 @@ namespace NHCM.Application.Organogram.Queries
                                        OrganizationId = Organogram.OrganizationId,
                                        StatusId = Organogram.StatusId,
                                        Year = Organogram.Year,
-                                       AppreovedDate = Organogram.AppreovedDate,
-                                       PreparedDate = Organogram.PreparedDate,
                                        NumberOfPositions = Organogram.NumberOfPositions,
                                        //(N'تشکیل ', S.Dari, N' سال ', O.Year, N' ', OU.Dari) Title
                                        statustext = resultStatus.Dari,
@@ -97,8 +95,6 @@ namespace NHCM.Application.Organogram.Queries
                                        OrganizationId = Organogram.OrganizationId,
                                        StatusId = Organogram.StatusId,
                                        Year = Organogram.Year,
-                                       AppreovedDate = Organogram.AppreovedDate,
-                                       PreparedDate = Organogram.PreparedDate,
                                        NumberOfPositions = Organogram.NumberOfPositions,
                                        //(N'تشکیل ', S.Dari, N' سال ', O.Year, N' ', OU.Dari) Title
                                        statustext = resultStatus.Dari,
@@ -129,8 +125,6 @@ namespace NHCM.Application.Organogram.Queries
                                        OrganizationId = Organogram.OrganizationId,
                                        StatusId = Organogram.StatusId,
                                        Year = Organogram.Year,
-                                       AppreovedDate = Organogram.AppreovedDate,
-                                       PreparedDate = Organogram.PreparedDate,
                                        NumberOfPositions = Organogram.NumberOfPositions,
                                        //(N'تشکیل ', S.Dari, N' سال ', O.Year, N' ', OU.Dari) Title
                                        statustext = resultStatus.Dari,

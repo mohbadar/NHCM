@@ -19,7 +19,6 @@
     <PackageReference Include="MediatR" Version="6.0.0" />
   </ItemGroup>
   <ItemGroup>
-    <Folder Include="Auditer\Auditer\" />
     <Folder Include="Employment\Commands\" />
     <Folder Include="Employment\Models\" />
     <Folder Include="Employment\Queries\" />

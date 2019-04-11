@@ -12,9 +12,7 @@ namespace NHCM.Domain.Entities
         public string Pashto { get; set; }
         public string Code { get; set; }
         public short StatusId { get; set; }
-
         public short OrgUnitTypeId { get; set; }
-
-
+        public virtual ICollection<Person> Person { get; set; }
     }
 }

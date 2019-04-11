@@ -25,8 +25,11 @@ namespace NHCM.Application.Lookup.Queries
         }
         public async Task<List<Screens>> Handle(GetScreens request, CancellationToken cancellationToken)
         {
-            if (request.ID == null || request.ID == 0) return await _context.Screens.Where(c=>c.ParentId == null).OrderBy(c=>c.Sorter).ToListAsync(cancellationToken);
-            else return await _context.Screens.Where(s => s.Id == request.ID).ToListAsync(cancellationToken);
+            if (request.ID == null || request.ID == 0)
+            {
+                return await _context.Screens.Where(c => c.ParentId == null).OrderBy(c => c.Sorter).ToListAsync(cancellationToken);
+            }
+            else { return await _context.Screens.Where(s => s.Id == request.ID).ToListAsync(cancellationToken); }
         }
     }
 }

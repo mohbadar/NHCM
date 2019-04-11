@@ -94,11 +94,8 @@ namespace NHCM.WebUI
                 options.Password.RequireUppercase = false;
                 options.Password.RequireDigit = false;
                 options.User.RequireUniqueEmail = true;
-                
-            }).AddRoles<HCMRole>()
-              .AddErrorDescriber<IdentityLocalizedErrorDescribers>()
-              .AddEntityFrameworkStores<HCMIdentityDbContext>()
-              .AddDefaultTokenProviders();
+
+            });
 
             // 4 Add MediatR
             services.AddTransient(typeof(IPipelineBehavior<,>), typeof(RequestPreProcessorBehavior<,>));
