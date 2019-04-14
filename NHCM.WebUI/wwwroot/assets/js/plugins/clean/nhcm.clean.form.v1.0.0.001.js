@@ -36,8 +36,6 @@
                 return false;
             });
 
-
-
             if (!clean.isEmpty(self.OnInit))
                 clean.invoke(self.OnInit, self);
         },
@@ -52,6 +50,33 @@
                 if ($(self.fields[item]).attr('id').startsWith(self.prefix)) return self.fields[item];
             });
             self.fields = filtered;
+        },
+        loaddatepicker: function () {
+            var self = this;
+            self.el.find('.Shamsi').each(function () {
+                var el = $(this);
+                var sib = el.attr('sibling');
+                el.MdPersianDateTimePicker({
+                    targetTextSelector: '#' + el.attr('id'),
+                    targetDateSelector: '#' + sib,
+                    dateFormat: 'yyyy-MM-dd',
+                    isGregorian: false,
+                    enableTimePicker: false
+                });
+            });
+
+            self.el.find('.Miladi').each(function () {
+                var el = $(this);
+                var sib = el.attr('sibling');
+                el.MdPersianDateTimePicker({
+                    targetTextSelector: '#' + sib,
+                    targetDateSelector: '#' + el.attr('id'),
+                    dateFormat: 'yyyy-MM-dd',
+                    isGregorian: true,
+                    toPersian: true,
+                    enableTimePicker: false
+                });
+            });
         },
         construct: function () {
             var self = this;
@@ -95,32 +120,9 @@
                 }
             });
 
-            // Configuring the datepicker on inputs
-            $('.Shamsi').each(function () {
-                var el = $(this);
-                var sib = el.attr('sibling');
-                el.MdPersianDateTimePicker({
-                    targetTextSelector: '#' + el.attr('id'),
-                    targetDateSelector: '#' + sib,
-                    dateFormat: 'yyyy-MM-dd',
-                    isGregorian: false,
-                    enableTimePicker: false
-                });
-            });
-
-            $('.Miladi').each(function () {
-                var el = $(this);
-                var sib = el.attr('sibling');
-                el.MdPersianDateTimePicker({
-                    targetTextSelector: '#' + sib,
-                    targetDateSelector: '#' + el.attr('id'),
-                    dateFormat: 'yyyy-MM-dd',
-                    isGregorian: true,
-                    toPersian: true,
-                    enableTimePicker: false
-                });
-            });
-
+            if ($.isEmptyObject(self.modal)) {
+                self.loaddatepicker();
+            }
             self.el.find('.national-id').each(function () {
                 var opt = {};
                 opt.el = $(this).find('.national-id-input');
@@ -128,7 +130,6 @@
                 opt.form = self;
                 self.tazkira = new clean.Tazkira(opt);
             });
-
             $(self.grid.template.find('thead').find('th')).each(function (index) {
                 self.grid.cols.push($(this).attr('colname'));
             });
@@ -223,7 +224,6 @@
                 if (!self.el.find($('#' + self.prefix + self.el.attr('parentcol'))).length) {
                     self.el.append("<input type='hidden' class='auto-gen-hidden search' id='" + self.prefix + self.el.attr('parentcol') + "' value = '" + self.parent.record.id + "' /> ");
                 }
-                self.getfields();
             }
 
             self.getfields();
@@ -237,10 +237,7 @@
             else {
                 _tazkira = true;
             }
-            self.fields.each(function () {
-                var fld = $(this);
-                var col = fld.attr('id').substring(self.prefix.length);
-            });
+
             var _photovalid = false;
             if (self.uploaders.photo.hasOwnProperty('options')) {
                 _photovalid = self.uploaders.photo.validate();
@@ -362,9 +359,11 @@
                 if (key == 'nid') {
                     self.tazkira.val(d[key]);
                 }
-                if (key == 'photoPath') {
+
+                if (key == 'photoPath' && d[key] != null) {
                     self.uploaders.photo.bind(d[key]);
                 }
+
                 if (key == 'path') {
                     if (!self.el.find($('#' + self.prefix + key)).length)
                         self.el.append("<input type='hidden' class='auto-gen-hidden' id='" + self.prefix + "path' value='" + d[key] + "' />");
@@ -492,7 +491,7 @@
                 $('#' + self.grid.table).treetable({ expandable: true });
                 $('#' + self.grid.table).parents('.dataTables_scrollBody').css({ overflow: 'visible' });
             }
-            $('[data-popup="tooltip"]').tooltip({ template: '<div class="tooltip"><div class="bg-primary"><div class="tooltip-arrow"></div><div class="tooltip-inner"></div></div></div>', trigger:'click'});
+            $('[data-popup="tooltip"]').tooltip({ template: '<div class="tooltip"><div class="bg-primary"><div class="tooltip-arrow"></div><div class="tooltip-inner"></div></div></div>', trigger: 'click' });
             $('#' + self.grid.table).find('tr').click(function () {
                 $(this).siblings().removeClass('row-selected');
                 $(this).addClass('row-selected');
@@ -574,25 +573,6 @@
             }
         },
 
-        next: function () {
-            var self = this;
-            var path = self.path + '/next';
-            var data = {};
-            data.recordid = self.record.id;
-            clean.data.post({
-                async: false, url: path, data: clean.data.json.write(data), dataType: 'json',
-                success: function (msg) {
-
-
-
-                }
-            });
-        },
-        previous: function () {
-            var v = {};
-            v.name = 'previous';
-            self.others(v);
-        },
         validation: function () {
             var self = this;
             var validator = $(self.el).validate({
@@ -658,15 +638,30 @@
             var b = $(v);
             var row = b.parents('tr');
             var parentid;
-            if (row.attr('data-tt-parent-id')) {
-                self.new();
-                parentid = row.attr('data-tt-parent-id');
-            }
             self.record = {};
-            self.record.id = row.attr('data');
-            self.fetch(self);
+
+            if (!b.attr('data-attribute')) {
+                if (row.attr('data-tt-parent-id')) {
+                    self.new();
+                    parentid = row.attr('data-tt-parent-id');
+                }
+                self.record.id = row.attr('data');
+                self.fetch(self);
+            }
+            else {
+                var attribute = b.attr('data-attribute');
+                var value = row.attr('data');
+                if (!self.el.find($('#' + self.prefix + attribute)).length) {
+                    self.el.append("<input type='hidden' class='auto-gen-hidden' id='" + self.prefix + attribute + "' value='" + value + "' />");
+                    self.getfields();
+                }
+                self.record[attribute] = value;
+            }
+            
             self.loadDynamicLists(parentid);
             self.modal.modal();
+            self.loaddatepicker();
+          
         },
 
         neighbour: function (v) {

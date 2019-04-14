@@ -40,7 +40,7 @@ namespace NHCM.Application.Organogram.Commands
         public async Task<List<SearchedPlan>> Handle(SavePlanCommand request, CancellationToken cancellationToken)
         {
             List<SearchedPlan> result = new List<SearchedPlan>();
-            if (request.Id == null || request.Id == default(decimal))
+            if (request.Id == default(decimal))
             {
                 result = await _mediator.Send(new Queries.SearchPlanQuery() { OrganizationId = request.OrganizationId, Year = request.Year });
                 if (result.Any())

@@ -6,6 +6,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using NHCM.Application.Employment.Commands;
 using NHCM.Application.Employment.Models;
+using NHCM.Application.Employment.Queries;
 using NHCM.Application.Lookup.Queries;
 using NHCM.Application.Organogram.Models;
 using NHCM.Application.Organogram.Queries;
@@ -21,32 +22,81 @@ namespace NHCM.WebUI.Pages.Employment
 
         public async Task OnGetAsync()
         {
-            ListOfPerson = new List<SelectListItem>();
-            List<SearchedPersonModel> Persons = new List<SearchedPersonModel>();
-            Persons = await Mediator.Send(new SearchPersonQuery() { Id = null });
-            foreach (SearchedPersonModel p in Persons)
-                ListOfPerson.Add(new SelectListItem(p.FirstName + " " + p.LastName, p.Id.ToString()));
 
-            ListOfPosition = new List<SelectListItem>();
-            List<SearchedPosition> Positions = new List<SearchedPosition>();
-            Positions = await Mediator.Send(new SearchPositionQuery() { });
-            foreach (SearchedPosition p in Positions)
-                ListOfPosition.Add(new SelectListItem(p.Id.ToString(), p.Id.ToString()));
-
-            ListOfEventType = new List<SelectListItem>();
-            List<EventType> EventTypes = new List<EventType>();
-            EventTypes = await Mediator.Send(new GetEventTypeQuery() { ID = null });
-            foreach (EventType e in EventTypes)
-                ListOfEventType.Add(new SelectListItem(e.Name, e.Id.ToString()));
+            //ListOfEventType = new List<SelectListItem>();
+            //
+            //
+            //foreach (EventType e in EventTypes)
+            //    ListOfEventType.Add(new SelectListItem(e.Name, e.Id.ToString()));
 
         }
 
-        public async Task<IActionResult> OnPostSave([FromBody]CreateSelectionCommand command)
+        public async Task<IActionResult> OnPostEvents(string body)
         {
-
             try
             {
-                List<SearchedSelectionModel> dbResult = new List<SearchedSelectionModel>();
+                List<EventType> EventTypes = new List<EventType>();
+                EventTypes = await Mediator.Send(new GetEventTypeQuery() { ID = null });
+
+                List<object> result = new List<object>();
+                foreach (EventType e in EventTypes)
+                    result.Add(new { Text = e.Name, ID = e.Id.ToString() });
+                return new JsonResult(new NHCM.WebUI.Types.UIResult()
+                {
+                    Data = new { list = result },
+                    Status = NHCM.WebUI.Types.UIStatus.Success,
+                    Text = string.Empty,
+                    Description = string.Empty
+                });
+            }
+            catch (Exception ex)
+            {
+                return new JsonResult(new NHCM.WebUI.Types.UIResult()
+                {
+                    Data = null,
+                    Status = NHCM.WebUI.Types.UIStatus.Failure,
+                    Text = CustomMessages.InternalSystemException,
+                    Description = ex.Message
+                });
+            }
+        }
+
+
+        public async Task<IActionResult> OnPostEmployees(string body)
+        {
+            try
+            {
+                List<SearchedPersonModel> Persons = new List<SearchedPersonModel>();
+                Persons = await Mediator.Send(new SearchPersonQuery() { Id = null });
+                List<object> result = new List<object>();
+                foreach (SearchedPersonModel p in Persons)
+                    result.Add(new { Text = p.FirstName + "  " + p.LastName, ID = p.Id.ToString() });
+                return new JsonResult(new NHCM.WebUI.Types.UIResult()
+                {
+                    Data = new { list = result },
+                    Status = NHCM.WebUI.Types.UIStatus.Success,
+                    Text = string.Empty,
+                    Description = string.Empty
+                });
+            }
+            catch (Exception ex)
+            {
+                return new JsonResult(new NHCM.WebUI.Types.UIResult()
+                {
+                    Data = null,
+                    Status = NHCM.WebUI.Types.UIStatus.Failure,
+                    Text = CustomMessages.InternalSystemException,
+                    Description = ex.Message
+                });
+            }
+        }
+
+
+        public async Task<IActionResult> OnPostSave([FromBody]CreateSelectionCommand command)
+        {
+            try
+            {
+                List<SearchedPosition> dbResult = new List<SearchedPosition>();
                 dbResult = await Mediator.Send(command);
                 return new JsonResult(new Types.UIResult()
                 {
@@ -64,6 +114,34 @@ namespace NHCM.WebUI.Pages.Employment
                     Status = Types.UIStatus.Failure,
                     Text = CustomMessages.InternalSystemException,
                     Description = ex.Message + " \n StackTrace : " + ex.StackTrace
+                });
+            }
+        }
+
+        public async Task<IActionResult> OnPostSearch([FromBody] SearchSelectionQuery command)
+        {
+            try
+            {
+                List<SearchedSelectionModel> result = new List<SearchedSelectionModel>();
+                result = await Mediator.Send(command);
+                return new JsonResult(new NHCM.WebUI.Types.UIResult()
+                {
+                    Data = new { list = result },
+                    Status = NHCM.WebUI.Types.UIStatus.Success,
+                    Text = string.Empty,
+                    Description = string.Empty
+                });
+            }
+            catch (Exception ex)
+            {
+                return new JsonResult(new NHCM.WebUI.Types.UIResult()
+                {
+
+                    Data = null,
+                    Status = NHCM.WebUI.Types.UIStatus.Failure,
+                    Text = CustomMessages.InternalSystemException,
+
+                    Description = ex.Message
                 });
             }
         }
