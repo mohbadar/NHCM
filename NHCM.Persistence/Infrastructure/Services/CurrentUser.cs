@@ -21,7 +21,6 @@ namespace NHCM.Persistence.Infrastructure.Services
             _httpContextAccessor = httpContextAccessor;
         }
 
-
         public async Task<int?> GetUserOrganizationID()
         {
 
@@ -31,5 +30,14 @@ namespace NHCM.Persistence.Infrastructure.Services
             return CurrentUserOrganizationID ?? 0;
             
         }
+
+        public async Task<bool?> IsSuperAdmin()
+        {
+            HCMUser user = await _userManager.GetUserAsync(_httpContextAccessor.HttpContext.User);
+            bool? IsUserASuperAdmin = user.SuperAdmin;
+            return IsUserASuperAdmin ?? false;
+        }
+
+  
     }
 }

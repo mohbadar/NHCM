@@ -3,21 +3,11 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.AspNetCore.Mvc.Rendering;
-
 using NHCM.Application.Lookup.Queries;
 using NHCM.WebUI.Types;
-using NHCM.Domain.Entities;
-using NHCM.Application.Recruitment.Queries;
-using NHCM.Application.Recruitment.Models;
-using NHCM.Application.Document.Commands;
-using NHCM.Application.Document.Models;
-using NHCM.Application.Document.Disk.FileManager;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Configuration;
-using NHCM.Application.Document.Queries;
-using NHCM.Application.Document.Disk;
 using NHCM.Application.Lookup.Models;
 using NHCM.Application.ProcessTracks.Queries;
 using NHCM.Application.ProcessTracks.Models;
@@ -25,6 +15,7 @@ using NHCM.Application.ProcessTracks.Commands;
 
 namespace NHCM.WebUI.Pages.Document
 {
+
     public class ProcessModel : BasePage
     {
         private readonly IConfiguration _configuration;
@@ -56,7 +47,7 @@ namespace NHCM.WebUI.Pages.Document
         }
 
 
-        public async Task<IActionResult> OnPostSave([FromBody]SaveProcessTracksCommand command)
+        public async Task<IActionResult> OnPostSave([FromBody] SaveProcessTracksCommand command)
         {
             try
             {

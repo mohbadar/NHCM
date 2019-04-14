@@ -14,7 +14,17 @@ namespace NHCM.Persistence.Extensions
 
         public static string CleanValue(this string val)
         {
-            return !String.IsNullOrWhiteSpace(val) ? val.Trim() : "درج نگردیده";
+            return !string.IsNullOrWhiteSpace(val) ? val.Trim() : "درج نگردیده";
+        }
+
+        public static string Encrypt(this string Value)
+        {
+            return null;
+        }
+
+        public static string Decrypt(this string Value)
+        {
+            return null;
         }
     }
 }

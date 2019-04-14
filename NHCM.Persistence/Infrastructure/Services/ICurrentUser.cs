@@ -8,8 +8,6 @@ namespace NHCM.Persistence.Infrastructure.Services
     public interface ICurrentUser
     {
         Task<int?> GetUserOrganizationID();
+        Task<bool?> IsSuperAdmin();
     }
-
-
-  
 }

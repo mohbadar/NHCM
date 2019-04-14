@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
@@ -20,6 +21,7 @@ using PersianLibrary;
 
 namespace NHCM.WebUI.Pages.Organogram
 {
+    [Authorize(Policy = "OrganizationTahskil")]
     public class PlanModel : BasePage
     {
         public async Task OnGetAsync()
@@ -63,17 +65,17 @@ namespace NHCM.WebUI.Pages.Organogram
                 return new JsonResult(new NHCM.WebUI.Types.UIResult()
                 {
                     Data = new { list = dbResult },
-                    Status = NHCM.WebUI.Types.UIStatus.Success,
+                    Status = UIStatus.Success,
                     Text = "تشکیل موفقانه ثبت سیستم شد",
                     Description = string.Empty
                 });
             }
             catch (Exception ex)
             {
-                return new JsonResult(new NHCM.WebUI.Types.UIResult()
+                return new JsonResult(new UIResult()
                 {
                     Data = null,
-                    Status = NHCM.WebUI.Types.UIStatus.Failure,
+                    Status = UIStatus.Failure,
                     Text = CustomMessages.InternalSystemException,
                     Description = ex.Message + " \n StackTrace : " + ex.StackTrace
                 });
@@ -86,10 +88,10 @@ namespace NHCM.WebUI.Pages.Organogram
             {
                 List<SearchedPlan> result = new List<SearchedPlan>();
                 result = await Mediator.Send(command);
-                return new JsonResult(new NHCM.WebUI.Types.UIResult()
+                return new JsonResult(new UIResult()
                 {
                     Data = new { list = result },
-                    Status = NHCM.WebUI.Types.UIStatus.Success,
+                    Status = UIStatus.Success,
                     Text = string.Empty,
                     Description = string.Empty
                 });
