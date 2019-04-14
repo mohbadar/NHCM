@@ -42,12 +42,8 @@ namespace NHCM.Application.Lookup.Queries
                                     Id = P.Id,
                                     Name = P.Name,
                                     Description = P.Description,
-                                    Predecessor = P.Predecessor,
-                                    Successor = P.Successor,
-                                    ScreenId = P.ScreenId,
-                                    ModuleId = ModuleResult.Id,
-                                    OnSuccessStatus = P.OnSuccessStatus,
-                                    OnFailureStatus = P.OnFailureStatus
+                                     ScreenId = P.ScreenId,
+                                    ModuleId = ModuleResult.Id, 
                                     
                                 }).ToListAsync(cancellationToken);
             }
