@@ -15,7 +15,7 @@ namespace NHCM.Application.Organogram.Models
         public int NumberOfPositions { get; set; }
         public string StatusText { get; set; }
         public string OrganizationText { get; set; }
-        public string CreationType { get; set; }
+        public string CreationType { get; set; } 
     }
 
 

@@ -60,7 +60,7 @@ namespace NHCM.Application.Organogram.Commands
                     _context.OrganoGram.Add(organogram);
                     await _context.SaveChangesAsync(cancellationToken);
 
-                    if (request.IsPositionsCopied == 1)
+                    if (request.IsPositionsCopied == 24)
                     {
                         OrganoGram orglast = (from a in _context.OrganoGram where a.Year == (request.Year - 1) && a.OrganizationId == request.OrganizationId select a).SingleOrDefault();
                         List<Position> list = _context.Position.Where(c => c.OrganoGramId == orglast.Id && c.ParentId == null).ToList();

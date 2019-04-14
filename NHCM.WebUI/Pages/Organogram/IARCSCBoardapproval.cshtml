@@ -1,11 +1,10 @@
 ﻿@page "{handler?}"
 @using NHCM.Domain.Entities;
-@model NHCM.WebUI.Pages.Organogram.PlanModel
+@model NHCM.WebUI.Pages.Organogram.dv_Organogram_IARCSCBoardapprovalModel
 @{
     ViewData["Title"] = "Plan";
     Layout = "~/Pages/Shared/_CustomLayout.cshtml";
 }
-
 
 
 @Html.AntiForgeryToken()
@@ -34,7 +33,7 @@
                             سال
                             <span class="text-danger">&nbsp;*</span>
                         </label>
-                        <select id="orgpyear" name="orgpyear" class="select search" asp-items="@Model.ListOfPersianYears" required>
+                        <select id="orgpyear" name="orgpyear" class="select search" asp-items="@Model.ListOfPersianYears" disabled>
                             <option></option>
                         </select>
                     </div>
@@ -45,7 +44,7 @@
                             نوع ایجاد بست ها
                             <span class="text-danger">&nbsp;*</span>
                         </label>
-                        <select id="orgpispositionscopied" name="orgpispositionscopied" class="select search" asp-items="@Model.ListOfStatus" required>
+                        <select id="orgpispositionscopied" name="orgpispositionscopied" class="select search" asp-items="@Model.ListOfStatus" disabled>
                             <option></option>
                         </select>
                     </div>
@@ -64,7 +63,7 @@
         <hr />
         <div class="row div-form-control main-form-details">
             <div class="col-md-12">
-                <div class="form-group actions">
+                <div class="form-group actions"> 
                     <button type="button" class="btn btn-primary" action="search"><i class="icon-search4 position-right"></i>جستجو </button>
                     <button type="button" class="btn btn-primary" action="new"><i class="icon-new-tab position-right"></i>صفحه جدید </button>
 
@@ -87,10 +86,6 @@
         </div>
     </form>
 </div>
-
-
-
-
 
 
 

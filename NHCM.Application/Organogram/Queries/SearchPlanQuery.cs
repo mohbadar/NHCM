@@ -46,8 +46,9 @@ namespace NHCM.Application.Organogram.Queries
                                 {
                                     Id = Organogram.Id,
                                     OrganizationId = Organogram.OrganizationId,
-                                    StatusId = 20,
+                                    StatusId = Organogram.StatusId,   ////
                                     Year = Organogram.Year,
+                                    IsPositionsCopied= Organogram.IsPositionsCopied,
                                     NumberOfPositions = Organogram.NumberOfPositions,
                                     StatusText = resultStatus.Dari,
                                     OrganizationText = resultOrgUnit.Dari,
@@ -70,6 +71,7 @@ namespace NHCM.Application.Organogram.Queries
                                     OrganizationId = Organogram.OrganizationId,
                                     StatusId = Organogram.StatusId,
                                     Year = Organogram.Year,
+                                    IsPositionsCopied = Organogram.IsPositionsCopied,
                                     NumberOfPositions = Organogram.NumberOfPositions,
                                     StatusText = resultStatus.Dari,
                                     OrganizationText = resultOrgUnit.Dari,
@@ -89,6 +91,7 @@ namespace NHCM.Application.Organogram.Queries
                                     OrganizationId = Organogram.OrganizationId,
                                     StatusId = Organogram.StatusId,
                                     Year = Organogram.Year,
+                                    IsPositionsCopied = Organogram.IsPositionsCopied,
                                     NumberOfPositions = Organogram.NumberOfPositions,
                                     StatusText = resultStatus.Dari,
                                     OrganizationText = resultOrgUnit.Dari,

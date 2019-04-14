@@ -58,9 +58,8 @@ namespace NHCM.WebUI.Types
         public List<SelectListItem> ListOfPosition;
         public List<SelectListItem> ListOfProcesses = new List<SelectListItem>();
         public List<SelectListItem> ListOfPersianYears = new List<SelectListItem>();
-        public List<SelectListItem> ListOfWorkAreas = new List<SelectListItem>();
+        public List<SelectListItem> ListOfWorkAreas = new List<SelectListItem>();  
 
-
-
+        
     }
 }

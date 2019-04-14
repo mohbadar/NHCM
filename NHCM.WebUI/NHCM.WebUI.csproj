@@ -20,12 +20,18 @@
     <Compile Remove="Pages\Organogram\CheckOrganogram.cshtml.cs" />
     <Compile Remove="Pages\Organogram\CheckPositions.cshtml.cs" />
     <Compile Remove="Pages\Organogram\Confirm.cshtml.cs" />
+    <Compile Remove="Pages\Organogram\OrganogramChart.cshtml.cs" />
+    <Compile Remove="Pages\Organogram\OrganogramControll.cshtml.cs" />
+    <Compile Remove="Pages\Organogram\PositionControll.cshtml.cs" />
   </ItemGroup>
 
   <ItemGroup>
     <Content Remove="Pages\Organogram\CheckOrganogram.cshtml" />
     <Content Remove="Pages\Organogram\CheckPositions.cshtml" />
     <Content Remove="Pages\Organogram\Confirm.cshtml" />
+    <Content Remove="Pages\Organogram\OrganogramChart.cshtml" />
+    <Content Remove="Pages\Organogram\OrganogramControll.cshtml" />
+    <Content Remove="Pages\Organogram\PositionControll.cshtml" />
   </ItemGroup>
 
 

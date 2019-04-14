@@ -11,7 +11,7 @@ namespace NHCM.Persistence.Identity.Infrastructure
         public HCMIdentityDbContext CreateDbContext(string[] args)
         {
             var optionsBuilder = new DbContextOptionsBuilder<HCMIdentityDbContext>();
-            optionsBuilder.UseNpgsql("Server=localhost; Database =HCM; Username=postgres; Password=kasperskyantigeral");
+            optionsBuilder.UseNpgsql("Server=localhost; Database =HCM; Username=postgres; Password=root");
             return new HCMIdentityDbContext(optionsBuilder.Options);
         }
     }
