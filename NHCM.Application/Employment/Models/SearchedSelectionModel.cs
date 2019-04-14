@@ -6,7 +6,7 @@ namespace NHCM.Application.Employment.Models
 {
     public class SearchedSelectionModel
     {
-        public decimal PositionId { get; set; }
+        public decimal SelectionId { get; set; }
         public DateTime EffectiveDate { get; set; }
         public decimal Id { get; set; }
         public int EventTypeId { get; set; }
@@ -14,22 +14,24 @@ namespace NHCM.Application.Employment.Models
         public short? CategoryId { get; set; }
         public decimal? EventId { get; set; }
         public string Remarks { get; set; }
-        public string OldPosition { get; set; }
-        public decimal? OrganizationId { get; set; }
         public DateTime? VerdictDate { get; set; }
         public string VerdictRegNo { get; set; }
         public string FinalNo { get; set; }
-        public short? RankId { get; set; }
-        public DateTime? ModifiedOn { get; set; }
-        public string ModifiedBy { get; set; }
         public string ReferenceNo { get; set; }
-        public DateTime? CreatedOn { get; set; }
-        public int? CreatedBy { get; set; }
-
-
         // TEMP:
         public string DateText { get; set; }
+        public int OrganogramId { get; set; }
+        public int ParentId { get; set; }
 
+        public string WorkAreaText { get; set; }
+        public string RankText { get; set; }
+        public string PositionTypeText { get; set; }
+        public string OrgUnitText { get; set; }
+        public string Sorter { get; set; }
+        public string Code { get; set; }
+        public string LocationText { get; set; }
+
+        public string Title { get; set; }
 
     }
 }

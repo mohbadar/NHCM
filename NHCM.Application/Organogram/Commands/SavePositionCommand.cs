@@ -47,7 +47,7 @@ namespace NHCM.Application.Organogram.Commands
             }
             else
             {
-                if (request.Id == null || request.Id == default(decimal))
+                if (request.Id == default(decimal))
                 {
                     String Sorter = "1";
                     if (request.ParentId > 0)

@@ -35,8 +35,6 @@ namespace NHCM.Application.Organogram.Queries
         {
             List<SearchedPosition> result = new List<SearchedPosition>();
             List<SearchedOrgPosition> OrgPositions = await _mediator.Send(new Queries.SearchOrgPositionQuery() { }).ConfigureAwait(false);
-
-
             if (request.Id != null)
             {
                 result = await (from p in _context.Position
@@ -76,8 +74,6 @@ namespace NHCM.Application.Organogram.Queries
                                     SalaryTypeText = str.Dari,
                                     LocationText = Lr.Dari,
                                     PlanTypeText = PTr.Name,
-
-
                                 }).OrderBy(c=>c.Sorter).DefaultIfEmpty().ToListAsync(cancellationToken);
 
             }
@@ -122,8 +118,6 @@ namespace NHCM.Application.Organogram.Queries
                                     SalaryTypeText = str.Dari,
                                     LocationText = Lr.Dari,
                                     PlanTypeText = PTr.Name,
-
-
                                 }).OrderBy(c => c.Sorter).DefaultIfEmpty().ToListAsync(cancellationToken);
 
             }
@@ -149,9 +143,7 @@ namespace NHCM.Application.Organogram.Queries
                                 {
                                     Id = position.Id,
                                     ParentId = position.ParentId,
-
                                     WorkingAreaId = position.WorkingAreaId,
-
                                     Code = position.Code,
                                     PositionTypeId = position.PositionTypeId,
                                     LocationId = position.LocationId,

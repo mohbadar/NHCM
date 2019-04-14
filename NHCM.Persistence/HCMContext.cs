@@ -14,7 +14,7 @@ namespace NHCM.Persistence
             : base(options)
         {
         }
-        public virtual DbSet<Audit> Audits { get; set;  }
+        public virtual DbSet<Audit> Audits { get; set; }
         public virtual DbSet<Address> Address { get; set; }
         public virtual DbSet<AssetType> AssetType { get; set; }
         public virtual DbSet<Gender> Gender { get; set; }
@@ -90,40 +90,21 @@ namespace NHCM.Persistence
         {
 
             modelBuilder.HasSequence("assettype_id_seq");
-
-
-
-
-
             modelBuilder.ApplyConfigurationsFromAssembly(typeof(HCMContext).Assembly);
             modelBuilder.HasSequence("documents_id_seq");
-
             modelBuilder.HasSequence("organization_id_seq");
-
             modelBuilder.HasSequence("processtracking_id_seq");
-
             modelBuilder.HasSequence("addresstype_id_seq");
-
             modelBuilder.HasSequence("assessmentlevel_id_seq");
-
             modelBuilder.HasSequence("assessmentrules_id_seq");
-
             modelBuilder.HasSequence("assettype_id_seq");
-
             modelBuilder.HasSequence("certification_id_seq");
-
             modelBuilder.HasSequence("characteristicresult_id_seq");
-
             modelBuilder.HasSequence("complaintype_id_seq");
-
             modelBuilder.HasSequence("component_id_seq");
-
             modelBuilder.HasSequence("course_id_seq");
-
             modelBuilder.HasSequence("currency_id_seq");
-
             modelBuilder.HasSequence("direction_id_seq");
-
             modelBuilder.HasSequence<int>("DocumentType_ID_seq");
 
             modelBuilder.HasSequence("educationlevel_id_seq");

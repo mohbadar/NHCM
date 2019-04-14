@@ -12,9 +12,12 @@ using System.Linq;
 using Microsoft.EntityFrameworkCore;
 using NHCM.Application.Employment.Models;
 using NHCM.Application.Employment.Queries;
+using NHCM.Application.Organogram.Queries;
+using NHCM.Application.Organogram.Models;
+
 namespace NHCM.Application.Employment.Commands
 {
-    public class CreateSelectionCommand : IRequest<List<SearchedSelectionModel>>
+    public class CreateSelectionCommand : IRequest<List<SearchedPosition>>
     {
 
         // public Person Person { get; set; }
@@ -27,23 +30,15 @@ namespace NHCM.Application.Employment.Commands
         public short? CategoryId { get; set; }
         public decimal? EventId { get; set; }
         public string Remarks { get; set; }
-        public string OldPosition { get; set; }
-        public decimal? OrganizationId { get; set; }
         public DateTime? VerdictDate { get; set; }
         public string VerdictRegNo { get; set; }
         public string FinalNo { get; set; }
-        public short? RankId { get; set; }
-        public DateTime? ModifiedOn { get; set; }
-        public string ModifiedBy { get; set; }
-        public string ReferenceNo { get; set; }
-        public DateTime? CreatedOn { get; set; }
-        public int? CreatedBy { get; set; }
-
+       
     }
 
 
 
-    public class CreateSelectionCommandHandler : IRequestHandler<CreateSelectionCommand, List<SearchedSelectionModel>>
+    public class CreateSelectionCommandHandler : IRequestHandler<CreateSelectionCommand, List<SearchedPosition>>
     {
 
         private readonly HCMContext _context;
@@ -53,11 +48,11 @@ namespace NHCM.Application.Employment.Commands
             _context = context;
             _mediator = mediator;
         }
-        public async Task<List<SearchedSelectionModel>> Handle(CreateSelectionCommand request, CancellationToken cancellationToken)
+        public async Task<List<SearchedPosition>> Handle(CreateSelectionCommand request, CancellationToken cancellationToken)
         {
-            List<SearchedSelectionModel> result = new List<SearchedSelectionModel>();
+            List<SearchedPosition> result = new List<SearchedPosition>();
             // Save
-            if (request.Id == null || request.Id == default(decimal))
+            if (request.Id == default(decimal))
             {
                 using (_context)
                 {
@@ -66,18 +61,19 @@ namespace NHCM.Application.Employment.Commands
                         PositionId = request.PositionId,
                         PersonId = request.PersonId,
                         EffectiveDate = request.EffectiveDate,
-                        VerdictDate = request.VerdictDate,
+                        VerdictDate = request.VerdictDate.Value,
                         EventTypeId = request.EventTypeId,
                         VerdictRegNo = request.VerdictRegNo,
                         Remarks = request.Remarks,
-                        FinalNo = request.FinalNo
+                        FinalNo = request.FinalNo,
+                        StatusId = 1
                     };
                     _context.Selection.Add(d);
                     // Before Saving the changes. Get the ID of inserted person and insert a new record to pol.Employee
-                    await _context.SaveChangesAsync(cancellationToken);
+                   int x =  await _context.SaveChangesAsync(true);
                     // Search and Return the saved object
                     //PersonCommon common = new PersonCommon(_context);
-                    result = await _mediator.Send(new SearchSelectionQuery() { Id = d.Id });
+                    result = await _mediator.Send(new SearchPositionQuery() { });
                     return result;
                 }
             }
@@ -93,7 +89,7 @@ namespace NHCM.Application.Employment.Commands
                     d.PersonId = request.PersonId;
                     d.EventTypeId = request.EventTypeId;
                     d.EffectiveDate = request.EffectiveDate;
-                    d.VerdictDate = request.VerdictDate;
+                    d.VerdictDate = request.VerdictDate.Value;
                     d.VerdictRegNo = request.VerdictRegNo;
                     d.Remarks = request.Remarks;
                     d.FinalNo = request.FinalNo;
@@ -101,10 +97,12 @@ namespace NHCM.Application.Employment.Commands
                     await _context.SaveChangesAsync();
                     // Search and Return the saved object
                     //PersonCommon common = new PersonCommon(_context);
-                    result = await _mediator.Send(new SearchSelectionQuery() { Id = d.Id });
+                    result = await _mediator.Send(new SearchPositionQuery() { });
                     return result;
                 }
             }
+
+        
         }
     }
 }
