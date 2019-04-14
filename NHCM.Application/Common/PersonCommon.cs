@@ -16,12 +16,12 @@ namespace NHCM.Application.Common
     public class PersonCommon
     {
         private readonly HCMContext _context;
-       
-      
+
+
         public PersonCommon(HCMContext context)
         {
             _context = context;
-           
+
         }
 
         public string ConvertJSONToString(String JSON, String Type)
@@ -42,18 +42,13 @@ namespace NHCM.Application.Common
             {
                 return null;
             }
-            
+
         }
 
 
         public async Task<List<SearchedPersonModel>> SearchPerson(SearchPersonQuery request)
         {
-           
-
             List<SearchedPersonModel> searchResult = new List<SearchedPersonModel>();
-
-
-
             // If specific person is required. Searched based on Id or HrCode
             if (request.Id != null)
             {
@@ -107,7 +102,6 @@ namespace NHCM.Application.Common
                                           DoBText = PersianLibrary.PersianDate.GetFormatedString(p.DateOfBirth)
                                       }).OrderBy(x => x.Id).ToListAsync();
             }
-
             // Else search based on search terms
             else if (request.OrganizationId != null)
             {
@@ -133,7 +127,7 @@ namespace NHCM.Application.Common
                                             && (p.FirstNameEng.Contains(request.FirstNameEng) || string.IsNullOrEmpty(request.FirstNameEng))
                                             && (p.LastNameEng.Contains(request.LastNameEng) || string.IsNullOrEmpty(request.LastNameEng))
                                             && (p.GrandFatherNameEng.Contains(request.GrandFatherNameEng) || string.IsNullOrEmpty(request.GrandFatherNameEng))
-                                            && (p.OrganizationId ==  request.OrganizationId )
+                                            && (p.OrganizationId == request.OrganizationId)
                                       select new SearchedPersonModel
                                       {
                                           FirstName = p.FirstName,
@@ -164,13 +158,63 @@ namespace NHCM.Application.Common
                                           BirthLocationText = resultPL.Name,
                                           MaritalStatusText = resultPM.Name,
                                           DocumentTypeText = resultPDT.Name,
-                                          NIDText = ConvertJSONToString(p.Nid , resultPDT.Name) ?? "درج نگردیده",
+                                          NIDText = ConvertJSONToString(p.Nid, resultPDT.Name) ?? "درج نگردیده",
+                                          DoBText = PersianLibrary.PersianDate.GetFormatedString(p.DateOfBirth)
+                                      }).OrderBy(x => x.Id).Take((request.NoOfRecords == 0) ? 100 : request.NoOfRecords).ToListAsync();
+            }
+            else
+            {
+                searchResult = await (from p in _context.Person
+                                      join g in _context.Gender on p.GenderId equals g.ID into pg
+                                      from resultPG in pg.DefaultIfEmpty()
+                                      join b in _context.BloodGroup on p.BloodGroupId equals b.Id into pb
+                                      from resultPB in pb.DefaultIfEmpty()
+                                      join e in _context.Ethnicity on p.EthnicityId equals e.Id into pe
+                                      from resultPE in pe.DefaultIfEmpty()
+                                      join r in _context.Religion on p.ReligionId equals r.Id into pr
+                                      from resultPR in pr.DefaultIfEmpty()
+                                      join l in _context.Location on p.BirthLocationId equals l.Id into pl
+                                      from resultPL in pl.DefaultIfEmpty()
+                                      join m in _context.MaritalStatus on p.MaritalStatusId equals m.Id into pm
+                                      from resultPM in pm.DefaultIfEmpty()
+                                      join dt in _context.DocumentTypes on p.DocumentTypeId equals dt.Id into pdt
+                                      from resultPDT in pdt.DefaultIfEmpty()
+                                      select new SearchedPersonModel
+                                      {
+                                          FirstName = p.FirstName,
+                                          LastName = p.LastName,
+                                          FirstNameEng = p.FirstNameEng,
+                                          LastNameEng = p.LastNameEng,
+                                          FatherName = p.FatherName,
+                                          FatherNameEng = p.FatherNameEng,
+                                          GenderId = p.GenderId,
+                                          DateOfBirth = p.DateOfBirth,
+                                          GrandFatherName = p.GrandFatherName,
+                                          GrandFatherNameEng = p.GrandFatherNameEng,
+                                          Id = p.Id,
+                                          DocumentTypeId = p.DocumentTypeId,
+                                          Hrcode = p.Hrcode,
+                                          BirthLocationId = p.BirthLocationId,
+                                          MaritalStatusId = p.MaritalStatusId,
+                                          ReligionId = p.ReligionId,
+                                          EthnicityId = p.EthnicityId,
+                                          Comments = p.Comments,
+                                          BloodGroupId = p.BloodGroupId,
+                                          Nid = p.Nid,
+                                          PhotoPath = p.PhotoPath,
+                                          GenderText = resultPG.Dari,
+                                          BloodGroupText = resultPB.Name,
+                                          EthnicityText = resultPE.Name,
+                                          ReligionText = resultPR.Name,
+                                          BirthLocationText = resultPL.Name,
+                                          MaritalStatusText = resultPM.Name,
+                                          DocumentTypeText = resultPDT.Name,
+                                          NIDText = ConvertJSONToString(p.Nid, resultPDT.Name) ?? "درج نگردیده",
                                           DoBText = PersianLibrary.PersianDate.GetFormatedString(p.DateOfBirth)
                                       }).OrderBy(x => x.Id).Take((request.NoOfRecords == 0) ? 100 : request.NoOfRecords).ToListAsync();
             }
             return searchResult;
         }
-
         public async Task<List<SearchedPersonRelative>> SearchPersonRelative(SearchPersonRelativeQuery request, CancellationToken cancellationToken)
         {
             List<SearchedPersonRelative> result = new List<SearchedPersonRelative>();
@@ -179,8 +223,8 @@ namespace NHCM.Application.Common
                 using (_context)
                 {
                     result = await (from r in _context.Relative
-                                   
-                                   join relationship in _context.Relationship on r.RelationShipId equals relationship.Id into rR
+
+                                    join relationship in _context.Relationship on r.RelationShipId equals relationship.Id into rR
                                     from resultRr in rR.DefaultIfEmpty()
                                     join l in _context.Location on r.LocationId equals l.Id into rL
                                     from resultrL in rL.DefaultIfEmpty()

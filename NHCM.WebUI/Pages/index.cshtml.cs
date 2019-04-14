@@ -13,7 +13,11 @@ namespace NHCM.WebUI.Pages
     public class indexModel : BasePage
     {
 
-        public string rowtemplate = @"<div class='row'>$cols</div><hr/>";
+        public string modultemplate = @"<div class='dash-header'>
+                                       <h4 style = 'font-weight:bold;' >$module</h4>
+                                       </div>";
+
+        public string rowtemplate = @"<div class='row'>$cols</div>";
 
         public string htmltemplate = @"
                                     <div class='col-md-3 pull-right'>
@@ -26,17 +30,24 @@ namespace NHCM.WebUI.Pages
                                     ";
 
         public string HTML { get; set; } = "";
-
         List<Screens> slist = new List<Screens>();
-
 
         public async Task OnGetAsync([FromBody] GetScreens command)
         {
-            command = new GetScreens();
+           
             try
             {
-                slist = await Mediator.Send(command);
-                Loadscreens(slist);
+                List<Module> Modules = await Mediator.Send(new GetModuleQuery() { });
+                string row = "";
+                
+                foreach (Module m in Modules)
+                {
+                    row = row + modultemplate.Replace("$module", m.Name);
+                    string screens = await LoadscreensAsync(m.Id);
+                    row = row + screens;
+                }
+                HTML = HTML + row;
+
             }
             catch (Exception ex)
             {
@@ -44,33 +55,29 @@ namespace NHCM.WebUI.Pages
             }
         }
 
-        private void Loadscreens(List<Screens> list)
+        private async Task<string> LoadscreensAsync(int ModuleID)
         {
-            int rownumber = (list.Count % 4) == 0 ? list.Count / 4 : (list.Count / 4) + 1;
-
+            List<Screens> Screens = await Mediator.Send(new GetScreens() { ModuleID = ModuleID });
+            int rownumber = (Screens.Count % 4) == 0 ? Screens.Count / 4 : (Screens.Count / 4) + 1;
             string row = "";
-
-            List<Screens> l = list;
-
+            List<Screens> templist = Screens;
             for (int i = 1; i <= rownumber; i++)
             {
                 string cols = "";
                 for (int j = 0; j <= 3; j++)
                 {
-                    if (list.Count > 0)
+                    if (Screens.Count > 0)
                     {
-                        Screens s = l[0];
+                        Screens s = templist[0];
                         String screenid = EncryptionHelper.Encrypt(s.Id.ToString());
                         cols = cols + htmltemplate.Replace("$id", screenid).Replace("$title", s.Title).Replace("$icon", s.Icon).Replace("$des", s.Description).Replace("$link", s.Path);
-                        l.RemoveAt(0);
+                        templist.RemoveAt(0);
                     }
                     // cols = cols + htmltemplate;
                 }
                 row = row + rowtemplate.Replace("$cols", cols);
             }
-            HTML = HTML + row;
+            return row;
         }
-
-
     }
 }

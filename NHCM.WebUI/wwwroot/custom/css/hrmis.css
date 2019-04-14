@@ -22,6 +22,7 @@
         display: block;
         font-size: 20px;
         font-weight: bold;
+        text-shadow: 0px 2px 1px #808080;
     }
 
 
@@ -34,6 +35,9 @@
 
     .dash h4 {
         text-align: right;
+        font-size: 20px;
+        font-weight: bold;
+        text-shadow: 0px 2px 1px #808080;
     }
 
     .dash img {
@@ -75,6 +79,7 @@
 
 .dash-header {
     margin-bottom: 25px;
+    margin-top: 40px;
     border-bottom: 1px solid #ccc;
 }
 
