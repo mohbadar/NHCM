@@ -96,14 +96,14 @@ namespace NHCM.WebUI.Pages.Employment
         {
             try
             {
-                List<SearchedPosition> dbResult = new List<SearchedPosition>();
+                List<SearchedSelectionModel> dbResult = new List<SearchedSelectionModel>();
                 dbResult = await Mediator.Send(command);
                 return new JsonResult(new Types.UIResult()
                 {
                     Data = new { list = dbResult },
                     Status = Types.UIStatus.Success,
-                    Text = "پیشنهاد تعیینات موفقانه ثبت سیستم گردید",
-                    Description = string.Empty
+                    Text = "موفقانه ثبت گردید",
+                    Description = "پیشنهاد تعیینات موفقانه در سیستم ثبت و راجستر گردید"
                 });
             }
             catch (Exception ex)

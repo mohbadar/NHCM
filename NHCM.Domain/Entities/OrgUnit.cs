@@ -11,7 +11,7 @@ namespace NHCM.Domain.Entities
             InverseParent = new HashSet<OrgUnit>();
           //  OrgUnitChangeNeworgUnit = new HashSet<OrgUnitChange>();
           //  OrgUnitChangeOrgUnit = new HashSet<OrgUnitChange>();
-            Selection = new HashSet<Selection>();
+           // Selection = new HashSet<Selection>();
         }
 
         public decimal Id { get; set; }
@@ -35,6 +35,6 @@ namespace NHCM.Domain.Entities
         public virtual ICollection<OrgUnit> InverseParent { get; set; }
       //  public virtual ICollection<OrgUnitChange> OrgUnitChangeNeworgUnit { get; set; }
       //  public virtual ICollection<OrgUnitChange> OrgUnitChangeOrgUnit { get; set; }
-        public virtual ICollection<Selection> Selection { get; set; }
+     //   public virtual ICollection<Selection> Selection { get; set; }
     }
 }

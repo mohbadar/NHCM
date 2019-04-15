@@ -7,6 +7,7 @@ namespace NHCM.Application.Employment.Models
     public class SearchedSelectionModel
     {
         public decimal SelectionId { get; set; }
+        public decimal PositionId { get; set; }
         public DateTime EffectiveDate { get; set; }
         public decimal Id { get; set; }
         public int EventTypeId { get; set; }
@@ -32,6 +33,9 @@ namespace NHCM.Application.Employment.Models
         public string LocationText { get; set; }
 
         public string Title { get; set; }
+        public string PersonName { get; set; }
+        public int NodeId { get; set; }
+        public int ParentNodeId { get; set; }
 
     }
 }
