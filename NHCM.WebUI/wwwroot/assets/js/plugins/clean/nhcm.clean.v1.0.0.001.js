@@ -30,7 +30,7 @@ var clean = window.clean = {};
                 a[i - 1] = arguments[i];
             }
             // Invoke
-
+        
             return fn.apply(o, a);
         },
         isEmpty: function (value) {
