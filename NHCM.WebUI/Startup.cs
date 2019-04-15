@@ -2,8 +2,6 @@ using System;
 using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
-
-
 using System.Reflection;
 using FluentValidation.AspNetCore;
 using MediatR;
@@ -56,30 +54,19 @@ namespace NHCM.WebUI
                 options.CheckConsentNeeded = context => true;
                 options.MinimumSameSitePolicy = SameSiteMode.None;
             });
-
             services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
-
             // Registering custom services
             services.AddScoped<ICurrentUser, CurrentUser>();
 
-
-
             // 1 Antiforgery
             services.AddAntiforgery(options => options.HeaderName = "XSRF-TOKEN");
-
-
 
             // 2 Add DbContext
             services.AddDbContext<HCMContext>();
             services.AddSession();
 
-
             // 3 Identity
-             
-           
             services.AddDbContext<HCMIdentityDbContext>();
-
-
             services.AddIdentity<HCMUser, HCMRole>(options => { options.User.RequireUniqueEmail = true; })
                 .AddRoles<HCMRole>()
                 .AddErrorDescriber<IdentityLocalizedErrorDescribers>()
@@ -102,33 +89,31 @@ namespace NHCM.WebUI
             services.AddTransient(typeof(IPipelineBehavior<,>), typeof(RequestValidationBehavior<,>));
             services.AddMediatR(typeof(CreatePersonCommandHandler).GetTypeInfo().Assembly);
 
-
             // Add authorization Policy
             services.AddAuthorization(options =>
             {
                 options.AddPolicy("ProfilerPolicy", policy => { policy.RequireRole("Profiler"); });
-               
-                options.AddPolicy("UserRegistrar", policy => { policy.RequireRole("UserRegistrar"); });
+                options.AddPolicy("OrganizationTahskil", policy => { policy.RequireRole("OrganizationTashkil"); });
+                options.AddPolicy("UserRegistrar",policy => { policy.RequireRole("UserRegistrar"); });
                 options.AddPolicy("AuthenticatedPolicy", policy => { policy.RequireAuthenticatedUser(); });
                 options.AddPolicy("SuperAdminPolicy", policy => { policy.RequireRole("SuperAdmin"); });
                 options.AddPolicy("OrganizationAdminPolicy", policy => { policy.RequireRole("OrganizationAdmin"); });
                 options.AddPolicy("FreshUserPolicy", policy => { policy.Requirements.Add(new NewlyRegisteredUsers(true)); });
+                options.AddPolicy("SuperAdminPolicy", policy => { policy.Requirements.Add(new SuperAdminOnly()); });
             });
             services.AddScoped<IAuthorizationHandler, NewlyRegisteredUsersHandler>();
 
 
 
-            ///////////////////////////////////////////////
+           
             services.AddSingleton<CultureLocalizer>(); 
-            /////////////////////////////////////
+            
             services.ConfigureRequestLocalization();
-            // Add MVC with fluent validation, Razor pages
-            services.AddMvc()
-                //////////////////////////////////////////////////////////////////
+            // Add MVC, Fluent Validation, Localization, Routes
+            services
+                .AddMvc()
                 .AddViewLocalization(o => o.ResourcesPath = "Resources")
-                .AddModelBindingMessagesLocalizer(services)
-                /////////////////////////////////////////////////////////////
-               
+                .AddModelBindingMessagesLocalizer(services) 
                 .AddRazorPagesOptions(o => { o.Conventions.Add(new CultureTemplateRouteModelConvention()); })
                 .AddFluentValidation(fv => fv.RegisterValidatorsFromAssemblyContaining<CreatePersonCommandValidator>())
                 .AddRazorPagesOptions
@@ -140,14 +125,14 @@ namespace NHCM.WebUI
                         options.Conventions.AddPageRoute("/Organogram/Plan", "/Organogram");
                         options.Conventions.AddPageRoute("/Employment/Selection", "/Employment");
 
-                        // Comment it in production
-                        options.Conventions.AllowAnonymousToPage("/Security/Register");
+                        
                         options.Conventions.AuthorizeFolder("/Security");
                         options.Conventions.AuthorizeFolder("/Recruitment", "ProfilerPolicy");
                         options.Conventions.AuthorizeFolder("/Shared");
+                        options.Conventions.AuthorizeFolder("/Document");
                         options.Conventions.AuthorizePage("/index"); 
                         // Comment it in production
-                      //  options.Conventions.AllowAnonymousToPage("/Security/Register");
+                         options.Conventions.AllowAnonymousToPage("/Security/Register");
 
                         options.AllowMappingHeadRequestsToGetHandler = true;
                     }
@@ -182,14 +167,12 @@ namespace NHCM.WebUI
             // User type extension method used for providing configuration from config file in static methods.
             serviceProvider.SetConfigurationProvider(Configuration);
 
-            //-----------------Localization------------------------------ ------------
            
             app.UseRequestLocalization();
             app.UseHttpsRedirection();
             app.UseStaticFiles(); 
             app.UseAuthentication();
             app.UseCookiePolicy();
-
             app.UseSession();
             app.UseMvc();
         }

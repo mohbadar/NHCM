@@ -1,7 +1,5 @@
 ﻿@page
-
 @model NHCM.WebUI.Areas.Security.Pages.RegisterModel
-@using NHCM.Application.Recruitment.Models
 @{
     Layout = "Security/Shared/_SecuritySharedLayout";
 }
@@ -22,7 +20,7 @@
                                 <label asp-for="@Model.EmployeeID" class="text-bold">
                                 </label>
                                 <span asp-validation-for="@Model.EmployeeID" class="text-danger"></span>
-                                <select asp-for="@Model.EmployeeID" asp-items="@Model.ViewData["ListOfOrgs"] as IEnumerable<SelectListItem>" class="select required">
+                                <select asp-for="@Model.EmployeeID" asp-items="@Model.ViewData["ListOfPersons"] as IEnumerable<SelectListItem>" class="select required">
                                     <option value="">--</option>
                                 </select>
                             </div>
@@ -36,7 +34,7 @@
 
                                 </label>
                                 <span asp-validation-for="@Model.OrganizationID" class="text-danger"></span>
-                                <select asp-for="@Model.OrganizationID" asp-items="@Model.ViewData["ListOfPersons"] as IEnumerable<SelectListItem>" class="select">
+                                <select asp-for="@Model.OrganizationID" asp-items="@Model.ViewData["ListOfOrgs"] as IEnumerable<SelectListItem>" class="select">
                                     <option value=""></option>
                                 </select>
                             </div>

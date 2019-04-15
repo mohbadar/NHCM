@@ -1,19 +1,15 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
-using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using NHCM.Application.Lookup.Queries;
 using NHCM.Application.Recruitment.Models;
 using NHCM.Application.Recruitment.Queries;
 using NHCM.Domain.Entities;
-using NHCM.Persistence.Identity.Infrastructure;
 using NHCM.Persistence.Infrastructure.Identity;
 using NHCM.Persistence.Infrastructure.Services;
 using NHCM.WebUI.Types;
@@ -50,21 +46,6 @@ namespace NHCM.WebUI.Areas.Security.Pages
         [Display(Name = "نام کاربری")]
         [Required(ErrorMessage = "نام کاربری ضروری میباشد")]
         public string UserName { get; set; }
-
-
-        //[BindProperty]
-        //[StringLength(100, ErrorMessage = "رمز عبور باید حد اقل دارای 6 حرف باشد", MinimumLength = 6)]
-        //[DataType(DataType.Password)]
-        //[Display(Name = "رمز عبور")]
-        //[Required(ErrorMessage = "رمز عبور ضروری میباشد")]
-        //public string Password { get; set; }
-
-
-        //[DataType(DataType.Password)]
-        //[Display(Name = "تایید رمز عبور")]
-        //[Compare("Password", ErrorMessage = "رمز عبور و تاییدی آن مطابقت ندارد")]
-        //[Required(ErrorMessage = "تایید رمز عبور ضروری میباشد")]
-        //public string ConfirmPassword { get; set; }
 
 
         public RegisterModel(UserManager<HCMUser> userManager, SignInManager<HCMUser> signInManager, ICurrentUser currentUser)
