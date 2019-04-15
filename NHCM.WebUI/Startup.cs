@@ -24,12 +24,9 @@ using NHCM.Application.Recruitment.Validators;
 using NHCM.Persistence;
 using NHCM.Persistence.Identity.Infrastructure;
 using NHCM.Persistence.Infrastructure.Identity;
-
 using NHCM.WebUI.Resources;
-
 using NHCM.Persistence.Infrastructure.Identity.Policies;
 using NHCM.Persistence.Infrastructure.Services;
-
 using NHCM.WebUI.Types;
 using NHCM.WebUI.Utilities;
 

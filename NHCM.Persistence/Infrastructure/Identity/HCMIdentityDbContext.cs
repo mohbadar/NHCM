@@ -20,7 +20,7 @@ namespace NHCM.Persistence.Identity.Infrastructure
             if (!optionsBuilder.IsConfigured)
             {
 
-                optionsBuilder.UseNpgsql("Server=localhost; Database =HCM; Username=postgres; Password=root");
+                optionsBuilder.UseNpgsql("Server=localhost; Database =HCM; Username=postgres; Password=kasperskyantigeral");
             }
         }
         protected override void OnModelCreating(ModelBuilder builder)
