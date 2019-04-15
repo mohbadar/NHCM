@@ -17,7 +17,7 @@ using NHCM.Application.Organogram.Models;
 
 namespace NHCM.Application.Employment.Commands
 {
-    public class CreateSelectionCommand : IRequest<List<SearchedPosition>>
+    public class CreateSelectionCommand : IRequest<List<SearchedSelectionModel>>
     {
 
         // public Person Person { get; set; }
@@ -27,18 +27,16 @@ namespace NHCM.Application.Employment.Commands
         public decimal Id { get; set; }
         public int EventTypeId { get; set; }
         public decimal PersonId { get; set; }
-        public short? CategoryId { get; set; }
-        public decimal? EventId { get; set; }
         public string Remarks { get; set; }
         public DateTime? VerdictDate { get; set; }
         public string VerdictRegNo { get; set; }
         public string FinalNo { get; set; }
-       
+
     }
 
 
 
-    public class CreateSelectionCommandHandler : IRequestHandler<CreateSelectionCommand, List<SearchedPosition>>
+    public class CreateSelectionCommandHandler : IRequestHandler<CreateSelectionCommand, List<SearchedSelectionModel>>
     {
 
         private readonly HCMContext _context;
@@ -48,61 +46,55 @@ namespace NHCM.Application.Employment.Commands
             _context = context;
             _mediator = mediator;
         }
-        public async Task<List<SearchedPosition>> Handle(CreateSelectionCommand request, CancellationToken cancellationToken)
+        public async Task<List<SearchedSelectionModel>> Handle(CreateSelectionCommand request, CancellationToken cancellationToken)
         {
-            List<SearchedPosition> result = new List<SearchedPosition>();
+            List<SearchedSelectionModel> result = new List<SearchedSelectionModel>();
             // Save
             if (request.Id == default(decimal))
             {
-                using (_context)
+                _context.Selections.Add(new Selection()
                 {
-                    Selection d = new Selection()
-                    {
-                        PositionId = request.PositionId,
-                        PersonId = request.PersonId,
-                        EffectiveDate = request.EffectiveDate,
-                        VerdictDate = request.VerdictDate.Value,
-                        EventTypeId = request.EventTypeId,
-                        VerdictRegNo = request.VerdictRegNo,
-                        Remarks = request.Remarks,
-                        FinalNo = request.FinalNo,
-                        StatusId = 1
-                    };
-                    _context.Selection.Add(d);
-                    // Before Saving the changes. Get the ID of inserted person and insert a new record to pol.Employee
-                   int x =  await _context.SaveChangesAsync(true);
-                    // Search and Return the saved object
-                    //PersonCommon common = new PersonCommon(_context);
-                    result = await _mediator.Send(new SearchPositionQuery() { });
-                    return result;
-                }
+                    PositionId = request.PositionId,
+                    PersonId = request.PersonId,
+                    EffectiveDate = request.EffectiveDate,
+                    VerdictDate = request.VerdictDate.Value,
+                    EventTypeId = request.EventTypeId,
+                    VerdictRegNo = request.VerdictRegNo,
+                    Remarks = request.Remarks,
+                    FinalNo = request.FinalNo,
+                    StatusId = 1
+                });
+                // Before Saving the changes. Get the ID of inserted person and insert a new record to pol.Employee
+                await _context.SaveChangesAsync(cancellationToken);
+                // Search and Return the saved object
+                //PersonCommon common = new PersonCommon(_context);
+                result = await _mediator.Send(new SearchSelectionQuery() { OrganoGramId = _context.Position.Where(a => a.Id == request.PositionId).SingleOrDefault().OrganoGramId });
+                return result;
             }
             // Update
             else
             {
-                using (_context)
-                {
-                    Selection d = (from p in _context.Selection
-                                   where p.Id == request.Id
-                                   select p).First();
-                    d.PositionId = request.PositionId;
-                    d.PersonId = request.PersonId;
-                    d.EventTypeId = request.EventTypeId;
-                    d.EffectiveDate = request.EffectiveDate;
-                    d.VerdictDate = request.VerdictDate.Value;
-                    d.VerdictRegNo = request.VerdictRegNo;
-                    d.Remarks = request.Remarks;
-                    d.FinalNo = request.FinalNo;
-                    // Before Saving the changes. Get the ID of inserted person and insert a new record to pol.Employee
-                    await _context.SaveChangesAsync();
-                    // Search and Return the saved object
-                    //PersonCommon common = new PersonCommon(_context);
-                    result = await _mediator.Send(new SearchPositionQuery() { });
-                    return result;
-                }
+                Selection d = (from p in _context.Selection
+                               where p.Id == request.Id
+                               select p).First();
+                d.PositionId = request.PositionId;
+                d.PersonId = request.PersonId;
+                d.EventTypeId = request.EventTypeId;
+                d.EffectiveDate = request.EffectiveDate;
+                d.VerdictDate = request.VerdictDate.Value;
+                d.VerdictRegNo = request.VerdictRegNo;
+                d.Remarks = request.Remarks;
+                d.FinalNo = request.FinalNo;
+                // Before Saving the changes. Get the ID of inserted person and insert a new record to pol.Employee
+                await _context.SaveChangesAsync();
+                // Search and Return the saved object
+                //PersonCommon common = new PersonCommon(_context);
+                result = await _mediator.Send(new SearchSelectionQuery() { OrganoGramId = _context.Position.Where(a => a.Id == request.PositionId).SingleOrDefault().OrganoGramId });
+                return result;
+
             }
 
-        
+
         }
     }
 }

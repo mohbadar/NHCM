@@ -7,19 +7,16 @@ using System.Text;
 
 namespace NHCM.Persistence.Configurations
 {
-    public class SelectionConfiguration : IEntityTypeConfiguration<Selection>
+    public class SelectionsConfiguration : IEntityTypeConfiguration<Selection>
     {
         public void Configure(EntityTypeBuilder<Selection> builder)
         {
-
-
             builder.ToTable("Selection", "pol");
 
             builder.Property(e => e.Id)
                 .HasColumnName("ID")
                 .HasColumnType("numeric")
                 .HasDefaultValueSql("nextval('pol.selection_id_seq'::regclass)");
-
 
             builder.Property(e => e.EffectiveDate).HasColumnType("date");
 
