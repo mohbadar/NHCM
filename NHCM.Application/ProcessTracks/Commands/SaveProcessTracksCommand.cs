@@ -48,6 +48,7 @@ namespace NHCM.Application.ProcessTracks.Commands
                     ProcessId = (Int16)request.ProcessId,
                     StatusId = 5,
                     ModuleId = request.ModuleId,
+                    ReferedProcessId=1,
                     CreatedOn = DateTime.Now
                 };
                 _context.ProcessTracking.Add(PT);
