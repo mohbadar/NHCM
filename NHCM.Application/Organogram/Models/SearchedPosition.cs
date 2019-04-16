@@ -10,6 +10,8 @@ namespace NHCM.Application.Organogram.Models
 
         public decimal Id { get; set; }
         public int WorkingAreaId { get; set; }
+        public int NodeId { get; set; }
+        public int ParentNodeId { get; set; }
         public decimal? ParentId { get; set; }
         public int? PositionTypeId { get; set; }
         public int? StatusId { get; set; }

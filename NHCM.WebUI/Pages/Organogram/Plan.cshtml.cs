@@ -35,9 +35,9 @@ namespace NHCM.WebUI.Pages.Organogram
 
             // Get Status
             ListOfStatus = new List<SelectListItem>();
-            List<Status> statuses = new List<NHCM.Domain.Entities.Status>();
+            List<Status> statuses = new List<Status>();
             statuses = await Mediator.Send(new GetStatusQuery() { category = "OR" });
-            foreach (NHCM.Domain.Entities.Status status in statuses)
+            foreach (Status status in statuses)
                 ListOfStatus.Add(new SelectListItem() { Text = status.Dari, Value = status.Id.ToString() });
 
 
@@ -70,7 +70,7 @@ namespace NHCM.WebUI.Pages.Organogram
                     await Mediator.Send(new SaveProcessTracksCommand() { ModuleId = ModuleID, ProcessId = ProcessID, RecordId = dbResult.FirstOrDefault().Id });
                 }
 
-                return new JsonResult(new NHCM.WebUI.Types.UIResult()
+                return new JsonResult(new UIResult()
                 {
                     Data = new { list = dbResult },
                     Status = UIStatus.Success,
@@ -106,10 +106,10 @@ namespace NHCM.WebUI.Pages.Organogram
             }
             catch (Exception ex)
             {
-                return new JsonResult(new NHCM.WebUI.Types.UIResult()
+                return new JsonResult(new UIResult()
                 {
                     Data = null,
-                    Status = NHCM.WebUI.Types.UIStatus.Failure,
+                    Status = UIStatus.Failure,
                     Text = CustomMessages.InternalSystemException,
                     Description = ex.Message
                 });

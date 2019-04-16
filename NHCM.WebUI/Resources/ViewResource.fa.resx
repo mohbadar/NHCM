@@ -177,4 +177,10 @@
   <data name="ToInsertPersonProfile" xml:space="preserve">
     <value>برای درج معلومات شخصی کارمند، لطفاً از فورم ذیل استفاده نمائید</value>
   </data>
+  <data name="CheckAndControlPageDescription" xml:space="preserve">
+    <value>برای چک بازدید و کنترول سوانح کارمند لطفا از این فورم استفاده کنید</value>
+  </data>
+  <data name="CheckAndControlPageTitle" xml:space="preserve">
+    <value>چک و کنترول اسناد</value>
+  </data>
 </root>

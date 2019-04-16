@@ -16,6 +16,7 @@
         this.tazkira = {};
         this.actions = this.el.find('.div-form-control [action]');
         this.fields = [];
+        this.datepickers = [];
         this.modal = {};
         this.grid = {};
         this.grid.template = this.el.find('.form-grid');
@@ -56,19 +57,20 @@
             self.el.find('.Shamsi').each(function () {
                 var el = $(this);
                 var sib = el.attr('sibling');
-                el.MdPersianDateTimePicker({
+                var shamsi = el.MdPersianDateTimePicker({
                     targetTextSelector: '#' + el.attr('id'),
                     targetDateSelector: '#' + sib,
                     dateFormat: 'yyyy-MM-dd',
                     isGregorian: false,
                     enableTimePicker: false
                 });
+                self.datepickers.push(shamsi);
             });
 
             self.el.find('.Miladi').each(function () {
                 var el = $(this);
                 var sib = el.attr('sibling');
-                el.MdPersianDateTimePicker({
+                var miladi = el.MdPersianDateTimePicker({
                     targetTextSelector: '#' + sib,
                     targetDateSelector: '#' + el.attr('id'),
                     dateFormat: 'yyyy-MM-dd',
@@ -76,6 +78,7 @@
                     toPersian: true,
                     enableTimePicker: false
                 });
+                self.datepickers.push(miladi);
             });
         },
         construct: function () {
@@ -273,8 +276,8 @@
         },
         search: function (r) {
             var self = r || this;
-
             var path = self.path + '/search';
+
             if (self.el.hasClass('sub-form')) {
                 if (!self.el.find($('#' + self.prefix + self.el.attr('parentcol'))).length) {
                     self.el.append("<input type='hidden' class='auto-gen-hidden search' id='" + self.prefix + self.el.attr('parentcol') + "' value = '" + self.parent.record.id + "' /> ");
@@ -459,11 +462,11 @@
                         column = column + temp.replace('$content', actions);
                     }
                 }
-                if (ob.parentId === undefined || ob.parentId === null) {
-                    row = row + "<tr role='row' data-tt-id='" + ob.id + "' class='" + rowclick + "' data='" + ob.id + "'>" + column + "</tr>";
+                if (ob.parentNodeId === undefined || ob.parentNodeId === null) {
+                    row = row + "<tr role='row' data-tt-id='" + ob.nodeId + "' class='" + rowclick + "' data='" + ob.id + "'>" + column + "</tr>";
                 }
                 else
-                    row = row + "<tr role='row' data-tt-id='" + ob.id + "' data-tt-parent-id='" + ob.parentId + "' class='" + rowclick + "' data='" + ob.id + "'>" + column + "</tr>";
+                    row = row + "<tr role='row' data-tt-id='" + ob.nodeId + "' data-tt-parent-id='" + ob.parentNodeId + "' class='" + rowclick + "' data='" + ob.id + "'>" + column + "</tr>";
             });
             $('#' + self.grid.table).find('tbody').empty().html(row);
 
@@ -489,6 +492,7 @@
             if ($('#' + self.grid.table).attr('type') == 'treetable') {
                 $('#' + self.grid.table).treetable('destroy');
                 $('#' + self.grid.table).treetable({ expandable: true });
+                $('#' + self.grid.table).treetable('expandAll');
                 $('#' + self.grid.table).parents('.dataTables_scrollBody').css({ overflow: 'visible' });
             }
             $('[data-popup="tooltip"]').tooltip({ template: '<div class="tooltip"><div class="bg-primary"><div class="tooltip-arrow"></div><div class="tooltip-inner"></div></div></div>', trigger: 'click' });
@@ -518,7 +522,7 @@
             $.each(self.actions, function (i, v) {
                 var el = $(v);
                 if (el.attr('showongrid'))
-                    $('#' + self.grid.table + '_wrapper').find('.dataTables_filter').append(el.css({ 'float': 'left' }));
+                    $('#' + self.grid.table + '_wrapper').find('.dataTables_filter').append(el.css({ 'float': 'left', 'margin-left':'5px' }));
 
             });
 
@@ -635,33 +639,51 @@
 
         update: function (v) {
             var self = this;
-            var b = $(v);
-            var row = b.parents('tr');
-            var parentid;
             self.record = {};
 
-            if (!b.attr('data-attribute')) {
-                if (row.attr('data-tt-parent-id')) {
-                    self.new();
-                    parentid = row.attr('data-tt-parent-id');
-                }
-                self.record.id = row.attr('data');
-                self.fetch(self);
+            var b = $(v);
+            var row = b.parents('tr');
+
+            var temp = {};
+            temp.id = row.attr('data');
+            temp.parentId = 0;
+            self.new();
+
+            if (row.attr('data-tt-parent-id')) {
+                temp.parentId = row.attr('data-tt-parent-id');
             }
-            else {
+            self.loadDynamicLists(temp.parentId);
+
+            if (temp.id > 0) {
+                self.record.id = temp.id;
+            }
+
+            if (b.attr('data-attribute')) {
                 var attribute = b.attr('data-attribute');
-                var value = row.attr('data');
+                var value = 0;
+                if (attribute == 'parentid') {
+                    value = row.attr('data-tt-parent-id');
+                }
+                else {
+                    value = row.attr('data-tt-id');
+                }
+
                 if (!self.el.find($('#' + self.prefix + attribute)).length) {
-                    self.el.append("<input type='hidden' class='auto-gen-hidden' id='" + self.prefix + attribute + "' value='" + value + "' />");
+                    self.el.append("<input type='hidden' id='" + self.prefix + attribute + "' value='" + value + "' />");
                     self.getfields();
+                }
+                else {
+                    $('#' + self.prefix + attribute).val(value);
                 }
                 self.record[attribute] = value;
             }
-            
-            self.loadDynamicLists(parentid);
             self.modal.modal();
-            self.loaddatepicker();
-          
+            if (self.datepickers.length == 0)
+                self.loaddatepicker();
+
+            if (self.record.id > 0) {
+                self.fetch(self);
+            }
         },
 
         neighbour: function (v) {

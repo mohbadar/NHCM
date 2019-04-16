@@ -58,10 +58,10 @@ namespace NHCM.WebUI.Pages.Document
                 List<SearchedDocumentModel> dbResult = new List<SearchedDocumentModel>();
                 dbResult = await Mediator.Send(command);
 
-                return new JsonResult(new Types.UIResult()
+                return new JsonResult(new UIResult()
                 {
                     Data = new { list = dbResult },
-                    Status = Types.UIStatus.Success,
+                    Status = UIStatus.Success,
 
                     Text = "اسناد و ضمایم موفقانه ثبت گردید",
                     Description = string.Empty
@@ -70,10 +70,10 @@ namespace NHCM.WebUI.Pages.Document
             catch (Exception ex)
             {
 
-                return new JsonResult(new Types.UIResult()
+                return new JsonResult(new UIResult()
                 {
                     Data = null,
-                    Status = Types.UIStatus.Failure,
+                    Status = UIStatus.Failure,
 
                     Text = CustomMessages.InternalSystemException,
                     Description = ex.Message + " \n StackTrace : " + ex.StackTrace
@@ -116,10 +116,10 @@ namespace NHCM.WebUI.Pages.Document
                 List<SearchedDocumentModel> dbResult = new List<SearchedDocumentModel>();
                 dbResult = await Mediator.Send(command);
 
-                return new JsonResult(new Types.UIResult()
+                return new JsonResult(new UIResult()
                 {
                     Data = new { list = dbResult },
-                    Status = Types.UIStatus.Success,
+                    Status = UIStatus.Success,
 
                     Text = string.Empty,
                     Description = string.Empty
@@ -128,10 +128,10 @@ namespace NHCM.WebUI.Pages.Document
             catch (Exception ex)
             {
 
-                return new JsonResult(new Types.UIResult()
+                return new JsonResult(new UIResult()
                 {
                     Data = null,
-                    Status = Types.UIStatus.Failure,
+                    Status = UIStatus.Failure,
 
                     Text = CustomMessages.InternalSystemException,
                     Description = ex.Message + " \n StackTrace : " + ex.StackTrace

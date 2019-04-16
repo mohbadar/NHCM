@@ -53,12 +53,14 @@ namespace NHCM.Application.Organogram.Queries
                                 join PT in _context.PlanType on p.PlanTypeId equals PT.Id into PTs
                                 from PTr in PTs.DefaultIfEmpty()
 
-                                where p.Id == request.Id || p.ParentId == request.Id
+                                where p.Id == request.Id
                                 select new SearchedPosition
                                 {
 
                                     Id = p.Id,
                                     ParentId = p.ParentId,
+                                    NodeId = Convert.ToInt32(p.Id),
+                                    ParentNodeId = Convert.ToInt32(p.ParentId),
                                     WorkingAreaId = p.WorkingAreaId,
                                     Code = p.Code,
                                     PositionTypeId = p.PositionTypeId,
@@ -103,6 +105,8 @@ namespace NHCM.Application.Organogram.Queries
 
                                     Id = p.Id,
                                     ParentId = p.ParentId,
+                                    NodeId = Convert.ToInt32(p.Id),
+                                    ParentNodeId = Convert.ToInt32(p.ParentId),
                                     WorkingAreaId = p.WorkingAreaId,
                                     Code = p.Code,
                                     PositionTypeId = p.PositionTypeId,
@@ -143,6 +147,8 @@ namespace NHCM.Application.Organogram.Queries
                                 {
                                     Id = position.Id,
                                     ParentId = position.ParentId,
+                                    NodeId = Convert.ToInt32(position.Id),
+                                    ParentNodeId = Convert.ToInt32(position.ParentId),
                                     WorkingAreaId = position.WorkingAreaId,
                                     Code = position.Code,
                                     PositionTypeId = position.PositionTypeId,

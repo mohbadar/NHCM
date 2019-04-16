@@ -1,6 +1,7 @@
 ﻿using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.Extensions.Configuration;
 using NHCM.Domain.Entities;
 
 namespace NHCM.Persistence
@@ -59,6 +60,7 @@ namespace NHCM.Persistence
         public virtual DbSet<Module> Module { get; set; }
 
         public virtual DbSet<Selection> Selection { get; set; }
+        public virtual DbSet<Selection> Selections { get; set; }
         public virtual DbSet<EventType> EventType { get; set; }
         public virtual DbSet<ProcessTracking> ProcessTracking { get; set; }
         public virtual DbSet<OrgUnit> OrgUnit { get; set; }
