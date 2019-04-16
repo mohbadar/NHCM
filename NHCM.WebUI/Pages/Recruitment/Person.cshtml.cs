@@ -17,6 +17,9 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Authorization;
 using NHCM.Persistence.Infrastructure.Services;
+using System.Linq;
+using NHCM.Application.ProcessTracks.Commands;
+using NHCM.Application.Lookup.Models;
 
 namespace NHCM.WebUI.Pages.Recruitment
 {
@@ -115,14 +118,21 @@ namespace NHCM.WebUI.Pages.Recruitment
             {
 
             }
+
+            int Screenid = Convert.ToInt32(EncryptionHelper.Decrypt(HttpContext.Request.Query["p"]));
+            List<SearchedProcess> Processes = await Mediator.Send(new GetProcess() { ScreenId = Screenid });
+            if (Processes.Any())
+            {
+                HttpContext.Session.SetInt32("ModuleID", Processes.FirstOrDefault().ModuleId);
+                HttpContext.Session.SetInt32("ProcessID", Processes.FirstOrDefault().Id);
+            }
         }
         
         public async Task<IActionResult> OnPostSave([FromBody] CreatePersonCommand command)
         {
             try
             {
-
-               
+                  
                 // Untill application of Identity
                 command.ModifiedBy = "TEST USER";
                 command.CreatedBy = 10;
@@ -131,7 +141,19 @@ namespace NHCM.WebUI.Pages.Recruitment
                 command.OrganizationId = await _currentUser.GetUserOrganizationID();
 
                 List<SearchedPersonModel> SaveResult = new List<SearchedPersonModel>();
+                //SaveResult = await Mediator.Send(command);
+
                 SaveResult = await Mediator.Send(command);
+
+                if (SaveResult.Any())
+                {
+                    int ModuleID = HttpContext.Session.GetInt32("ModuleID").Value;
+                    int ProcessID = HttpContext.Session.GetInt32("ProcessID").Value;
+                    int id = Convert.ToInt32(SaveResult.FirstOrDefault().Id);
+
+                    await Mediator.Send(new SaveProcessTracksCommand() { ModuleId = ModuleID, ProcessId = ProcessID, RecordId = id });
+                }
+
                 return new JsonResult(new UIResult()
                 {
                     Data = new { list = SaveResult },
