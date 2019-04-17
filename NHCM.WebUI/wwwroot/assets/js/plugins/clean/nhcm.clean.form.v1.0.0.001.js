@@ -534,6 +534,7 @@
         attach: function () {
             var self = this;
             if (!$.isEmptyObject(self.record)) {
+                alert();
                 path = "/Document/Document/Get";
                 var modalid = self.prefix + self.el.attr('id') + '_Modal';
                 if ($.isEmptyObject(self.modal)) {
@@ -542,6 +543,7 @@
                     $('.dependent-screens').append(modal);
                     self.modal = $('#' + modalid);
                     var data = {};
+
                     clean.data.get({
                         async: false, url: path, data: clean.data.json.write(data), dataType: 'html',
                         success: function (msg) {

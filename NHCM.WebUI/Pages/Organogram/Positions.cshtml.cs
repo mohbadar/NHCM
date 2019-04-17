@@ -16,7 +16,8 @@ using NHCM.WebUI.Types;
 namespace NHCM.WebUI.Pages.Organogram
 {
 
-    //[Authorize(Policy = "OrganizationTahskil")]
+  //  [Authorize(Policy = "OrganizationTahskil")]
+
     public class PositionsModel : BasePage
     {
 
