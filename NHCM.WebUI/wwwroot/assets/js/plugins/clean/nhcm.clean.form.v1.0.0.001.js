@@ -24,6 +24,7 @@
         this.grid.cols = [];
         this.grid.actions = this.el.find('.div-grid-control').html();
         this.validationrule = {};
+        this.orgchart = {};
         this.init(this.el);
     }
     clean.form.prototype = {
@@ -167,8 +168,15 @@
                 var el = self.el.find('.file-attachment');
                 self.initiateFileUpload(el);
             }
-            self.validationrule = self.validation();
 
+
+            if ($('#' + self.grid.table).attr('organogram') == 'true') {
+
+                var bttntext = $('#' + self.grid.table).attr('action-button');
+                self.el.find('.div-form-control').find('.form-group').append('<button type="button" class="btn btn-primary" action="chart" showongrid="true"><i class="icon-tree6 position-right"></i>' + bttntext + '</button>');
+                self.getactions();
+            }
+            self.validationrule = self.validation();
         },
         initiateFileUpload: function (e) {
             var self = this;
@@ -430,7 +438,7 @@
                                 var va = ob[key];
                                 if (clean.isEmpty(ob[key]))
                                     va = 'درج نگردیده';
-                                column = column + "<td col='" + key.toLowerCase() + "'>" + va + "</td>";
+                                column = column + "<td col='" + key.toLowerCase() + "' data='" + va + "'>" + va + "</td>";
                             }
 
                             else if (colname == 'path') {
@@ -518,19 +526,16 @@
                 self.download($(this).attr('downloadpath'));
             });
 
-
             $.each(self.actions, function (i, v) {
                 var el = $(v);
                 if (el.attr('showongrid'))
-                    $('#' + self.grid.table + '_wrapper').find('.dataTables_filter').append(el.css({ 'float': 'left', 'margin-left':'5px' }));
-
+                    $('#' + self.grid.table + '_wrapper').find('.dataTables_filter').append(el.css({ 'float': 'left', 'margin-right': '5px' }));
             });
 
             if (!$('#' + self.grid.table).attr('ignoreinitialformbind'))
                 self.bindtoform(d[0]);
 
         },
-
         attach: function () {
             var self = this;
             if (!$.isEmptyObject(self.record)) {
@@ -578,7 +583,6 @@
                 clean.widget.error(title, des);
             }
         },
-
         validation: function () {
             var self = this;
             var validator = $(self.el).validate({
@@ -638,7 +642,6 @@
             });
             return validator;
         },
-
         update: function (v) {
             var self = this;
             self.record = {};
@@ -687,7 +690,6 @@
                 self.fetch(self);
             }
         },
-
         neighbour: function (v) {
             var self = this;
             var b = $(v);
@@ -706,6 +708,113 @@
                 self.loadDynamicLists(parentid);
                 self.modal.modal();
             }
+        },
+        chart: function () {
+            var self = this;
+            var table = $('#' + self.grid.table);
+            var modal_title = table.attr('modal-title');
+            var modal_description = table.attr('modal-description');
+            if (table.attr('node-title') && table.attr('node-sub-title') && table.attr('node-description')) {
+                var modalid = self.el.attr('id') + '_chart_Modal';
+                var modal = '<div id="' + modalid + '" class="modal fade"><div class="modal-dialog modal-full"><div class="modal-content"><div class="panel panel-flat" style="direction: rtl;"><div class="panel-heading"><h1 class="panel-title">' + modal_title + '</h1></div><div class="panel-body" style="padding-bottom: 5px; "><legend class="text-bold">' + modal_description + '</legend><fieldset class="content-group"><div id="chart-container"></div><hr /></fieldset><div class="row"><div class="col-md-12 action-bttns" style="padding:5px;"><button type="button" class="btn btn-link close-bttn" data-dismiss="modal"><i class="icon-close2 position-right"></i>صرف نظر</button></div></div></div></div></div></div></div>';
+                $('.dependent-screens').append(modal);
+                $('#' + modalid).modal();
+                var nodeTemplate = function (data) {
+                    return `
+                        <div class="title">${data.title}</div>
+                        <div class="content">
+                            <div class="subtitle">${data.subtitle}</div>
+                            <div class="description">${data.description}</div>
+                        </div>
+                      `;
+                };
+                var rows = [];
+                var node = {};
+                node.title = $('#' + self.grid.table).attr('node-title').split(',');
+                node.subtitle = $('#' + self.grid.table).attr('node-sub-title').split(',');
+                node.description = $('#' + self.grid.table).attr('node-description').split(',');
+                var tbl_html = table.find('tbody');
+                $(tbl_html).find('tr').each(function (i, v) {
+                    var tr = $(v);
+                    var row = {};
+                    row.id = tr.attr('data-tt-id');
+                    row.parent = tr.attr('data-tt-parent-id');
+                    row.title = "";
+                    row.subtitle = "";
+                    row.description = "";
+                    $.each(node.title, function (i, k) {
+                        var key = k.toLowerCase();
+                        var td = tr.find('[col="' + key + '"]');
+                        row.title = row.title + ' ' + $(td).attr('data');
+                    });
+                    $.each(node.subtitle, function (i, k) {
+                        var key = k.toLowerCase();
+                        var td = tr.find('[col="' + key + '"]');
+                        row.subtitle = row.subtitle + ' ' + $(td).attr('data');
+                    });
+                    $.each(node.description, function (i, k) {
+                        var key = k.toLowerCase();
+                        var td = tr.find('[col="' + key + '"]');
+                        row.description = row.description + ' ' + $(td).attr('data');
+                    });
+                    rows.push(row);
+                });
+                var datascource = {};
+                if (rows.length > 0) {
+                    $.each(rows, function (i, v) {
+
+                        if (v.parent == 0) {
+                            datascource.title = v.title;
+                            datascource.subtitle = v.subtitle;
+                            datascource.description = v.description;
+                            datascource.children = self.getchildren(v, rows);
+                        }
+                    });
+                }
+
+                if ($.isEmptyObject(self.orgchart)) {
+                    self.orgchart = $('#chart-container').orgchart({
+                        'data': datascource,
+                        'nodeContent': 'title',
+                        'nodeTemplate': nodeTemplate,
+                        'exportButton': true,
+                        'exportFilename': 'OrgChart',
+                        'pan': true,
+                        'zoom': true
+                    });
+                    $('#chart-container').css('overflow-y', 'auto');
+                    $('#chart-container').css('max-height', $(window).height() * 0.7);
+                    $('#chart-container').css('height', $(window).height() * 0.7);
+                    if ($('#chart-container').find('.oc-export-btn').length && !$('.action-bttns').find('.oc-export-btn').length)
+                        $('.action-bttns').append($('.oc-export-btn').addClass('btn btn-primary').prepend('<i class="icon-tree6 position-right"></i>'));
+
+                   
+                }
+                else {
+                    self.orgchart.init({ 'data': datascource });
+                    $('#chart-container .oc-export-btn').remove();
+                }
+            }
+            else {
+                clean.widget.error('اشتباه', 'لطفاً تمام مشخصات مورد ضرورت چارت را واضح سازید');
+            }
+
+
+        },
+        getchildren: function (o, rows) {
+            var self = this;
+            var result = [];
+            $.each(rows, function (i, v) {
+                var obj = {};
+                if (v.parent == o.id) {
+                    obj.title = v.title;
+                    obj.subtitle = v.subtitle;
+                    obj.description = v.description;
+                    obj.children = self.getchildren(v, rows);
+                    result.push(obj)
+                }
+            });
+            return result;
         },
         loadDynamicLists: function (v) {
             var self = this;

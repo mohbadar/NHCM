@@ -5,7 +5,7 @@
     Layout = null;
 }
 
- 
+
 <div class="panel panel-flat" style="direction: rtl;">
     <div class="panel-heading">
         <h1 class="panel-title">جزئیات تشکیل</h1>
@@ -103,7 +103,6 @@
                                         <div class="form-group">
                                             <button type="button" class="btn btn-primary" action="save"><i class="icon-floppy-disk position-right"></i>ثبت معلومات</button>
                                             <button type="button" class="btn btn-primary" action="search" showongrid="true"><i class="icon-search4 position-right"></i>نمایش تمام تشکیل </button>
-                                            <button type="button" class="btn btn-primary" action="search" showongrid="true"><i class="icon-search4 position-right"></i>نمایش چارت تشکیلاتی </button>
                                             <button type="button" class="btn btn-primary" action="new"><i class="icon-new-tab position-right"></i>صفحه جدید </button>
                                             <button type="button" class="btn btn-link close-bttn" data-dismiss="modal"><i class="icon-close2 position-right"></i>صرف نظر</button>
                                         </div>
@@ -126,7 +125,7 @@
                 </div>
             </div>
             <div class="form-grid">
-                <table style="direction: rtl;" type="treetable" fullheight="true" filter="true" ignoreinitialformbind="true">
+                <table style="direction: rtl;" type="treetable" modal-title="چارت تشکیلات" modal-description="چارت تشکیلات مطابق به جدول تشکیل ترتیب شده ترسیم و آماده پرنت میباشد" organogram="true" node-title="PositionTypeText,WorkAreaText" node-sub-title="Code" node-description="RankText" fullheight="true" filter="true" ignoreinitialformbind="true" action-button="نمایش چارت تشکیلاتی">
                     <thead>
                         <tr>
                             <th colname="PositionTypeText">نوع وظیفه</th>
@@ -143,11 +142,14 @@
                     <tbody></tbody>
                 </table>
             </div>
+
         </form>
     </div>
 </div>
 @*<script>
     window["fnOnInit"] = function (v) {
-       
+
     }
+
 </script>*@
+
