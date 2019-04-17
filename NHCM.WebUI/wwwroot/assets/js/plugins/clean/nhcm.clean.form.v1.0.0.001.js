@@ -542,7 +542,7 @@
                     $('.dependent-screens').append(modal);
                     self.modal = $('#' + modalid);
                     var data = {};
-                    clean.data.post({
+                    clean.data.get({
                         async: false, url: path, data: clean.data.json.write(data), dataType: 'html',
                         success: function (msg) {
                             var html = msg;

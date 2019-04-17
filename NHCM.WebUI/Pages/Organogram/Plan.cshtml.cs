@@ -21,7 +21,7 @@ using PersianLibrary;
 
 namespace NHCM.WebUI.Pages.Organogram
 {
-    [Authorize(Policy = "OrganizationTahskil")]
+   // [Authorize(Policy = "OrganizationTahskil")]
     public class PlanModel : BasePage
     {
         public async Task OnGetAsync()
