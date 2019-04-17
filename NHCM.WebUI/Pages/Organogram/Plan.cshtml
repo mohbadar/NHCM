@@ -7,7 +7,6 @@
 }
 
 
-
 @Html.AntiForgeryToken()
 <div class="panel-heading">
     <h1 class="panel-title">پلان تشکیل</h1>
@@ -45,8 +44,10 @@
                             نوع ایجاد بست ها
                             <span class="text-danger">&nbsp;*</span>
                         </label>
-                        <select id="orgpispositionscopied" name="orgpispositionscopied" class="select search" asp-items="@Model.ListOfStatus" required>
+                        <select id="orgpispositionscopied" name="orgpispositionscopied" class="select search" required>
                             <option></option>
+                            <option value="0">ترتیب جدید</option>
+                            <option value="1">انتقال از سال قبل</option>
                         </select>
                     </div>
                 </div>
@@ -65,7 +66,9 @@
         <div class="row div-form-control main-form-details">
             <div class="col-md-12">
                 <div class="form-group actions">
+                    <button type="button" class="btn btn-primary" action="save"><i class="icon-floppy-disk position-right"></i>ثبت معلومات</button>
                     <button type="button" class="btn btn-primary" action="search"><i class="icon-search4 position-right"></i>جستجو </button>
+
                     <button type="button" class="btn btn-primary" action="new"><i class="icon-new-tab position-right"></i>صفحه جدید </button>
 
                 </div>
@@ -87,7 +90,6 @@
         </div>
     </form>
 </div>
-
 
 
 
