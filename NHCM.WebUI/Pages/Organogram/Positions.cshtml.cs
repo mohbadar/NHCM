@@ -17,6 +17,7 @@ namespace NHCM.WebUI.Pages.Organogram
 {
 
   //  [Authorize(Policy = "OrganizationTahskil")]
+
     public class PositionsModel : BasePage
     {
 

@@ -17,15 +17,10 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Authorization;
 using NHCM.Persistence.Infrastructure.Services;
-using System.Linq;
-using NHCM.Application.ProcessTracks.Commands;
-using NHCM.Application.Lookup.Models;
 
 namespace NHCM.WebUI.Pages.Recruitment
 {
-
-   
-    public class PersonModel : BasePage
+    public class HRCheckAndControlModel : BasePage
     {
         public string SubScreens { get; set; } = "";
         private string htmltemplate = @"
@@ -35,7 +30,7 @@ namespace NHCM.WebUI.Pages.Recruitment
         private readonly IConfiguration _configuration;
         private readonly ICurrentUser _currentUser;
 
-        public PersonModel(IConfiguration configuration, ICurrentUser currentUser)
+        public HRCheckAndControlModel(IConfiguration configuration, ICurrentUser currentUser)
         {
             _configuration = configuration;
             _currentUser = currentUser;
@@ -118,61 +113,12 @@ namespace NHCM.WebUI.Pages.Recruitment
             {
 
             }
-
-            int Screenid = Convert.ToInt32(EncryptionHelper.Decrypt(HttpContext.Request.Query["p"]));
-            List<SearchedProcess> Processes = await Mediator.Send(new GetProcess() { ScreenId = Screenid });
-            if (Processes.Any())
-            {
-                HttpContext.Session.SetInt32("ModuleID", Processes.FirstOrDefault().ModuleId);
-                HttpContext.Session.SetInt32("ProcessID", Processes.FirstOrDefault().Id);
-            }
         }
-        
-        public async Task<IActionResult> OnPostSave([FromBody] CreatePersonCommand command)
-        {
-            try
-            {
-                  
-                // Untill application of Identity
-                command.ModifiedBy = "TEST USER";
-                command.CreatedBy = 10;
-                command.CreatedOn = DateTime.Now;
 
-                command.OrganizationId = await _currentUser.GetUserOrganizationID();
-
-                List<SearchedPersonModel> SaveResult = new List<SearchedPersonModel>();
-                //SaveResult = await Mediator.Send(command);
-
-                SaveResult = await Mediator.Send(command);
-
-                if (SaveResult.Any())
-                {
-                    int ModuleID = HttpContext.Session.GetInt32("ModuleID").Value;
-                    int ProcessID = HttpContext.Session.GetInt32("ProcessID").Value;
-                    int id = Convert.ToInt32(SaveResult.FirstOrDefault().Id);
-
-                    await Mediator.Send(new SaveProcessTracksCommand() { ModuleId = ModuleID, ProcessId = ProcessID, RecordId = id });
-                }
-
-                return new JsonResult(new UIResult()
-                {
-                    Data = new { list = SaveResult },
-                    Status = UIStatus.Success,
-                    Text = "اطلاعات مستخدم موفقانه ثبت سیستم شد",
-                    Description = string.Empty
-                });
-
-              
-            }
-            catch (Exception ex)
-            {
-                return new JsonResult(CustomMessages.FabricateException(ex)); 
-            }
-        }
 
         public async Task<IActionResult> OnPostSearch([FromBody]SearchPersonQuery searchQuery)
         {
-         
+
             try
             {
 
@@ -192,72 +138,8 @@ namespace NHCM.WebUI.Pages.Recruitment
             {
 
                 return new JsonResult(CustomMessages.FabricateException(ex));
-               
-            }
-        }
 
-        public async Task<IActionResult> OnPostUpload([FromQuery]IFormFile img)
-        {
-            FileStorage _storage = new FileStorage();
-            var extension = System.IO.Path.GetExtension(img.FileName);
-            // check for a valid mediatype
-            if (!img.ContentType.StartsWith("image/"))
-            {
-                return new JsonResult(new UIResult()
-                {
-                    Data = null,
-                    Status = 0,
-                    Text = "فارمت عکس درست نیست",
-                    // Can be changed from app settings
-                    Description = ""
-                });
             }
-            else
-            {
-                //var image = Image.FromStream(img.OpenReadStream(), true, true);
-                string filename = await _storage.CreateAsync(img.OpenReadStream(), extension, _configuration["Photo"]);
-                var result = new
-                {
-                    status = "success",
-                    url = filename
-                };
-                return new JsonResult(result);
-            }
-        }
-
-
-        public async Task<IActionResult> OnPostCrop([FromBody] CropRequest cropmodel)
-        {
-            FileStorage _storage = new FileStorage();
-            string filename = await _storage.Crop(cropmodel, _configuration["Photo"]);
-
-            var result = new object();
-            try
-            {
-                result = new
-                {
-                    status = "success",
-                    url = filename
-                };
-            }
-            catch (Exception e)
-            {
-                result = new
-                {
-                    status = "fail",
-                    url = "",
-                };
-            }
-            return new JsonResult(result);
-        }
-
-        public async Task<IActionResult> OnPostDownload([FromBody] UploadedFile file)
-        {
-            FileStorage _storage = new FileStorage();
-            var filepath = _configuration["Photo"] + file.Name;
-            System.IO.Stream filecontent = await _storage.GetAsync(filepath);
-            var filetype = _storage.GetContentType(filepath);
-            return File(filecontent, filetype, file.Name);
         }
     }
 }

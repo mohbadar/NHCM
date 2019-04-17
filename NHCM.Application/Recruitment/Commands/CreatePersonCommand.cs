@@ -90,8 +90,8 @@ namespace NHCM.Application.Recruitment.Commands
             if (request.Id == null || request.Id == default(decimal))
             {
 
-                using (_context)
-                {
+                //using (_context)
+                //{
                     StringBuilder PrefixBuilder = new StringBuilder(string.Empty);
                     StringBuilder HrCodeBuilder = new StringBuilder(string.Empty);
 
@@ -162,7 +162,7 @@ namespace NHCM.Application.Recruitment.Commands
 
                     result = await _personCommon.SearchPerson(new SearchPersonQuery() { Id = person.Id });
                     return result;
-                }
+                //}
             }
             // Update
             else

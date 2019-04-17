@@ -99,7 +99,7 @@
             }
 
             if (self.el.attr('hasprocess')) {
-                self.el.find('.actions').append('<button type="button" class="btn btn-primary" action="process" style="float:left;"><i class="icon-loop position-right"></i>طی مراحل </button>');
+                self.el.find('.actions').append('<button type="button" class="btn btn-primary" action="process" style="float:left; margin-left: 5px;"><i class="icon-loop position-right"></i>طی مراحل </button>');
                 self.getactions();
             }
 
@@ -543,8 +543,6 @@
                     $('.dependent-screens').append(modal);
                     self.modal = $('#' + modalid);
                     var data = {};
-
-
 
                     clean.data.get({
                         async: false, url: path, data: clean.data.json.write(data), dataType: 'html',

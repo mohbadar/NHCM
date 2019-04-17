@@ -42,17 +42,18 @@ namespace NHCM.Application.ProcessTracks.Commands
           
             if (request.Id == null)
             {
-                ProcessTracking PT = new ProcessTracking()
-                {
-                    RecordId = request.RecordId,
-                    ProcessId = (Int16)request.ProcessId,
-                    StatusId = 5,
-                    ModuleId = request.ModuleId,
-                    ReferedProcessId=1,
-                    CreatedOn = DateTime.Now
-                };
-                _context.ProcessTracking.Add(PT);
-                await _context.SaveChangesAsync(cancellationToken);
+
+                    ProcessTracking PT = new ProcessTracking()
+                    {
+                        RecordId = request.RecordId,
+                        ProcessId = (Int16)request.ProcessId,
+                        StatusId = 5,
+                        ModuleId = request.ModuleId,
+                        ReferedProcessId = 1,
+                        CreatedOn = DateTime.Now
+                    };
+                    _context.ProcessTracking.Add(PT);
+                    await _context.SaveChangesAsync(cancellationToken);   
             }
             else
             {
