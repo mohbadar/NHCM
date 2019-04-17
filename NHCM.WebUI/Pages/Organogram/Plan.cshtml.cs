@@ -20,6 +20,10 @@ using PersianLibrary;
 
 namespace NHCM.WebUI.Pages.Organogram
 {
+
+
+  //  [Authorize(Policy = "OrganizationTahskil")]
+
     public class PlanModel : BasePage
     {
         public async Task OnGetAsync()
@@ -30,6 +34,16 @@ namespace NHCM.WebUI.Pages.Organogram
             organizations = await Mediator.Send(new GetOrganiztionQuery() { Id = null });
             foreach (Organization organization in organizations)
                 ListOfOrganization.Add(new SelectListItem(organization.Dari, organization.Id.ToString()));
+
+
+            // Get Status
+            ListOfStatus = new List<SelectListItem>();
+            List<Status> statuses = new List<Status>();
+            statuses = await Mediator.Send(new GetStatusQuery() { category = "OR" });
+            foreach (Status status in statuses)
+                ListOfStatus.Add(new SelectListItem() { Text = status.Dari, Value = status.Id.ToString() });
+
+
 
             List<int> years = Enumerable.Range(PersianDate.Now.Year - 1, 3).ToList();
             foreach (int i in years)
@@ -60,7 +74,7 @@ namespace NHCM.WebUI.Pages.Organogram
                     await Mediator.Send(new SaveProcessTracksCommand() { ModuleId = ModuleID, ProcessId = ProcessID, RecordId = dbResult.FirstOrDefault().Id });
                 }
 
-                return new JsonResult(new NHCM.WebUI.Types.UIResult()
+                return new JsonResult(new UIResult()
                 {
                     Data = new { list = dbResult },
                     Status = NHCM.WebUI.Types.UIStatus.Success,
@@ -96,10 +110,10 @@ namespace NHCM.WebUI.Pages.Organogram
             }
             catch (Exception ex)
             {
-                return new JsonResult(new NHCM.WebUI.Types.UIResult()
+                return new JsonResult(new UIResult()
                 {
                     Data = null,
-                    Status = NHCM.WebUI.Types.UIStatus.Failure,
+                    Status = UIStatus.Failure,
                     Text = CustomMessages.InternalSystemException,
                     Description = ex.Message
                 });

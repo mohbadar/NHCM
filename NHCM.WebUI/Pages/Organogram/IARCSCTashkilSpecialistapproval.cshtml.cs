@@ -18,11 +18,10 @@ using NHCM.Domain.Entities;
 using NHCM.WebUI.Types;
 using PersianLibrary;
 
-namespace NHCM.WebUI.Pages.Employment
+namespace NHCM.WebUI.Pages.Organogram
 {
-    public class PlanModel : BasePage
+    public class IARCSCTashkilSpecialistApprovalModel : BasePage
     {
-
         public async Task OnGetAsync()
         {
             //Get Organization
@@ -31,14 +30,12 @@ namespace NHCM.WebUI.Pages.Employment
             organizations = await Mediator.Send(new GetOrganiztionQuery() { Id = null });
             foreach (Organization organization in organizations)
                 ListOfOrganization.Add(new SelectListItem(organization.Dari, organization.Id.ToString()));
-
             // Get Status
             ListOfStatus = new List<SelectListItem>();
-            List<Status> statuses = new List<Status>();
+            List<Status> statuses = new List<NHCM.Domain.Entities.Status>();
             statuses = await Mediator.Send(new GetStatusQuery() { category = "OR" });
-            foreach (Status status in statuses)
+            foreach (NHCM.Domain.Entities.Status status in statuses)
                 ListOfStatus.Add(new SelectListItem() { Text = status.Dari, Value = status.Id.ToString() });
-
 
             List<int> years = Enumerable.Range(PersianDate.Now.Year - 1, 3).ToList();
             foreach (int i in years)
@@ -54,9 +51,11 @@ namespace NHCM.WebUI.Pages.Employment
                 HttpContext.Session.SetInt32("ModuleID", Processes.FirstOrDefault().ModuleId);
                 HttpContext.Session.SetInt32("ProcessID", Processes.FirstOrDefault().Id);
             }
+            
+
         }
 
-        
+
 
         public async Task<IActionResult> OnPostSearch([FromBody] SearchPlanQuery command)
         {
@@ -64,71 +63,24 @@ namespace NHCM.WebUI.Pages.Employment
             {
                 List<SearchedPlan> result = new List<SearchedPlan>();
                 result = await Mediator.Send(command);
-                return new JsonResult(new UIResult()
+                return new JsonResult(new NHCM.WebUI.Types.UIResult()
                 {
                     Data = new { list = result },
-                    Status = UIStatus.Success,
+                    Status = NHCM.WebUI.Types.UIStatus.Success,
                     Text = string.Empty,
                     Description = string.Empty
                 });
             }
             catch (Exception ex)
             {
-                return new JsonResult(new UIResult()
+                return new JsonResult(new NHCM.WebUI.Types.UIResult()
                 {
                     Data = null,
-                    Status = UIStatus.Failure,
+                    Status = NHCM.WebUI.Types.UIStatus.Failure,
                     Text = CustomMessages.InternalSystemException,
                     Description = ex.Message
                 });
             }
         }
-
-
-
-
-        //public async Task OnGetAsync()
-        //{
-        //    //Get Organization
-        //    ListOfOrganization = new List<SelectListItem>();
-        //    List<Organization> organizations = new List<Organization>();
-        //    organizations = await Mediator.Send(new GetOrganiztionQuery() { Id = null });
-        //    foreach (Organization organization in organizations)
-        //        ListOfOrganization.Add(new SelectListItem(organization.Dari, organization.Id.ToString()));
-
-        //    List<int> years = Enumerable.Range(PersianDate.Now.Year - 1, 3).ToList();
-        //    foreach (int i in years)
-        //    {
-        //        SelectListItem x = new SelectListItem();
-        //        ListOfPersianYears.Add(new SelectListItem { Value = i.ToString(), Text = i.ToString() });
-        //    }
-
-        //}
-
-        //public async Task<IActionResult> OnPostSearch([FromBody] SearchPlanQuery command)
-        //{
-        //    try
-        //    {
-        //        List<SearchedPlan> result = new List<SearchedPlan>();
-        //        result = await Mediator.Send(command);
-        //        return new JsonResult(new NHCM.WebUI.Types.UIResult()
-        //        {
-        //            Data = new { list = result },
-        //            Status = NHCM.WebUI.Types.UIStatus.Success,
-        //            Text = string.Empty,
-        //            Description = string.Empty
-        //        });
-        //    }
-        //    catch (Exception ex)
-        //    {
-        //        return new JsonResult(new NHCM.WebUI.Types.UIResult()
-        //        {
-        //            Data = null,
-        //            Status = NHCM.WebUI.Types.UIStatus.Failure,
-        //            Text = CustomMessages.InternalSystemException,
-        //            Description = ex.Message
-        //        });
-        //    }
-        //}
     }
 }

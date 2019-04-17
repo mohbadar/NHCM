@@ -100,7 +100,7 @@
             }
 
             if (self.el.attr('hasprocess')) {
-                self.el.find('.actions').append('<button type="button" class="btn btn-primary" action="process" style="float:left;"><i class="icon-loop position-right"></i>طی مراحل </button>');
+                self.el.find('.actions').append('<button type="button" class="btn btn-primary" action="process" style="float:left; margin-left: 5px;"><i class="icon-loop position-right"></i>طی مراحل </button>');
                 self.getactions();
             }
 
@@ -539,6 +539,7 @@
         attach: function () {
             var self = this;
             if (!$.isEmptyObject(self.record)) {
+                alert();
                 path = "/Document/Document/Get";
                 var modalid = self.prefix + self.el.attr('id') + '_Modal';
                 if ($.isEmptyObject(self.modal)) {
@@ -547,7 +548,8 @@
                     $('.dependent-screens').append(modal);
                     self.modal = $('#' + modalid);
                     var data = {};
-                    clean.data.post({
+
+                    clean.data.get({
                         async: false, url: path, data: clean.data.json.write(data), dataType: 'html',
                         success: function (msg) {
                             var html = msg;

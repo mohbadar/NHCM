@@ -34,11 +34,18 @@ namespace NHCM.WebUI.Pages.Document
 
         public async Task  OnGetAsync()
         {
-            ListOfDocumentTypesD = new List<SelectListItem>();
-            List<DocumentType> documentTypesd = new List<DocumentType>();
-            documentTypesd = await Mediator.Send(new GetDocumentTypeQuery() { ScreenID = 1, ID = null });
-            foreach (DocumentType documentType in documentTypesd)
-                ListOfDocumentTypesD.Add(new SelectListItem() { Text = documentType.Name, Value = documentType.Id.ToString() });
+            ListOfDocumentTypes = new List<SelectListItem>();
+            List<DocumentType> documentTypes = new List<DocumentType>();
+            documentTypes = await Mediator.Send(new GetDocumentTypeQuery() { ScreenID = 1, ID = null });
+            foreach (DocumentType documentType in documentTypes)
+                ListOfDocumentTypes.Add(new SelectListItem() { Text = documentType.Name, Value = documentType.Id.ToString() });
+
+
+            //ListOfDocumentTypesD = new List<SelectListItem>();
+            //List<DocumentType> documentTypesd = new List<DocumentType>();
+            //documentTypesd = await Mediator.Send(new GetDocumentTypeQuery() { ScreenID = 1, ID = null });
+            //foreach (DocumentType documentType in documentTypesd)
+            //    ListOfDocumentTypesD.Add(new SelectListItem() { Text = documentType.Name, Value = documentType.Id.ToString() });
 
         }
         public async Task<IActionResult> OnPostSave([FromBody]CreateDocumentCommand command)
@@ -51,10 +58,10 @@ namespace NHCM.WebUI.Pages.Document
                 List<SearchedDocumentModel> dbResult = new List<SearchedDocumentModel>();
                 dbResult = await Mediator.Send(command);
 
-                return new JsonResult(new Types.UIResult()
+                return new JsonResult(new UIResult()
                 {
                     Data = new { list = dbResult },
-                    Status = Types.UIStatus.Success,
+                    Status = UIStatus.Success,
 
                     Text = "اسناد و ضمایم موفقانه ثبت گردید",
                     Description = string.Empty
@@ -63,10 +70,10 @@ namespace NHCM.WebUI.Pages.Document
             catch (Exception ex)
             {
 
-                return new JsonResult(new Types.UIResult()
+                return new JsonResult(new UIResult()
                 {
                     Data = null,
-                    Status = Types.UIStatus.Failure,
+                    Status = UIStatus.Failure,
 
                     Text = CustomMessages.InternalSystemException,
                     Description = ex.Message + " \n StackTrace : " + ex.StackTrace
@@ -109,10 +116,10 @@ namespace NHCM.WebUI.Pages.Document
                 List<SearchedDocumentModel> dbResult = new List<SearchedDocumentModel>();
                 dbResult = await Mediator.Send(command);
 
-                return new JsonResult(new Types.UIResult()
+                return new JsonResult(new UIResult()
                 {
                     Data = new { list = dbResult },
-                    Status = Types.UIStatus.Success,
+                    Status = UIStatus.Success,
 
                     Text = string.Empty,
                     Description = string.Empty
@@ -121,10 +128,10 @@ namespace NHCM.WebUI.Pages.Document
             catch (Exception ex)
             {
 
-                return new JsonResult(new Types.UIResult()
+                return new JsonResult(new UIResult()
                 {
                     Data = null,
-                    Status = Types.UIStatus.Failure,
+                    Status = UIStatus.Failure,
 
                     Text = CustomMessages.InternalSystemException,
                     Description = ex.Message + " \n StackTrace : " + ex.StackTrace

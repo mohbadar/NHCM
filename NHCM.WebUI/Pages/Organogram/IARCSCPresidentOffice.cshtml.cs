@@ -20,7 +20,7 @@ using PersianLibrary;
 
 namespace NHCM.WebUI.Pages.Organogram
 {
-    public class IARCSCHRapprovalModel : BasePage
+    public class IARCSCPresidentOfficeModel : BasePage
     {
         public async Task OnGetAsync()
         {
