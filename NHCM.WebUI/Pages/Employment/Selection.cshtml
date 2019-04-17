@@ -1,6 +1,7 @@
 ﻿@page "{handler?}/{id?}"
 @model NHCM.WebUI.Pages.Employment.SelectionModel
 @{
+
     Layout = null;
 }
 
@@ -9,8 +10,10 @@
     <div class="panel-heading">
         <h1 class="panel-title">تعیینات مطابق به تشکیلات تائید شده</h1>
     </div>
+
+   
     <div class="panel-body" style="padding-bottom:5px;">
-        <form id="dv_Employment_Selection" class="form sub-form page-component" type="form" category="modal" prefix="ux" parent="dv_Organogram_Plan" parentcol="OrganoGramId" onInit="fnOnInit">
+        <form id="dv_Employment_Selection" class="form sub-form page-component" type="form" category="modal" prefix="ux"  parent="dv_Employment_Plan" parentcol="OrganoGramId" onInit="fnOnInit">
             <div class="modal fade">
                 <div class="modal-dialog modal-lg">
                     <div class="modal-content">
