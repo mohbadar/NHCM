@@ -1,6 +1,6 @@
 ﻿@page "{handler?}"
 @using NHCM.Domain.Entities;
-@model NHCM.WebUI.Pages.Organogram.PlanModel
+@model NHCM.WebUI.Pages.Employment.PlanModel
 @{
     ViewData["Title"] = "Plan";
     Layout = "~/Pages/Shared/_CustomLayout.cshtml";
@@ -9,10 +9,10 @@
 
 @Html.AntiForgeryToken()
 <div class="panel-heading">
-    <h1 class="panel-title">پلان تشکیلات</h1>
+    <h1 class="panel-title">تعیینات</h1>
 </div>
 <div class="panel-body" style="padding-bottom:5px;">
-    <form id="dv_Organogram_Plan" class="form main-form page-component" type="form" subform="dv_Employment_Selection" prefix="orgp">
+    <form id="dv_Employment_Plan" class="form main-form page-component" type="form" subform="dv_Employment_Selection" prefix="orgp">
         <fieldset class="content-group">
             <legend class="text-bold">برای تعیینات، لطفاً تشکیل مورد نظر را انتخاب نمائید</legend>
             <div class="row">

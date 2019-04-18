@@ -10,10 +10,7 @@ using NHCM.Application.Lookup.Models;
 using NHCM.Application.Lookup.Queries;
 using NHCM.Application.Organogram.Commands;
 using NHCM.Application.Organogram.Models;
-using NHCM.Application.Organogram.Queries;
-using NHCM.Application.ProcessTracks.Commands;
-using NHCM.Application.ProcessTracks.Models;
-using NHCM.Application.ProcessTracks.Queries;
+using NHCM.Application.Organogram.Queries; 
 using NHCM.Domain.Entities;
 using NHCM.WebUI.Types;
 using PersianLibrary;
@@ -46,20 +43,20 @@ namespace NHCM.WebUI.Pages.Employment
             {
                 List<SearchedPlan> result = new List<SearchedPlan>();
                 result = await Mediator.Send(command);
-                return new JsonResult(new NHCM.WebUI.Types.UIResult()
+                return new JsonResult(new UIResult()
                 {
                     Data = new { list = result },
-                    Status = NHCM.WebUI.Types.UIStatus.Success,
+                    Status = UIStatus.Success,
                     Text = string.Empty,
                     Description = string.Empty
                 });
             }
             catch (Exception ex)
             {
-                return new JsonResult(new NHCM.WebUI.Types.UIResult()
+                return new JsonResult(new UIResult()
                 {
                     Data = null,
-                    Status = NHCM.WebUI.Types.UIStatus.Failure,
+                    Status =UIStatus.Failure,
                     Text = CustomMessages.InternalSystemException,
                     Description = ex.Message
                 });

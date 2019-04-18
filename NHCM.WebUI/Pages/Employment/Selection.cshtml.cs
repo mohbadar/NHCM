@@ -19,17 +19,16 @@ namespace NHCM.WebUI.Pages.Employment
 {
     public class SelectionModel : BasePage
     {
-
+        [BindProperty]
+       public string ScreenID { get; set;  }
         public async Task OnGetAsync()
         {
 
-            //ListOfEventType = new List<SelectListItem>();
-            //
-            //
-            //foreach (EventType e in EventTypes)
-            //    ListOfEventType.Add(new SelectListItem(e.Name, e.Id.ToString()));
+             ScreenID = EncryptionHelper.Encrypt("50");
+
 
         }
+
 
         public async Task<IActionResult> OnPostEvents(string body)
         {
@@ -41,20 +40,20 @@ namespace NHCM.WebUI.Pages.Employment
                 List<object> result = new List<object>();
                 foreach (EventType e in EventTypes)
                     result.Add(new { Text = e.Name, ID = e.Id.ToString() });
-                return new JsonResult(new NHCM.WebUI.Types.UIResult()
+                return new JsonResult(new UIResult()
                 {
                     Data = new { list = result },
-                    Status = NHCM.WebUI.Types.UIStatus.Success,
+                    Status = UIStatus.Success,
                     Text = string.Empty,
                     Description = string.Empty
                 });
             }
             catch (Exception ex)
             {
-                return new JsonResult(new NHCM.WebUI.Types.UIResult()
+                return new JsonResult(new UIResult()
                 {
                     Data = null,
-                    Status = NHCM.WebUI.Types.UIStatus.Failure,
+                    Status =  UIStatus.Failure,
                     Text = CustomMessages.InternalSystemException,
                     Description = ex.Message
                 });
@@ -71,26 +70,25 @@ namespace NHCM.WebUI.Pages.Employment
                 List<object> result = new List<object>();
                 foreach (SearchedPersonModel p in Persons)
                     result.Add(new { Text = p.FirstName + "  " + p.LastName, ID = p.Id.ToString() });
-                return new JsonResult(new NHCM.WebUI.Types.UIResult()
+                return new JsonResult(new UIResult()
                 {
                     Data = new { list = result },
-                    Status = NHCM.WebUI.Types.UIStatus.Success,
+                    Status =  UIStatus.Success,
                     Text = string.Empty,
                     Description = string.Empty
                 });
             }
             catch (Exception ex)
             {
-                return new JsonResult(new NHCM.WebUI.Types.UIResult()
+                return new JsonResult(new  UIResult()
                 {
                     Data = null,
-                    Status = NHCM.WebUI.Types.UIStatus.Failure,
+                    Status =  UIStatus.Failure,
                     Text = CustomMessages.InternalSystemException,
                     Description = ex.Message
                 });
             }
         }
-
 
         public async Task<IActionResult> OnPostSave([FromBody]CreateSelectionCommand command)
         {
@@ -98,20 +96,20 @@ namespace NHCM.WebUI.Pages.Employment
             {
                 List<SearchedSelectionModel> dbResult = new List<SearchedSelectionModel>();
                 dbResult = await Mediator.Send(command);
-                return new JsonResult(new Types.UIResult()
+                return new JsonResult(new  UIResult()
                 {
                     Data = new { list = dbResult },
-                    Status = Types.UIStatus.Success,
+                    Status = UIStatus.Success,
                     Text = "موفقانه ثبت گردید",
                     Description = "پیشنهاد تعیینات موفقانه در سیستم ثبت و راجستر گردید"
                 });
             }
             catch (Exception ex)
             {
-                return new JsonResult(new Types.UIResult()
+                return new JsonResult(new  UIResult()
                 {
                     Data = null,
-                    Status = Types.UIStatus.Failure,
+                    Status =  UIStatus.Failure,
                     Text = CustomMessages.InternalSystemException,
                     Description = ex.Message + " \n StackTrace : " + ex.StackTrace
                 });
@@ -124,21 +122,21 @@ namespace NHCM.WebUI.Pages.Employment
             {
                 List<SearchedSelectionModel> result = new List<SearchedSelectionModel>();
                 result = await Mediator.Send(command);
-                return new JsonResult(new NHCM.WebUI.Types.UIResult()
+                return new JsonResult(new  UIResult()
                 {
                     Data = new { list = result },
-                    Status = NHCM.WebUI.Types.UIStatus.Success,
+                    Status = UIStatus.Success,
                     Text = string.Empty,
                     Description = string.Empty
                 });
             }
             catch (Exception ex)
             {
-                return new JsonResult(new NHCM.WebUI.Types.UIResult()
+                return new JsonResult(new  UIResult()
                 {
 
                     Data = null,
-                    Status = NHCM.WebUI.Types.UIStatus.Failure,
+                    Status =  UIStatus.Failure,
                     Text = CustomMessages.InternalSystemException,
 
                     Description = ex.Message

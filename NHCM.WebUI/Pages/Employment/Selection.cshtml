@@ -10,7 +10,10 @@
         <h1 class="panel-title">تعیینات مطابق به تشکیلات تائید شده</h1>
     </div>
     <div class="panel-body" style="padding-bottom:5px;">
-        <form id="dv_Employment_Selection" class="form sub-form page-component" type="form" category="modal" prefix="ux" parent="dv_Organogram_Plan" parentcol="OrganoGramId" onInit="fnOnInit">
+        <form id="dv_Employment_Selection" class="form sub-form page-component" type="form" category="modal" prefix="ux" parent="dv_Employment_Plan" parentcol="OrganoGramId" hasprocess="true" >
+            
+            <input  type="hidden" asp-for="@Model.ScreenID" id="pageid" /> 
+            
             <div class="modal fade">
                 <div class="modal-dialog modal-lg">
                     <div class="modal-content">
@@ -136,7 +139,7 @@
                                 <hr />
                                 <div class="row div-form-control">
                                     <div class="col-md-12">
-                                        <div class="form-group">
+                                        <div class="form-group actions">
                                             <button type="button" class="btn btn-primary" action="save"><i class="icon-floppy-disk position-right"></i>ثبت معلومات</button>
                                             <button type="button" class="btn btn-primary" action="search" showongrid="true"><i class="icon-search4 position-right"></i>نمایش تمام تعیینات </button>
                                             <button type="button" class="btn btn-link close-bttn" data-dismiss="modal"><i class="icon-close2 position-right"></i>صرف نظر</button>
@@ -154,7 +157,7 @@
                     </div>
                 </div>
             </div>
-            <div class="form-grid">
+            <div class="form-grid" >
                 <table style="direction: rtl;" type="treetable" fullheight="true" filter="true" ignoreinitialformbind="true">
                     <thead>
                         <tr>
@@ -172,11 +175,6 @@
     </div>
 </div>
 
-<script>
-    window["fnOnInit"] = function () {
-      
-    }
-</script>
 
 
 

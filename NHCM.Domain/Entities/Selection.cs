@@ -14,9 +14,7 @@ namespace NHCM.Domain.Entities
         public DateTime VerdictDate { get; set; }
         public string VerdictRegNo { get; set; }
         public string FinalNo { get; set; }
-        public string ReferenceNo { get; set; }
-        public int StatusId { get; set; }
-
+        public string ReferenceNo { get; set; }        
         public virtual Position Position { get; set; }
     }
 }

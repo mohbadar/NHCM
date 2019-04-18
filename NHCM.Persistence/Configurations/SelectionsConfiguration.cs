@@ -38,10 +38,7 @@ namespace NHCM.Persistence.Configurations
 
             builder.Property(e => e.Remarks)
                 .IsRequired()
-                .HasMaxLength(400);
-
-            builder.Property(e => e.StatusId).HasColumnName("StatusID");
-
+                .HasMaxLength(400);            
             builder.Property(e => e.VerdictDate).HasColumnType("timestamp with time zone");
 
             builder.Property(e => e.VerdictRegNo)
