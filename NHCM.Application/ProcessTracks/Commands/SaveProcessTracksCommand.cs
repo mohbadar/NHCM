@@ -47,7 +47,7 @@ namespace NHCM.Application.ProcessTracks.Commands
                     {
                         RecordId = request.RecordId,
                         ProcessId = (Int16)request.ProcessId,
-                        StatusId = 5,
+                        StatusId = 5, // In Process
                         ModuleId = request.ModuleId,
                         ReferedProcessId = 1,
                         CreatedOn = DateTime.Now

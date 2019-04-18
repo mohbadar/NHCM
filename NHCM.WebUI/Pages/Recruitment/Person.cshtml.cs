@@ -141,8 +141,7 @@ namespace NHCM.WebUI.Pages.Recruitment
                 command.OrganizationId = await _currentUser.GetUserOrganizationID();
 
                 List<SearchedPersonModel> SaveResult = new List<SearchedPersonModel>();
-                //SaveResult = await Mediator.Send(command);
-
+                
                 SaveResult = await Mediator.Send(command);
 
                 if (SaveResult.Any())
