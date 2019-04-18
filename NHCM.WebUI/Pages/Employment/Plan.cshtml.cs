@@ -10,10 +10,7 @@ using NHCM.Application.Lookup.Models;
 using NHCM.Application.Lookup.Queries;
 using NHCM.Application.Organogram.Commands;
 using NHCM.Application.Organogram.Models;
-using NHCM.Application.Organogram.Queries;
-using NHCM.Application.ProcessTracks.Commands;
-using NHCM.Application.ProcessTracks.Models;
-using NHCM.Application.ProcessTracks.Queries;
+using NHCM.Application.Organogram.Queries; 
 using NHCM.Domain.Entities;
 using NHCM.WebUI.Types;
 using PersianLibrary;
@@ -77,7 +74,9 @@ namespace NHCM.WebUI.Pages.Employment
                 return new JsonResult(new UIResult()
                 {
                     Data = null,
+
                     Status = UIStatus.Failure,
+
                     Text = CustomMessages.InternalSystemException,
                     Description = ex.Message
                 });

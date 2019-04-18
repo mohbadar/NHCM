@@ -58,7 +58,6 @@ namespace NHCM.Application.Organogram.Queries
             }
             else if (request.Id != null || request.OrganizationId != null)
             {
-                ///Change OrganoGram to Organogram
                 result = await (from Organogram in _context.OrganoGram
                                 join organization in _context.Organization on Organogram.OrganizationId equals organization.Id into orgs
                                 from resultOrgUnit in orgs.DefaultIfEmpty()
