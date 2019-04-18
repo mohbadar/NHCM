@@ -90,12 +90,12 @@ namespace NHCM.Application.Employment.Queries
                 foreach (SearchedPosition P in Positions)
                 {
                     SearchedSelectionModel Record = new SearchedSelectionModel();
-                    if (_context.Selection.Any(c => c.PositionId == P.Id && c.StatusId != 2))
+                    if (_context.Selection.Any(c => c.PositionId == P.Id))
                     {
                         Record = await (from Selection in _context.Selection
                                         join Person in _context.Person on Selection.PersonId equals Person.Id into Persons
                                         from PersonResult in Persons.DefaultIfEmpty()
-                                        where Selection.PositionId == P.Id && Selection.StatusId != 2
+                                        where Selection.PositionId == P.Id 
                                         select new SearchedSelectionModel
                                         {
                                             PersonName = PersonResult.FirstName + " " + PersonResult.LastName,

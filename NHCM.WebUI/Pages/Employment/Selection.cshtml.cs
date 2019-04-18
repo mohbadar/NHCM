@@ -16,18 +16,13 @@ namespace NHCM.WebUI.Pages.Employment
 {
     public class SelectionModel : BasePage
     {
-
+        [BindProperty]
+        public string ScreenID { get; set;  }
         public async Task OnGetAsync()
         {
-
-
-            //listofeventtype = new list<selectlistitem>();
-
-
-            //foreach (eventtype e in eventtypes)
-            //    listofeventtype.add(new selectlistitem(e.name, e.id.tostring()));
-
+             ScreenID = EncryptionHelper.Encrypt("50");
         }
+
 
         public async Task<IActionResult> OnPostEvents(string body)
         {
@@ -52,7 +47,9 @@ namespace NHCM.WebUI.Pages.Employment
                 return new JsonResult(new UIResult()
                 {
                     Data = null,
+
                     Status =UIStatus.Failure,
+
                     Text = CustomMessages.InternalSystemException,
                     Description = ex.Message
                 });
@@ -72,13 +69,16 @@ namespace NHCM.WebUI.Pages.Employment
                 return new JsonResult(new UIResult()
                 {
                     Data = new { list = result },
+
                     Status = UIStatus.Success,
+
                     Text = string.Empty,
                     Description = string.Empty
                 });
             }
             catch (Exception ex)
             {
+
                 return new JsonResult(new UIResult()
                 {
                     Data = null,
@@ -89,14 +89,15 @@ namespace NHCM.WebUI.Pages.Employment
             }
         }
 
-
         public async Task<IActionResult> OnPostSave([FromBody]CreateSelectionCommand command)
         {
             try
             {
                 List<SearchedSelectionModel> dbResult = new List<SearchedSelectionModel>();
                 dbResult = await Mediator.Send(command);
+
                 return new JsonResult(new UIResult()
+
                 {
                     Data = new { list = dbResult },
                     Status = UIStatus.Success,
@@ -106,11 +107,11 @@ namespace NHCM.WebUI.Pages.Employment
             }
             catch (Exception ex)
             {
+
                 return new JsonResult(new UIResult()
                 {
-
-
                     Data = null,
+
                     Status = UIStatus.Failure,
                     Text = CustomMessages.InternalSystemException,
                     Description = ex.Message + " \n StackTrace : " + ex.StackTrace
@@ -124,6 +125,7 @@ namespace NHCM.WebUI.Pages.Employment
             {
                 List<SearchedSelectionModel> result = new List<SearchedSelectionModel>();
                 result = await Mediator.Send(command);
+
                 return new JsonResult(new UIResult()
                 {
                     Data = new { list = result },
@@ -136,11 +138,9 @@ namespace NHCM.WebUI.Pages.Employment
             {
                 return new JsonResult(new UIResult()
                 {
-
                     Data = null,
                     Status = UIStatus.Failure,
                     Text = CustomMessages.InternalSystemException,
-
                     Description = ex.Message
                 });
             }
