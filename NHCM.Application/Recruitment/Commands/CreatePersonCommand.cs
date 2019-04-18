@@ -132,9 +132,7 @@ namespace NHCM.Application.Recruitment.Commands
                         Nid = request.Nid,
                         PhotoPath = request.PhotoPath,
                         DocumentTypeId = request.DocumentTypeId,
-
                         OrganizationId = request.OrganizationId
-
                     };
 
                     _context.Person.Add(person);
@@ -142,47 +140,43 @@ namespace NHCM.Application.Recruitment.Commands
                     await _context.SaveChangesAsync(cancellationToken);
 
 
-                    // Search and Return the saved object
-                    //PersonCommon common = new PersonCommon(_context);
-
                     result = await _personCommon.SearchPerson(new SearchPersonQuery() { Id = person.Id });
                     return result;   
             }
             // Update
             else
             {
-                using (_context)
-                {
-                    Person UpdateablePerson = (from p in _context.Person
-                                               where p.Id == request.Id
-                                               select p).First();
 
-                    UpdateablePerson.FirstName = request.FirstName;
-                    UpdateablePerson.LastName = request.LastName;
-                    UpdateablePerson.FatherName = request.FatherName;
-                    UpdateablePerson.FatherNameEng = request.FatherNameEng;
-                    UpdateablePerson.GrandFatherName = request.GrandFatherName;
-                    UpdateablePerson.FirstNameEng = request.FirstNameEng;
-                    UpdateablePerson.LastNameEng = request.LastNameEng;
-                    UpdateablePerson.GrandFatherNameEng = request.GrandFatherNameEng;
-                    UpdateablePerson.BirthLocationId = request.BirthLocationId;
-                    UpdateablePerson.GenderId = request.GenderId;
-                    UpdateablePerson.MaritalStatusId = request.MaritalStatusId;
-                    UpdateablePerson.EthnicityId = request.EthnicityId;
-                    UpdateablePerson.ReligionId = request.ReligionId;
-                    UpdateablePerson.Comments = request.Comments;
-                    UpdateablePerson.BloodGroupId = request.BloodGroupId;
-                    UpdateablePerson.Nid = request.Nid;
-                    UpdateablePerson.PhotoPath = request.PhotoPath;
-                    UpdateablePerson.DocumentTypeId = request.DocumentTypeId;
-                    UpdateablePerson.OrganizationId = request.OrganizationId;
+                Person UpdateablePerson = (from p in _context.Person
+                                           where p.Id == request.Id
+                                           select p).First();
 
-                    await _context.SaveChangesAsync();
+                UpdateablePerson.FirstName = request.FirstName;
+                UpdateablePerson.LastName = request.LastName;
+                UpdateablePerson.FatherName = request.FatherName;
+                UpdateablePerson.FatherNameEng = request.FatherNameEng;
+                UpdateablePerson.GrandFatherName = request.GrandFatherName;
+                UpdateablePerson.FirstNameEng = request.FirstNameEng;
+                UpdateablePerson.LastNameEng = request.LastNameEng;
+                UpdateablePerson.GrandFatherNameEng = request.GrandFatherNameEng;
+                UpdateablePerson.BirthLocationId = request.BirthLocationId;
+                UpdateablePerson.GenderId = request.GenderId;
+                UpdateablePerson.MaritalStatusId = request.MaritalStatusId;
+                UpdateablePerson.EthnicityId = request.EthnicityId;
+                UpdateablePerson.ReligionId = request.ReligionId;
+                UpdateablePerson.Comments = request.Comments;
+                UpdateablePerson.BloodGroupId = request.BloodGroupId;
+                UpdateablePerson.Nid = request.Nid;
+                UpdateablePerson.PhotoPath = request.PhotoPath;
+                UpdateablePerson.DocumentTypeId = request.DocumentTypeId;
+                UpdateablePerson.OrganizationId = request.OrganizationId;
 
-                    result = await _personCommon.SearchPerson(new SearchPersonQuery() { Id = UpdateablePerson.Id });
+                await _context.SaveChangesAsync();
 
-                    return result;
-                }
+                result = await _personCommon.SearchPerson(new SearchPersonQuery() { Id = UpdateablePerson.Id });
+
+                return result;
+
             }
         }
     }

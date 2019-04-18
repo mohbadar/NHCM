@@ -539,7 +539,7 @@
         attach: function () {
             var self = this;
             if (!$.isEmptyObject(self.record)) {
-                alert();
+               
                 path = "/Document/Document/Get";
                 var modalid = self.prefix + self.el.attr('id') + '_Modal';
                 if ($.isEmptyObject(self.modal)) {

@@ -74,10 +74,10 @@ namespace NHCM.WebUI.Pages.Organogram
 
                 List<SearchedPosition> dbResult = new List<SearchedPosition>();
                 dbResult = await Mediator.Send(command);
-                return new JsonResult(new NHCM.WebUI.Types.UIResult()
+                return new JsonResult(new UIResult()
                 {
                     Data = new { list = dbResult },
-                    Status = NHCM.WebUI.Types.UIStatus.Success,
+                    Status = UIStatus.Success,
                     Text = "بست موفقانه ثبت سیستم شد",
                     Description = string.Empty
 
@@ -85,7 +85,7 @@ namespace NHCM.WebUI.Pages.Organogram
             }
             catch (Exception ex)
             {
-                return new JsonResult(new NHCM.WebUI.Types.UIResult()
+                return new JsonResult(new UIResult()
                 {
                     Data = null,
                     Status = NHCM.WebUI.Types.UIStatus.Failure,
@@ -102,7 +102,7 @@ namespace NHCM.WebUI.Pages.Organogram
             {
                 List<SearchedPosition> theParentOfDeletedPosition = new List<SearchedPosition>();
                 theParentOfDeletedPosition = await Mediator.Send(command);
-                return new JsonResult(new NHCM.WebUI.Types.UIResult()
+                return new JsonResult(new UIResult()
                 {
                     Data = new { list = theParentOfDeletedPosition },
                     Status = UIStatus.Success,
@@ -114,7 +114,7 @@ namespace NHCM.WebUI.Pages.Organogram
             }
             catch(Exception ex)
             {
-                return new JsonResult(new NHCM.WebUI.Types.UIResult()
+                return new JsonResult(new UIResult()
                 {
                     Data = new { },
                     Status = UIStatus.Failure,
@@ -144,20 +144,20 @@ namespace NHCM.WebUI.Pages.Organogram
                     result.Add(new { Text = po.PositionTypeText + " | " + po.RankText, ID = po.Id.ToString() });
 
 
-                return new JsonResult(new NHCM.WebUI.Types.UIResult()
+                return new JsonResult(new UIResult()
                 {
                     Data = new { list = result },
-                    Status = NHCM.WebUI.Types.UIStatus.Success,
+                    Status = UIStatus.Success,
                     Text = string.Empty,
                     Description = string.Empty
                 });
             }
             catch (Exception ex)
             {
-                return new JsonResult(new NHCM.WebUI.Types.UIResult()
+                return new JsonResult(new UIResult()
                 {
                     Data = null,
-                    Status = NHCM.WebUI.Types.UIStatus.Failure,
+                    Status = UIStatus.Failure,
                     Text = CustomMessages.InternalSystemException,
                     Description = ex.Message
                 });
@@ -171,21 +171,21 @@ namespace NHCM.WebUI.Pages.Organogram
             {
                 List<SearchedPosition> result = new List<SearchedPosition>();
                 result = await Mediator.Send(command);
-                return new JsonResult(new NHCM.WebUI.Types.UIResult()
+                return new JsonResult(new UIResult()
                 {
                     Data = new { list = result },
-                    Status = NHCM.WebUI.Types.UIStatus.Success,
+                    Status = UIStatus.Success,
                     Text = string.Empty,
                     Description = string.Empty
                 });
             }
             catch (Exception ex)
             {
-                return new JsonResult(new NHCM.WebUI.Types.UIResult()
+                return new JsonResult(new UIResult()
                 {
 
                     Data = null,
-                    Status = NHCM.WebUI.Types.UIStatus.Failure,
+                    Status = UIStatus.Failure,
                     Text = CustomMessages.InternalSystemException,
 
                     Description = ex.Message
