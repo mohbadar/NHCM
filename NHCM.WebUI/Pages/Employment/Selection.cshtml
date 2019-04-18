@@ -1,6 +1,7 @@
 ﻿@page "{handler?}/{id?}"
 @model NHCM.WebUI.Pages.Employment.SelectionModel
 @{
+
     Layout = null;
 }
 
@@ -9,11 +10,15 @@
     <div class="panel-heading">
         <h1 class="panel-title">تعیینات مطابق به تشکیلات تائید شده</h1>
     </div>
+
+   
     <div class="panel-body" style="padding-bottom:5px;">
+
         <form id="dv_Employment_Selection" class="form sub-form page-component" type="form" category="modal" prefix="ux" parent="dv_Employment_Plan" parentcol="OrganoGramId" hasprocess="true" >
             
             <input  type="hidden" asp-for="@Model.ScreenID" id="pageid" /> 
             
+
             <div class="modal fade">
                 <div class="modal-dialog modal-lg">
                     <div class="modal-content">
@@ -157,8 +162,10 @@
                     </div>
                 </div>
             </div>
-            <div class="form-grid" >
-                <table style="direction: rtl;" type="treetable" fullheight="true" filter="true" ignoreinitialformbind="true">
+
+            <div class="form-grid">
+                <table style="direction: rtl;" type="treetable" modal-title="چارت تشکیلات" modal-description="چارت تشکیلات مطابق به جدول تشکیل ترتیب شده ترسیم و آماده پرنت میباشد" organogram="true" node-title="Title" node-sub-title="Code" node-description="PersonName" fullheight="true" filter="true" ignoreinitialformbind="true" action-button="نمایش چارت تشکیلاتی">
+
                     <thead>
                         <tr>
                             <th colname="Title">نوع وظیفه</th>

@@ -1,6 +1,6 @@
 ﻿@page "{handler?}"
 @using NHCM.Domain.Entities;
-@model NHCM.WebUI.Pages.Organogram.dv_Organogram_IARCSCBoardapprovalModel
+@model NHCM.WebUI.Pages.Organogram.IARCSCTashkilSpecialistApprovalModel
 @{
     ViewData["Title"] = "Plan";
     Layout = "~/Pages/Shared/_CustomLayout.cshtml";
@@ -14,7 +14,9 @@
 <div class="panel-body" style="padding-bottom:5px;">
     <form id="dv_Organogram_Plan" class="form main-form page-component" type="form" subform="dv_Organogram_Positions" prefix="orgp" hasprocess="true">
         <fieldset class="content-group">
-            <legend class="text-bold">برای درج تشکیل سال، لطفاً از فورم ذیل استفاده نمائید</legend>
+            <legend class="text-bold">
+                مطالعه و تائید تشکیل از طرف متخصصین تشکیل کمیسیون مستقل اصلاحات اداری و خدمات ملکی
+            </legend>
             <div class="row">
                 <div class="col-md-6 col-sm-12 col-xs-12 pull-right">
                     <div class="form-group has-feedback has-feedback-left">

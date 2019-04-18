@@ -41,7 +41,8 @@
     }
 
     .dash img {
-        height: 70px;
+        height: 90px;
+        width:92px;
     }
 
     .dash h5, .dash span {
@@ -488,4 +489,18 @@ td .label {
     padding: 7px 12px;
     font-family: calibri;
     font-weight: bold;
+}
+
+
+#chart-container {
+    position: relative;
+    display: inline-block;
+    top: 10px;
+    left: 10px;
+    height: 420px;
+    width: calc(100% - 24px);
+    border-radius: 5px;
+    overflow: auto;
+    text-align: center;
+    direction:ltr;
 }

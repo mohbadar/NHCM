@@ -34,11 +34,18 @@ namespace NHCM.WebUI.Pages.Document
 
         public async Task  OnGetAsync()
         {
-            ListOfDocumentTypesD = new List<SelectListItem>();
-            List<DocumentType> documentTypesd = new List<DocumentType>();
-            documentTypesd = await Mediator.Send(new GetDocumentTypeQuery() { ScreenID = 1, ID = null });
-            foreach (DocumentType documentType in documentTypesd)
-                ListOfDocumentTypesD.Add(new SelectListItem() { Text = documentType.Name, Value = documentType.Id.ToString() });
+            ListOfDocumentTypes = new List<SelectListItem>();
+            List<DocumentType> documentTypes = new List<DocumentType>();
+            documentTypes = await Mediator.Send(new GetDocumentTypeQuery() { ScreenID = 1, ID = null });
+            foreach (DocumentType documentType in documentTypes)
+                ListOfDocumentTypes.Add(new SelectListItem() { Text = documentType.Name, Value = documentType.Id.ToString() });
+
+
+            //ListOfDocumentTypesD = new List<SelectListItem>();
+            //List<DocumentType> documentTypesd = new List<DocumentType>();
+            //documentTypesd = await Mediator.Send(new GetDocumentTypeQuery() { ScreenID = 1, ID = null });
+            //foreach (DocumentType documentType in documentTypesd)
+            //    ListOfDocumentTypesD.Add(new SelectListItem() { Text = documentType.Name, Value = documentType.Id.ToString() });
 
         }
         public async Task<IActionResult> OnPostSave([FromBody]CreateDocumentCommand command)

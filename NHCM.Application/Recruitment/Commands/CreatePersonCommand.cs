@@ -19,9 +19,6 @@ namespace NHCM.Application.Recruitment.Commands
 {
     public class CreatePersonCommand : IRequest<List<SearchedPersonModel>>
     {
-       
-      // public Person Person { get; set; }
-
         public string FatherName { get; set; }
         public decimal? Id { get; set; }
         public DateTime ModifiedOn { get; set; }
@@ -32,8 +29,6 @@ namespace NHCM.Application.Recruitment.Commands
         public string ReferenceNo { get; set; }
         public DateTime? CreatedOn { get; set; }
         public int? CreatedBy { get; set; }
-        
-        
         public string GrandFatherName { get; set; }
         public string FirstNameEng { get; set; }
         public string LastNameEng { get; set; }
@@ -50,14 +45,9 @@ namespace NHCM.Application.Recruitment.Commands
         public string Remark { get; set; }
         public int? BloodGroupId { get; set; }
 
-
-
-
-
         public int? DocumentTypeId { get; set; }
         public string PhotoPath { get; set; }
         public string Nid { get; set; }
-
         public int? OrganizationId { get; set; }
 
     }
@@ -79,45 +69,40 @@ namespace NHCM.Application.Recruitment.Commands
         public async Task<List<SearchedPersonModel>> Handle(CreatePersonCommand request, CancellationToken cancellationToken)
         {
 
-           
-
             List<SearchedPersonModel> result = new List<SearchedPersonModel>();
-
-            // throw new BusinessRulesException("این استثنا به شکل امتحانی از لایه سیستم");
-
 
             // Save
             if (request.Id == null || request.Id == default(decimal))
             {
+                #region BuildHrCode
+                StringBuilder PrefixBuilder = new StringBuilder(string.Empty);
+                StringBuilder HrCodeBuilder = new StringBuilder(string.Empty);
 
-                using (_context)
-                {
-                    StringBuilder PrefixBuilder = new StringBuilder(string.Empty);
-                    StringBuilder HrCodeBuilder = new StringBuilder(string.Empty);
+                // Build Prefix
+                PrefixBuilder.Append(("00" + request.BirthLocationId.ToString()).Right(2));
+                PrefixBuilder.Append(("00" + Convert.ToDateTime(request.DateOfBirth).Month.ToString()).Right(2));
+                PrefixBuilder.Append(("0000" + Convert.ToDateTime(request.DateOfBirth).Year.ToString()).Right(4));
+                PrefixBuilder.Append(("00" + Convert.ToDateTime(request.CreatedOn).Day.ToString()).Right(2));
+                PrefixBuilder.Append(("00" + Convert.ToDateTime(request.CreatedOn).Month.ToString()).Right(2));
+                PrefixBuilder.Append(Convert.ToDateTime(request.CreatedOn).Year.ToString().Right(2));
 
-                    // Build Prefix
-                    PrefixBuilder.Append(("00" + request.BirthLocationId.ToString()).Right(2));
-                    PrefixBuilder.Append(("00" + Convert.ToDateTime(request.DateOfBirth).Month.ToString()).Right(2));
-                    PrefixBuilder.Append(("0000" + Convert.ToDateTime(request.DateOfBirth).Year.ToString()).Right(4));
-                    PrefixBuilder.Append(("00" + Convert.ToDateTime(request.CreatedOn).Day.ToString()).Right(2));
-                    PrefixBuilder.Append(("00" + Convert.ToDateTime(request.CreatedOn).Month.ToString()).Right(2));
-                    PrefixBuilder.Append(Convert.ToDateTime(request.CreatedOn).Year.ToString().Right(2));
+                //Build Suffix
+                //Get Current Suffix where its prefix is equal to PrefixBuilder.
+                int? Suffix;
+                int? CurrentSuffix = await _context.Person.Where(p => p.PreFix == PrefixBuilder.ToString()).MaxAsync(s => s.Suffix);
+                if (CurrentSuffix is null) CurrentSuffix = 1;
+                Suffix = CurrentSuffix + 1;
 
-                    //Build Suffix
-                    //Get Current Suffix where its prefix is equal to PrefixBuilder.
-                    int? Suffix;
-                    int? CurrentSuffix = await _context.Person.Where(p => p.PreFix == PrefixBuilder.ToString()).MaxAsync(s => s.Suffix);
-                    if (CurrentSuffix is null) CurrentSuffix = 1;
-                    Suffix = CurrentSuffix + 1;
-
-
-                    // Build HR Code
-                    HrCodeBuilder.Append(PrefixBuilder.ToString());
-                    HrCodeBuilder.Append(("000" + Suffix.ToString()).Right(3));
+                // Build HR Code
+                HrCodeBuilder.Append(PrefixBuilder.ToString());
+                HrCodeBuilder.Append(("000" + Suffix.ToString()).Right(3));
+                #endregion BuildHrCode
 
 
-                    // Construct Person Object
-                    Person person = new Person()
+
+
+                // Construct Person Object
+                Person person = new Person()
                     {
                         FirstName = request.FirstName.Trim(),
                         FirstNameEng = request.FirstNameEng.Trim(),
@@ -161,20 +146,18 @@ namespace NHCM.Application.Recruitment.Commands
                     //PersonCommon common = new PersonCommon(_context);
 
                     result = await _personCommon.SearchPerson(new SearchPersonQuery() { Id = person.Id });
-                    return result;
-                }
+                    return result;   
             }
             // Update
             else
             {
-
                 using (_context)
                 {
                     Person UpdateablePerson = (from p in _context.Person
                                                where p.Id == request.Id
                                                select p).First();
 
-                    UpdateablePerson.FirstName = request.FirstName; //request.FirstName;
+                    UpdateablePerson.FirstName = request.FirstName;
                     UpdateablePerson.LastName = request.LastName;
                     UpdateablePerson.FatherName = request.FatherName;
                     UpdateablePerson.FatherNameEng = request.FatherNameEng;
@@ -182,7 +165,6 @@ namespace NHCM.Application.Recruitment.Commands
                     UpdateablePerson.FirstNameEng = request.FirstNameEng;
                     UpdateablePerson.LastNameEng = request.LastNameEng;
                     UpdateablePerson.GrandFatherNameEng = request.GrandFatherNameEng;
-
                     UpdateablePerson.BirthLocationId = request.BirthLocationId;
                     UpdateablePerson.GenderId = request.GenderId;
                     UpdateablePerson.MaritalStatusId = request.MaritalStatusId;
@@ -190,25 +172,17 @@ namespace NHCM.Application.Recruitment.Commands
                     UpdateablePerson.ReligionId = request.ReligionId;
                     UpdateablePerson.Comments = request.Comments;
                     UpdateablePerson.BloodGroupId = request.BloodGroupId;
-
-
-
                     UpdateablePerson.Nid = request.Nid;
                     UpdateablePerson.PhotoPath = request.PhotoPath;
                     UpdateablePerson.DocumentTypeId = request.DocumentTypeId;
-
-
                     UpdateablePerson.OrganizationId = request.OrganizationId;
 
                     await _context.SaveChangesAsync();
 
-
                     result = await _personCommon.SearchPerson(new SearchPersonQuery() { Id = UpdateablePerson.Id });
 
                     return result;
-
                 }
-
             }
         }
     }
