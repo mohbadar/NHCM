@@ -17,7 +17,7 @@ namespace NHCM.WebUI.Pages
                                        <h4 style = 'font-weight:bold;' >$module</h4>
                                        </div>";
 
-        public string rowtemplate = @"<div class='row'>$cols</div>";
+        public string rowtemplate = @"<div class='row' style='margin-top:5px;'>$cols</div>";
 
         public string htmltemplate = @"
                                     <div class='col-md-3 pull-right'>

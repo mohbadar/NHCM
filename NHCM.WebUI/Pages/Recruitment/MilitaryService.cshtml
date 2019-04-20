@@ -10,7 +10,7 @@
         <h1 class="panel-title">بخش ثبت عسکری</h1>
     </div>
     <div class="panel-body" style="padding-bottom:5px;">
-        <form id="dv_Recruitment_MilitaryService" class="form sub-form page-component" type="form" prefix="uxms" parent="dv_Recruitment_Person" parentcol="PersonID">
+        <form id="dv_Recruitment_MilitaryService"  class="form sub-form page-component" type="form" prefix="uxms" parent="dv_Recruitment_Person" attachment="true" parentcol="PersonID">
             <fieldset class="content-group">
                 <legend class="text-bold">ثبت سفر های کارمند</legend>
                 <div class="row">
@@ -25,8 +25,6 @@
                             </select>
                         </div>
                     </div>
-
-
                     <div class="col-md-3 col-sm-12 col-xs-12 pull-right">
                         <div class="form-group">
                             <label class="text-bold">
@@ -88,7 +86,7 @@
             <hr />
             <div class="row div-form-control">
                 <div class="col-md-12">
-                    <div class="form-group"> 
+                    <div  class="form-group actions"> 
                         <button type="button" class="btn btn-primary" action="save"><i class="icon-floppy-disk position-right"></i>ثبت معلومات</button>
                         <button type="button" class="btn btn-primary" action="search"><i class="icon-search4 position-right"></i>جستجو </button>
                         <button type="button" class="btn btn-primary" action="new"><i class="icon-new-tab position-right"></i>صفحه جدید </button>
@@ -102,10 +100,8 @@
                             <th colname="militaryservicetypetext">نوعیت عسکری</th>
                             <th colname="StartDateText">تاریخ آغاز</th>
                             <th colname="EndDateText">تاریخ ختم </th>
-                            
                         </tr>
                     </thead>
-
                     <tbody></tbody>
                 </table>
             </div>
