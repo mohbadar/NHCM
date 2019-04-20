@@ -26,7 +26,12 @@ namespace NHCM.Application.Organogram.Queries
     public class SearchOrgPositionQueryHandler : IRequestHandler<SearchOrgPositionQuery, List<SearchedOrgPosition>>
     {
         private HCMContext _context;
-        public SearchOrgPositionQueryHandler(HCMContext context) { _context = context; }
+        public SearchOrgPositionQueryHandler(HCMContext context)
+        {
+            _context = context;
+        }
+
+
         public async Task<List<SearchedOrgPosition>> Handle(SearchOrgPositionQuery request, CancellationToken cancellationToken)
         {
             List<SearchedOrgPosition> result = new List<SearchedOrgPosition>();

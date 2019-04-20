@@ -65,7 +65,6 @@ namespace NHCM.WebUI.Pages.Organogram
         {
             try
             {
-
                 List<SearchedPlan> dbResult = await Mediator.Send(command);
                 if (dbResult.Any())
                 {
@@ -77,7 +76,7 @@ namespace NHCM.WebUI.Pages.Organogram
                 return new JsonResult(new UIResult()
                 {
                     Data = new { list = dbResult },
-                    Status = NHCM.WebUI.Types.UIStatus.Success,
+                    Status = UIStatus.Success,
                     Text = "تشکیل موفقانه ثبت سیستم شد",
                     Description = string.Empty
                 });
@@ -87,7 +86,7 @@ namespace NHCM.WebUI.Pages.Organogram
                 return new JsonResult(new NHCM.WebUI.Types.UIResult()
                 {
                     Data = null,
-                    Status = NHCM.WebUI.Types.UIStatus.Failure,
+                    Status = UIStatus.Failure,
                     Text = CustomMessages.InternalSystemException,
                     Description = ex.Message + " \n StackTrace : " + ex.StackTrace
                 });
@@ -100,10 +99,10 @@ namespace NHCM.WebUI.Pages.Organogram
             {
                 List<SearchedPlan> result = new List<SearchedPlan>();
                 result = await Mediator.Send(command);
-                return new JsonResult(new NHCM.WebUI.Types.UIResult()
+                return new JsonResult(new UIResult()
                 {
                     Data = new { list = result },
-                    Status = NHCM.WebUI.Types.UIStatus.Success,
+                    Status = UIStatus.Success,
                     Text = string.Empty,
                     Description = string.Empty
                 });
