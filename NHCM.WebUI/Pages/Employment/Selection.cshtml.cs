@@ -2,11 +2,14 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using NHCM.Application.Employment.Commands;
 using NHCM.Application.Employment.Models;
 using NHCM.Application.Employment.Queries;
+using NHCM.Application.Lookup.Models;
 using NHCM.Application.Lookup.Queries;
+using NHCM.Application.ProcessTracks.Commands;
 using NHCM.Application.Recruitment.Models;
 using NHCM.Application.Recruitment.Queries;
 using NHCM.Domain.Entities;
@@ -20,7 +23,17 @@ namespace NHCM.WebUI.Pages.Employment
         public string ScreenID { get; set;  }
         public async Task OnGetAsync()
         {
-             ScreenID = EncryptionHelper.Encrypt("50");
+             ScreenID = EncryptionHelper.Encrypt("51");
+
+
+
+           int SID = Convert.ToInt32(EncryptionHelper.Decrypt(ScreenID));
+            List<SearchedProcess> Processes = await Mediator.Send(new GetProcess() { ScreenId = SID });
+            if (Processes.Any())
+            {
+                HttpContext.Session.SetInt32("ModuleID", Processes.FirstOrDefault().ModuleId);
+                HttpContext.Session.SetInt32("ProcessID", Processes.FirstOrDefault().Id);
+            }
         }
 
 
@@ -95,6 +108,17 @@ namespace NHCM.WebUI.Pages.Employment
             {
                 List<SearchedSelectionModel> dbResult = new List<SearchedSelectionModel>();
                 dbResult = await Mediator.Send(command);
+
+                //List<SearchedSelectionModel> SelectionDBResult = await Mediator.Send(command);
+
+                if (dbResult.Any())
+                {
+                    int ModuleID = HttpContext.Session.GetInt32("ModuleID").Value;
+                    int ProcessID = HttpContext.Session.GetInt32("ProcessID").Value;
+                    int id = Convert.ToInt32(dbResult.FirstOrDefault().Id);
+
+                    await Mediator.Send(new SaveProcessTracksCommand() { ModuleId = ModuleID, ProcessId = ProcessID, RecordId = id });
+                }
 
                 return new JsonResult(new UIResult()
 
