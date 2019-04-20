@@ -5,6 +5,7 @@ using NHCM.Persistence;
 using System;
 using System.Collections.Generic;
 using System.Text;
+
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
@@ -43,6 +44,7 @@ namespace NHCM.Application.Organogram.Commands
         public async Task<List<SearchedPlan>> Handle(SavePlanCommand request, CancellationToken cancellationToken)
         {
             List<SearchedPlan> result = new List<SearchedPlan>();
+
             if (request.Id == default(decimal))
             {
                 result = await _mediator.Send(new SearchPlanQuery() { OrganizationId = request.OrganizationId, Year = request.Year });

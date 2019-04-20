@@ -50,6 +50,9 @@ namespace NHCM.Application.Recruitment.Commands
         public string Nid { get; set; }
         public int? OrganizationId { get; set; }
 
+        public int ModuleID { get; set; }
+        public int ProcessID { get; set; }
+
     }
 
 
@@ -68,80 +71,105 @@ namespace NHCM.Application.Recruitment.Commands
         }
         public async Task<List<SearchedPersonModel>> Handle(CreatePersonCommand request, CancellationToken cancellationToken)
         {
-
             List<SearchedPersonModel> result = new List<SearchedPersonModel>();
 
             // Save
             if (request.Id == null || request.Id == default(decimal))
             {
-                #region BuildHrCode
-                StringBuilder PrefixBuilder = new StringBuilder(string.Empty);
-                StringBuilder HrCodeBuilder = new StringBuilder(string.Empty);
-
-                // Build Prefix
-                PrefixBuilder.Append(("00" + request.BirthLocationId.ToString()).Right(2));
-                PrefixBuilder.Append(("00" + Convert.ToDateTime(request.DateOfBirth).Month.ToString()).Right(2));
-                PrefixBuilder.Append(("0000" + Convert.ToDateTime(request.DateOfBirth).Year.ToString()).Right(4));
-                PrefixBuilder.Append(("00" + Convert.ToDateTime(request.CreatedOn).Day.ToString()).Right(2));
-                PrefixBuilder.Append(("00" + Convert.ToDateTime(request.CreatedOn).Month.ToString()).Right(2));
-                PrefixBuilder.Append(Convert.ToDateTime(request.CreatedOn).Year.ToString().Right(2));
-
-                //Build Suffix
-                //Get Current Suffix where its prefix is equal to PrefixBuilder.
-                int? Suffix;
-                int? CurrentSuffix = await _context.Person.Where(p => p.PreFix == PrefixBuilder.ToString()).MaxAsync(s => s.Suffix);
-                if (CurrentSuffix is null) CurrentSuffix = 1;
-                Suffix = CurrentSuffix + 1;
-
-                // Build HR Code
-                HrCodeBuilder.Append(PrefixBuilder.ToString());
-                HrCodeBuilder.Append(("000" + Suffix.ToString()).Right(3));
-                #endregion BuildHrCode
-
-
-
-
-                // Construct Person Object
-                Person person = new Person()
+                using(var transaction = _context.Database.BeginTransaction())
+                {
+                    try
                     {
-                        FirstName = request.FirstName.Trim(),
-                        FirstNameEng = request.FirstNameEng.Trim(),
-                        LastName = request.LastName.Trim(),
-                        FatherName = request.FatherName,
-                        FatherNameEng = request.FatherNameEng,
-                        GrandFatherName = request.GrandFatherName,
-                        GrandFatherNameEng = request.GrandFatherNameEng,
-                        LastNameEng = request.LastNameEng.Trim(),
-                        PreFix = PrefixBuilder.ToString(),
-                        Suffix = Suffix,
-                        Hrcode = HrCodeBuilder.ToString(),
-                        DateOfBirth = request.DateOfBirth,
-                        BirthLocationId = request.BirthLocationId,
-                        GenderId = request.GenderId,
-                        MaritalStatusId = request.MaritalStatusId,
-                        EthnicityId = request.EthnicityId,
-                        ReligionId = request.ReligionId,
-                        Comments = request.Comments,
-                        StatusId = request.StatusId,
-                        Remark = request.Remark,
-                        BloodGroupId = request.BloodGroupId,
-                        ModifiedBy = request.ModifiedBy,
-                        CreatedBy = request.CreatedBy,
-                        CreatedOn = request.CreatedOn,
+                        #region BuildHrCode
+                        StringBuilder PrefixBuilder = new StringBuilder(string.Empty);
+                        StringBuilder HrCodeBuilder = new StringBuilder(string.Empty);
 
-                        Nid = request.Nid,
-                        PhotoPath = request.PhotoPath,
-                        DocumentTypeId = request.DocumentTypeId,
-                        OrganizationId = request.OrganizationId
-                    };
+                        // Build Prefix
+                        PrefixBuilder.Append(("00" + request.BirthLocationId.ToString()).Right(2));
+                        PrefixBuilder.Append(("00" + Convert.ToDateTime(request.DateOfBirth).Month.ToString()).Right(2));
+                        PrefixBuilder.Append(("0000" + Convert.ToDateTime(request.DateOfBirth).Year.ToString()).Right(4));
+                        PrefixBuilder.Append(("00" + Convert.ToDateTime(request.CreatedOn).Day.ToString()).Right(2));
+                        PrefixBuilder.Append(("00" + Convert.ToDateTime(request.CreatedOn).Month.ToString()).Right(2));
+                        PrefixBuilder.Append(Convert.ToDateTime(request.CreatedOn).Year.ToString().Right(2));
 
-                    _context.Person.Add(person);
-                    // Before Saving the changes. Get the ID of inserted person and insert a new record to pol.Employee
-                    await _context.SaveChangesAsync(cancellationToken);
+                        //Build Suffix
+                        //Get Current Suffix where its prefix is equal to PrefixBuilder.
+                        int? Suffix;
+                        int? CurrentSuffix = await _context.Person.Where(p => p.PreFix == PrefixBuilder.ToString()).MaxAsync(s => s.Suffix);
+                        if (CurrentSuffix is null) CurrentSuffix = 1;
+                        Suffix = CurrentSuffix + 1;
+
+                        // Build HR Code
+                        HrCodeBuilder.Append(PrefixBuilder.ToString());
+                        HrCodeBuilder.Append(("000" + Suffix.ToString()).Right(3));
+                        #endregion BuildHrCode
+                        #region SaveAndReturnResult
+                        // Construct Person Object
+                        Person person = new Person()
+                        {
+                            FirstName = request.FirstName.Trim(),
+                            FirstNameEng = request.FirstNameEng.Trim(),
+                            LastName = request.LastName.Trim(),
+                            FatherName = request.FatherName,
+                            FatherNameEng = request.FatherNameEng,
+                            GrandFatherName = request.GrandFatherName,
+                            GrandFatherNameEng = request.GrandFatherNameEng,
+                            LastNameEng = request.LastNameEng.Trim(),
+                            PreFix = PrefixBuilder.ToString(),
+                            Suffix = Suffix,
+                            Hrcode = HrCodeBuilder.ToString(),
+                            DateOfBirth = request.DateOfBirth,
+                            BirthLocationId = request.BirthLocationId,
+                            GenderId = request.GenderId,
+                            MaritalStatusId = request.MaritalStatusId,
+                            EthnicityId = request.EthnicityId,
+                            ReligionId = request.ReligionId,
+                            Comments = request.Comments,
+                            StatusId = request.StatusId,
+                            Remark = request.Remark,
+                            BloodGroupId = request.BloodGroupId,
+                            ModifiedBy = request.ModifiedBy,
+                            CreatedBy = request.CreatedBy,
+                            CreatedOn = request.CreatedOn,
+
+                            Nid = request.Nid,
+                            PhotoPath = request.PhotoPath,
+                            DocumentTypeId = request.DocumentTypeId,
+                            OrganizationId = request.OrganizationId
+                        };
+                        _context.Person.Add(person);
+                        await _context.SaveChangesAsync(cancellationToken);
+
+                        ProcessTracking PT = new ProcessTracking()
+                        {
+                            // CHANGE: Don't convert person.Id to integer, instead make the RecordId to include different types
+                            RecordId = Convert.ToInt32(person.Id),
+                            ProcessId = (Int16)request.ProcessID,
+                            StatusId = 5, // In Process
+                            ModuleId = request.ModuleID,
+                            ReferedProcessId = 1,
+                            CreatedOn = DateTime.Now
+                        };
+                        _context.ProcessTracking.Add(PT);
+
+                        await _context.SaveChangesAsync(cancellationToken);
+
+                        result = await _personCommon.SearchPerson(new SearchPersonQuery() { Id = person.Id });
 
 
-                    result = await _personCommon.SearchPerson(new SearchPersonQuery() { Id = person.Id });
-                    return result;   
+                        #endregion SaveAndReturnResult
+
+                        transaction.Commit();
+                    }
+                    catch (Exception  ex)
+                    {
+                        transaction.Rollback();
+                        throw new Exception("Intentional Exception");
+                    }
+                }
+
+                return result;
+
             }
             // Update
             else
