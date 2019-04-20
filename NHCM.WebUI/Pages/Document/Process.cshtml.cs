@@ -58,20 +58,20 @@ namespace NHCM.WebUI.Pages.Document
                 {
                     command.ModuleId = CurrentProcess.ModuleId;
                     QueryResult = await Mediator.Send(command);
-                    return new JsonResult(new Types.UIResult()
+                    return new JsonResult(new UIResult()
                     {
                         Data = new { list = QueryResult },
-                        Status = Types.UIStatus.Success,
+                        Status = UIStatus.Success,
                         Text = "اسناد موفقانه ارسال گردید",
                         Description = "اسناد انتخاب شده، موفقانه به مرحله تعیین شده ارسال گردید"
                     });
                 }
                 else
                 {
-                    return new JsonResult(new Types.UIResult()
+                    return new JsonResult(new UIResult()
                     {
                         Data = null,
-                        Status = Types.UIStatus.Failure,
+                        Status = UIStatus.Failure,
                         Text = "کوشش خلاف اصول",
                         Description = "شما اجازه ارسال این سند را به مراحل انتخاب شده ندارید. سند مذکور خارج از حدود صلاحیت این مرحله میباشد"
                     });
@@ -79,10 +79,10 @@ namespace NHCM.WebUI.Pages.Document
             }
             catch (Exception ex)
             {
-                return new JsonResult(new Types.UIResult()
+                return new JsonResult(new UIResult()
                 {
                     Data = null,
-                    Status = Types.UIStatus.Failure,
+                    Status = UIStatus.Failure,
                     Text = CustomMessages.InternalSystemException,
                     Description = ex.Message + " \n StackTrace : " + ex.StackTrace
                 });
@@ -97,20 +97,20 @@ namespace NHCM.WebUI.Pages.Document
                 List<SearchedProcessTracks> QueryResult = new List<SearchedProcessTracks>();
                 command.ModuleId = HttpContext.Session.GetInt32("ModuleID").Value;
                 QueryResult = await Mediator.Send(command);
-                return new JsonResult(new Types.UIResult()
+                return new JsonResult(new UIResult()
                 {
                     Data = new { list = QueryResult },
-                    Status = Types.UIStatus.Success,
+                    Status = UIStatus.Success,
                     Text = string.Empty,
                     Description = string.Empty
                 });
             }
             catch (Exception ex)
             {
-                return new JsonResult(new Types.UIResult()
+                return new JsonResult(new UIResult()
                 {
                     Data = null,
-                    Status = Types.UIStatus.Failure,
+                    Status = UIStatus.Failure,
                     Text = CustomMessages.InternalSystemException,
                     Description = ex.Message + " \n StackTrace : " + ex.StackTrace
                 });
@@ -119,10 +119,10 @@ namespace NHCM.WebUI.Pages.Document
 
         public IActionResult OnPostProcesses([FromBody] String ID)
         {
-            return new JsonResult(new Types.UIResult()
+            return new JsonResult(new UIResult()
             {
                 Data = 20,
-                Status = Types.UIStatus.Success,
+                Status = UIStatus.Success,
                 Text = string.Empty,
                 Description = string.Empty
             });
