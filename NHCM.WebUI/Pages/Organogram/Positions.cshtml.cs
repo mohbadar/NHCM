@@ -15,21 +15,16 @@ using NHCM.WebUI.Types;
 
 namespace NHCM.WebUI.Pages.Organogram
 {
-
-
-
   //  [Authorize(Policy = "OrganizationTahskil")]
-
 
     public class PositionsModel : BasePage
     {
-
         public async Task OnGetAsync()
         {
             ListOfStatus = new List<SelectListItem>();
-            List<Status> statuses = new List<NHCM.Domain.Entities.Status>();
+            List<Status> statuses = new List<Status>();
             statuses = await Mediator.Send(new GetStatusQuery() { category = "PS" });
-            foreach (NHCM.Domain.Entities.Status status in statuses)
+            foreach (Status status in statuses)
                 ListOfStatus.Add(new SelectListItem() { Text = status.Dari, Value = status.Id.ToString() });
 
 
@@ -64,7 +59,6 @@ namespace NHCM.WebUI.Pages.Organogram
             locations = await Mediator.Send(new GetLocationQuery() { ID = null });
             foreach (Location l in locations)
                 ListOfLocations.Add(new SelectListItem(l.Dari, l.Id.ToString()));
-
         }
 
 
@@ -72,7 +66,6 @@ namespace NHCM.WebUI.Pages.Organogram
         {
             try
             {
-
 
                 List<SearchedPosition> dbResult = new List<SearchedPosition>();
                 dbResult = await Mediator.Send(command);
@@ -87,13 +80,7 @@ namespace NHCM.WebUI.Pages.Organogram
             }
             catch (Exception ex)
             {
-                return new JsonResult(new UIResult()
-                {
-                    Data = null,
-                    Status = NHCM.WebUI.Types.UIStatus.Failure,
-                    Text = CustomMessages.InternalSystemException,
-                    Description = ex.Message + " \n StackTrace : " + ex.StackTrace
-                });
+                return new JsonResult(CustomMessages.FabricateException(ex));
             }
 
         }
@@ -116,6 +103,9 @@ namespace NHCM.WebUI.Pages.Organogram
             }
             catch(Exception ex)
             {
+
+
+
                 return new JsonResult(new UIResult()
                 {
                     Data = new { },
@@ -126,9 +116,6 @@ namespace NHCM.WebUI.Pages.Organogram
 
             }
         }
-
-
-
 
         public async Task<IActionResult> OnPostPositions([FromBody] SearchPositionQuery command)
         {
@@ -183,15 +170,7 @@ namespace NHCM.WebUI.Pages.Organogram
             }
             catch (Exception ex)
             {
-                return new JsonResult(new UIResult()
-                {
-
-                    Data = null,
-                    Status = UIStatus.Failure,
-                    Text = CustomMessages.InternalSystemException,
-
-                    Description = ex.Message
-                });
+                return new JsonResult(CustomMessages.FabricateException(ex));
             }
         }
     }

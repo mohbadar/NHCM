@@ -23,6 +23,9 @@ namespace NHCM.Application.Organogram.Commands
         public int IsPositionsCopied { get; set; }
         public int NumberOfPositions { get; set; }
         public short StatusId { get; set; }
+
+        public int ModuleID { get; set; }
+        public int ProcessID { get; set; }
     }
 
 
@@ -42,7 +45,7 @@ namespace NHCM.Application.Organogram.Commands
             List<SearchedPlan> result = new List<SearchedPlan>();
             if (request.Id == default(decimal))
             {
-                result = await _mediator.Send(new Queries.SearchPlanQuery() { OrganizationId = request.OrganizationId, Year = request.Year });
+                result = await _mediator.Send(new SearchPlanQuery() { OrganizationId = request.OrganizationId, Year = request.Year });
                 if (result.Any())
                 {
                     throw new BusinessRulesException("اداره در سال انتخاب شده تشکیل دارد");
