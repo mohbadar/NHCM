@@ -1,10 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Text;
 
-namespace NHCM.Domain.Entities
+namespace NHCM.Persistence.models
 {
-  public  class Audit
+    public partial class Audit
     {
         public long Id { get; set; }
         public string DbContextObject { get; set; }

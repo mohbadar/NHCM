@@ -164,7 +164,7 @@ namespace NHCM.Application.Recruitment.Commands
                     catch (Exception  ex)
                     {
                         transaction.Rollback();
-                        throw new Exception("Intentional Exception");
+                        throw new Exception();
                     }
                 }
 
