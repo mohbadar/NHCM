@@ -8,6 +8,7 @@ using System.Collections.Generic;
 using NHCM.Domain.Entities;
 using NHCM.Persistence.Infrastructure;
 using System.Linq;
+using NHCM.Persistence.Infrastructure.Services;
 
 namespace NHCM.Persistence
 {
@@ -99,24 +100,19 @@ namespace NHCM.Persistence
 
         #region AuditionSetting
 
-
-        public override async Task<int> SaveChangesAsync(CancellationToken cancellationToken = default(CancellationToken))
+     //   private CurrentUser currentUser;
+        public  async Task<int> SaveChangesAsync(int UserId, CancellationToken cancellationToken = default(CancellationToken))
         {
             List<AuditEntry> AuditEntries = new List<AuditEntry>();
-            var result = await base.SaveChangesAsync( cancellationToken);
 
+            AuditEntries =   OnBeforeSaveChanges(UserId);
+            var result = await base.SaveChangesAsync( cancellationToken);
             await OnAfterSaveChanges(AuditEntries);
             return result;
-
-
-
-
-
-           // return base.SaveChangesAsync(cancellationToken);
         }
 
 
-        private List<AuditEntry> OnBeforeSaveChanges()
+        private  List<AuditEntry> OnBeforeSaveChanges(int UserId)
         {
             ChangeTracker.DetectChanges();
             var auditEntries = new List<AuditEntry>();
@@ -128,6 +124,7 @@ namespace NHCM.Persistence
 
                 var auditEntry = new AuditEntry(entry);
                 auditEntry.TableName = entry.Metadata.Relational().TableName;
+                auditEntry.UserId = UserId;
                 auditEntries.Add(auditEntry);
 
                 foreach (var property in entry.Properties)
@@ -150,10 +147,12 @@ namespace NHCM.Persistence
                     {
                         case EntityState.Added:
                             auditEntry.NewValues[propertyName] = property.CurrentValue;
+                            auditEntry.OperationTypeId = 1;
                             break;
 
                         case EntityState.Deleted:
                             auditEntry.OldValues[propertyName] = property.OriginalValue;
+                            auditEntry.OperationTypeId = 3;
                             break;
 
                         case EntityState.Modified:
@@ -161,6 +160,8 @@ namespace NHCM.Persistence
                             {
                                 auditEntry.OldValues[propertyName] = property.OriginalValue;
                                 auditEntry.NewValues[propertyName] = property.CurrentValue;
+                                auditEntry.OperationTypeId = 2;
+                               
                             }
                             break;
                     }

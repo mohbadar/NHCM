@@ -14,6 +14,7 @@ using NHCM.Application.Infrastructure.Exceptions;
 using NHCM.Application.Recruitment.Queries;
 using NHCM.Application.Recruitment.Models;
 using NHCM.Application.Common;
+using NHCM.Persistence.Infrastructure.Services;
 
 namespace NHCM.Application.Recruitment.Commands
 {
@@ -63,11 +64,14 @@ namespace NHCM.Application.Recruitment.Commands
         private readonly HCMContext _context;
         private readonly IMediator _mediator;
         private readonly PersonCommon _personCommon;
-        public CreatePersonCommandHandler(HCMContext context, IMediator mediator)
+        private readonly ICurrentUser _currentUser;
+        public CreatePersonCommandHandler(HCMContext context, IMediator mediator, ICurrentUser currentUser)
         {
             _context = context;
             _mediator = mediator;
             _personCommon = new PersonCommon(_context);
+            _currentUser = currentUser;
+
         }
         public async Task<List<SearchedPersonModel>> Handle(CreatePersonCommand request, CancellationToken cancellationToken)
         {
@@ -76,6 +80,9 @@ namespace NHCM.Application.Recruitment.Commands
             // Save
             if (request.Id == null || request.Id == default(decimal))
             {
+
+                int CurrentUserId = await _currentUser.GetUserId();
+
                 using(var transaction = _context.Database.BeginTransaction())
                 {
                     try
@@ -138,7 +145,7 @@ namespace NHCM.Application.Recruitment.Commands
                             OrganizationId = request.OrganizationId
                         };
                         _context.Person.Add(person);
-                        await _context.SaveChangesAsync(cancellationToken);
+                        await _context.SaveChangesAsync(CurrentUserId, cancellationToken);
 
                         ProcessTracking PT = new ProcessTracking()
                         {
@@ -152,7 +159,7 @@ namespace NHCM.Application.Recruitment.Commands
                         };
                         _context.ProcessTracking.Add(PT);
 
-                        await _context.SaveChangesAsync(cancellationToken);
+                        await _context.SaveChangesAsync(CurrentUserId,  cancellationToken);
 
                         result = await _personCommon.SearchPerson(new SearchPersonQuery() { Id = person.Id });
 

@@ -1,4 +1,5 @@
-﻿using Microsoft.EntityFrameworkCore.ChangeTracking;
+﻿using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.ChangeTracking;
 using Newtonsoft.Json;
 using NHCM.Domain.Entities;
 using NHCM.Persistence.Infrastructure.Services;
@@ -14,32 +15,56 @@ namespace NHCM.Persistence.Infrastructure
 
     public class AuditEntry
     {
-       
-        public AuditEntry(EntityEntry entry)
-        {
-            Entry = entry;
-           
-        }
+
+
 
         public EntityEntry Entry { get; }
         public string TableName { get; set; }
+        public int UserId { get; set; }
+        public int OperationTypeId { get; set; }
         public Dictionary<string, object> KeyValues { get; } = new Dictionary<string, object>();
         public Dictionary<string, object> OldValues { get; } = new Dictionary<string, object>();
         public Dictionary<string, object> NewValues { get; } = new Dictionary<string, object>();
         public List<PropertyEntry> TemporaryProperties { get; } = new List<PropertyEntry>();
+        
 
         public bool HasTemporaryProperties => TemporaryProperties.Any();
+
+
+
+        public AuditEntry(EntityEntry entry )
+        {
+            Entry = entry;
+            
+           
+        }
+
+        
 
         public Audit ToAudit()
         {
             var audit = new Audit();
 
 
-            audit.OperationTypeId = 1;
-            audit.ReocordId = JsonConvert.SerializeObject(KeyValues);   // CHANGE: change the column type of RecordId from long to string to include json
+            //switch (Entry.State)
+            //{
+            //    case EntityState.Added:
+            //        audit.OperationTypeId = 1;  // 1 From au.OperationType for Insert
+            //        break;
+            //    case EntityState.Modified:
+            //        audit.OperationTypeId = 2; // 2 From au.OperationType for Update
+            //        break;
+            //    case EntityState.Deleted:
+            //        audit.OperationTypeId = 3; // 3 From au.OperationType for Delete
+            //        break;
+            //}
+           
+            
+            audit.ReocordId = JsonConvert.SerializeObject(KeyValues);
             audit.OperationDate = DateTime.Now;
             audit.DbOjbectName = TableName;
-            audit.UserId = 1000; // CHANGE: statement should recieve the id of current user running the operation.
+            audit.UserId = UserId;
+            audit.OperationTypeId = OperationTypeId;
 
             audit.ValueBefore = OldValues.Count == 0 ? null : JsonConvert.SerializeObject(OldValues);
             audit.ValueAfter = NewValues.Count == 0 ? null : JsonConvert.SerializeObject(NewValues);
