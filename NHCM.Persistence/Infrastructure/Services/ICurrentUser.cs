@@ -9,5 +9,6 @@ namespace NHCM.Persistence.Infrastructure.Services
     {
         Task<int?> GetUserOrganizationID();
         Task<bool?> IsSuperAdmin();
+        Task<int> GetUserId();
     }
 }

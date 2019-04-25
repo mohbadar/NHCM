@@ -38,6 +38,14 @@ namespace NHCM.Persistence.Infrastructure.Services
             return IsUserASuperAdmin ?? false;
         }
 
+        public async Task<int> GetUserId()
+        {
+            HCMUser user = await _userManager.GetUserAsync(_httpContextAccessor.HttpContext.User);
+            int UserID= user.Id;
+            return UserID;
+           
+        }
+
   
     }
 }

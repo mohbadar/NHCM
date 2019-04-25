@@ -138,20 +138,13 @@ namespace NHCM.WebUI.Pages.Recruitment
                 command.CreatedBy = 10;
                 command.CreatedOn = DateTime.Now;
 
+                command.ModuleID = HttpContext.Session.GetInt32("ModuleID").Value;
+                command.ProcessID = HttpContext.Session.GetInt32("ProcessID").Value;
                 command.OrganizationId = await _currentUser.GetUserOrganizationID();
 
                 List<SearchedPersonModel> SaveResult = new List<SearchedPersonModel>();
                 
                 SaveResult = await Mediator.Send(command);
-
-                if (SaveResult.Any())
-                {
-                    int ModuleID = HttpContext.Session.GetInt32("ModuleID").Value;
-                    int ProcessID = HttpContext.Session.GetInt32("ProcessID").Value;
-                    int id = Convert.ToInt32(SaveResult.FirstOrDefault().Id);
-
-                    await Mediator.Send(new SaveProcessTracksCommand() { ModuleId = ModuleID, ProcessId = ProcessID, RecordId = id });
-                }
 
                 return new JsonResult(new UIResult()
                 {
@@ -161,7 +154,6 @@ namespace NHCM.WebUI.Pages.Recruitment
                     Description = string.Empty
                 });
 
-              
             }
             catch (Exception ex)
             {

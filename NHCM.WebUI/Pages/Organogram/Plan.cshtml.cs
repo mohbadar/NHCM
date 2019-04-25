@@ -70,6 +70,8 @@ namespace NHCM.WebUI.Pages.Organogram
                 {
                     int ModuleID = HttpContext.Session.GetInt32("ModuleID").Value;
                     int ProcessID = HttpContext.Session.GetInt32("ProcessID").Value;
+
+                    
                     await Mediator.Send(new SaveProcessTracksCommand() { ModuleId = ModuleID, ProcessId = ProcessID, RecordId = dbResult.FirstOrDefault().Id });
                 }
 
@@ -83,13 +85,7 @@ namespace NHCM.WebUI.Pages.Organogram
             }
             catch (Exception ex)
             {
-                return new JsonResult(new NHCM.WebUI.Types.UIResult()
-                {
-                    Data = null,
-                    Status = UIStatus.Failure,
-                    Text = CustomMessages.InternalSystemException,
-                    Description = ex.Message + " \n StackTrace : " + ex.StackTrace
-                });
+                return new JsonResult(CustomMessages.FabricateException(ex));
             }
         }
 

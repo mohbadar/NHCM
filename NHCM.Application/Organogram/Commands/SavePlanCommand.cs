@@ -4,6 +4,7 @@ using NHCM.Domain.Entities;
 using NHCM.Persistence;
 using System;
 using System.Collections.Generic;
+using System.Text;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
@@ -22,6 +23,9 @@ namespace NHCM.Application.Organogram.Commands
         public int IsPositionsCopied { get; set; }
         public int NumberOfPositions { get; set; }
         public int StatusId { get; set; }
+        public int ModuleID { get; set; }
+        public int ProcessID { get; set; }
+
     }
     public class SaveOrganogramCommandHandler : IRequestHandler<SavePlanCommand, List<SearchedPlan>>
     {
@@ -37,6 +41,7 @@ namespace NHCM.Application.Organogram.Commands
         public async Task<List<SearchedPlan>> Handle(SavePlanCommand request, CancellationToken cancellationToken)
         {
             List<SearchedPlan> result = new List<SearchedPlan>();
+
             if (request.Id == default(decimal))
             {
                 result = await _mediator.Send(new SearchPlanQuery() { OrganizationId = request.OrganizationId, Year = request.Year });
