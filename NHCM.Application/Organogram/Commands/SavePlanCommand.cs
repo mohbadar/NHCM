@@ -4,7 +4,6 @@ using NHCM.Domain.Entities;
 using NHCM.Persistence;
 using System;
 using System.Collections.Generic;
-using System.Text;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
@@ -22,10 +21,8 @@ namespace NHCM.Application.Organogram.Commands
         public int Year { get; set; }
         public int IsPositionsCopied { get; set; }
         public int NumberOfPositions { get; set; }
-        public short StatusId { get; set; }
+        public int StatusId { get; set; }
     }
-
-
     public class SaveOrganogramCommandHandler : IRequestHandler<SavePlanCommand, List<SearchedPlan>>
     {
         private readonly HCMContext _context;
@@ -42,7 +39,7 @@ namespace NHCM.Application.Organogram.Commands
             List<SearchedPlan> result = new List<SearchedPlan>();
             if (request.Id == default(decimal))
             {
-                result = await _mediator.Send(new Queries.SearchPlanQuery() { OrganizationId = request.OrganizationId, Year = request.Year });
+                result = await _mediator.Send(new SearchPlanQuery() { OrganizationId = request.OrganizationId, Year = request.Year });
                 if (result.Any())
                 {
                     throw new BusinessRulesException("اداره در سال انتخاب شده تشکیل دارد");
@@ -60,7 +57,7 @@ namespace NHCM.Application.Organogram.Commands
                     _context.OrganoGram.Add(organogram);
                     await _context.SaveChangesAsync(cancellationToken);
 
-                    if (request.IsPositionsCopied == 24)
+                    if (request.IsPositionsCopied == 1)
                     {
                         OrganoGram orglast = (from a in _context.OrganoGram where a.Year == (request.Year - 1) && a.OrganizationId == request.OrganizationId select a).SingleOrDefault();
                         List<Position> list = _context.Position.Where(c => c.OrganoGramId == orglast.Id && c.ParentId == null).ToList();
@@ -113,9 +110,7 @@ namespace NHCM.Application.Organogram.Commands
                 });
             }
             return result;
-        }
-
-
+        } 
         public async Task<List<SearchedPosition>> AddPositionAsync(Position p, int PlanID, int? ParentID)
         {
             List<SearchedPosition> positionresults = await _mediator.Send(new SavePositionCommand()

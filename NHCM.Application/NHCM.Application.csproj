@@ -21,7 +21,6 @@
   <ItemGroup>
     <Folder Include="Employment\Commands\" />
     <Folder Include="Employment\Models\" />
-    <Folder Include="Lookup\Commands\" />
     <Folder Include="Lookup\Validators\" />
   </ItemGroup>
 </Project>

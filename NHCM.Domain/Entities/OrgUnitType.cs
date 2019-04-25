@@ -9,7 +9,5 @@ namespace NHCM.Domain.Entities
         public string Name { get; set; }
         public short? ParentId { get; set; }
         public bool? IsHead { get; set; }
-
-        public virtual OrgPosition OrgPosition { get; set; }
     }
 }

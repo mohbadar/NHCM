@@ -14,8 +14,7 @@ namespace NHCM.Application.Lookup.Queries
    public class GetCertificationQuery : IRequest<List<Certification>>
     {
         public int? ID { get; set; }
-    }
-
+    } 
     public class GetCertificationQueryHandler : IRequestHandler<GetCertificationQuery, List<Certification>>
     {
         private readonly HCMContext _dbContext;
@@ -28,21 +27,14 @@ namespace NHCM.Application.Lookup.Queries
             List<Certification> list = new List<Certification>();
 
             if (request.ID == null || request.ID == 0)
-            {
-
-               
-                list = await _dbContext.Certification.ToListAsync(cancellationToken);
-
-                return list;
-
-
+            { 
+                list = await _dbContext.Certification.ToListAsync(cancellationToken); 
+                return list; 
             }
             else
-            {
-               
+            { 
                 list = await _dbContext.Certification.Where(b => b.Id == request.ID).ToListAsync(cancellationToken);
-                return list;
-
+                return list; 
             }
         }
     }

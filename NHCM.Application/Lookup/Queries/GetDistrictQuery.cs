@@ -8,16 +8,7 @@ using NHCM.Persistence;
 using Microsoft.EntityFrameworkCore;
 
 namespace NHCM.Application.Lookup.Queries
-{
-
-
-
-
-    
-
-
-
-
+{ 
     public class GetDistrictQuery : IRequest<List<District>>
     {
         public int? ID { get; set; }
@@ -31,19 +22,12 @@ namespace NHCM.Application.Lookup.Queries
             _context = context;
         }
         public async Task<List<District>> Handle(GetDistrictQuery request, CancellationToken cancellationToken)
-        {
-
-
-
-
+        {  
             List<District> result = new List<District>();
 
             if (request.ID == null || request.ID == default(int)) result = await _context.District.ToListAsync(cancellationToken);
-            else result = await _context.District.Where(e => e.Id == request.ID).ToListAsync(cancellationToken);
-
-
+            else result = await _context.District.Where(e => e.Id == request.ID).ToListAsync(cancellationToken);            
             return result;
-
         }
     }
 }

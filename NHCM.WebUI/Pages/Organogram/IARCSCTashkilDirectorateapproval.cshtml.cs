@@ -62,6 +62,7 @@ namespace NHCM.WebUI.Pages.Organogram
             try
             {
                 List<SearchedPlan> result = new List<SearchedPlan>();
+                command.ProccessID = HttpContext.Session.GetInt32("ProcessID").Value;
                 result = await Mediator.Send(command);
                 return new JsonResult(new NHCM.WebUI.Types.UIResult()
                 {

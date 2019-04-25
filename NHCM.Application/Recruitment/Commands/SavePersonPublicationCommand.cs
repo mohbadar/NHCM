@@ -46,13 +46,10 @@ namespace NHCM.Application.Recruitment.Commands
             if (request.Id == null || request.Id == default(int))
             {
                 // Save
-
                 using (_context)
                 {
-
                     Publication publication = new Publication()
                     {
-                       
                        PersonId  = request.PersonId,
                         PublicationTypeId = request.PublicationTypeId,
                         Subject = request.Subject,
@@ -64,39 +61,18 @@ namespace NHCM.Application.Recruitment.Commands
                         CreatedBy = request.CreatedBy,
                         Isbn = request.Isbn,
                         NoofPages = request.NoofPages,
-
-                    };
-                    
-
-
-
-
+                    };                   
                     _context.Publication.Add(publication);
                     await _context.SaveChangesAsync(cancellationToken);
 
                     result = await _mediator.Send(new SearchPersonPublicationQuery() { Id = publication.Id });
-
-
                 }
-
-
-
-
             }
-
-
-
             else
             {
-
-
-
-
                 using (_context)
                 {
                     Publication toUpdatePublication = await _context.Publication.Where(ms => ms.Id == request.Id).SingleOrDefaultAsync();
-
-
                     toUpdatePublication.PersonId = request.PersonId;
                     toUpdatePublication.PublicationTypeId = request.PublicationTypeId;
                     toUpdatePublication.Subject = request.Subject;
@@ -108,16 +84,10 @@ namespace NHCM.Application.Recruitment.Commands
                     toUpdatePublication.CreatedBy = request.CreatedBy;
                     toUpdatePublication.Isbn = request.Isbn;
                     toUpdatePublication.NoofPages = request.NoofPages;
-
                     await _context.SaveChangesAsync(cancellationToken);
-
                     result = await _mediator.Send(new SearchPersonPublicationQuery() { Id = toUpdatePublication.Id });
-
                 }
-
             }
-
-
             return result;
         }
     }

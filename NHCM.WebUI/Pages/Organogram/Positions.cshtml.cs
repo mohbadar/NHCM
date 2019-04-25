@@ -72,8 +72,6 @@ namespace NHCM.WebUI.Pages.Organogram
         {
             try
             {
-
-
                 List<SearchedPosition> dbResult = new List<SearchedPosition>();
                 dbResult = await Mediator.Send(command);
                 return new JsonResult(new UIResult()

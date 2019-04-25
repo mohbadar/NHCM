@@ -10,13 +10,9 @@ using System.Linq;
 using Microsoft.EntityFrameworkCore;
 
 namespace NHCM.Application.Recruitment.Queries
-{
-   
-
-
+{ 
     public class SearchPersonAddressQuery : IRequest<List<SearchedPersonAdress>>
-    {
-
+    { 
         public decimal? Id { get; set; }
         public decimal? PersonId { get; set; }
 
@@ -37,8 +33,7 @@ namespace NHCM.Application.Recruitment.Queries
         public string Cvillage { get; set; }
          
     }
-
-
+     
     public class SearchPersonAddressQueryHandler : IRequestHandler<SearchPersonAddressQuery, List<SearchedPersonAdress>>
     {
 

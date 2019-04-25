@@ -15,7 +15,7 @@ namespace NHCM.Application.Organogram.Queries
     {
         public int? Id { get; set; }
         public int? OrganizationId { get; set; }
-        public short StatusId { get; set; }
+        public int StatusId { get; set; }
         public DateTime ModifiedOn { get; set; }
         public string ModifiedBy { get; set; }
         public DateTime CreatedOn { get; set; }

@@ -12,15 +12,13 @@ using Microsoft.EntityFrameworkCore;
 namespace NHCM.Application.Organogram.Queries
 {
     public class SearchPositionQuery : IRequest<List<SearchedPosition>>
-    {
-
+    { 
         public decimal? Id { get; set; }
         public int? OrganoGramId { get; set; }
         public int? ParentId { get; set; }
         public short? PositionTypeId { get; set; }
         public short? RankId { get; set; }
-    }
-
+    } 
     public class SearchPositionQueryHandler : IRequestHandler<SearchPositionQuery, List<SearchedPosition>>
     {
         private HCMContext _context;
@@ -29,34 +27,27 @@ namespace NHCM.Application.Organogram.Queries
         {
             _context = context;
             _mediator = mediator;
-        }
-
+        } 
         public async Task<List<SearchedPosition>> Handle(SearchPositionQuery request, CancellationToken cancellationToken)
         {
             List<SearchedPosition> result = new List<SearchedPosition>();
-            List<SearchedOrgPosition> OrgPositions = await _mediator.Send(new Queries.SearchOrgPositionQuery() { }).ConfigureAwait(false);
+            List<SearchedOrgPosition> OrgPositions = await _mediator.Send(new SearchOrgPositionQuery() { }).ConfigureAwait(false);
             if (request.Id != null)
             {
                 result = await (from p in _context.Position
                                 join w in _context.WorkArea on p.WorkingAreaId equals w.Id into pw
-                                from rpw in pw.DefaultIfEmpty()
-
+                                from rpw in pw.DefaultIfEmpty() 
                                 join OP in OrgPositions on p.PositionTypeId equals OP.Id into OPs
-                                from rops in OPs.DefaultIfEmpty()
-
+                                from rops in OPs.DefaultIfEmpty() 
                                 join ST in _context.SalaryType on p.SalaryTypeId equals ST.Id into STs
-                                from str in STs.DefaultIfEmpty()
-
+                                from str in STs.DefaultIfEmpty() 
                                 join L in _context.Location on p.LocationId equals L.Id into Ls
-                                from Lr in Ls.DefaultIfEmpty()
-
+                                from Lr in Ls.DefaultIfEmpty() 
                                 join PT in _context.PlanType on p.PlanTypeId equals PT.Id into PTs
-                                from PTr in PTs.DefaultIfEmpty()
-
+                                from PTr in PTs.DefaultIfEmpty() 
                                 where p.Id == request.Id
                                 select new SearchedPosition
-                                {
-
+                                { 
                                     Id = p.Id,
                                     ParentId = p.ParentId,
                                     NodeId = Convert.ToInt32(p.Id),
@@ -84,25 +75,17 @@ namespace NHCM.Application.Organogram.Queries
                 result = await (from p in _context.Position
                                 join w in _context.WorkArea on p.WorkingAreaId equals w.Id into pw
                                 from rpw in pw.DefaultIfEmpty()
-
-
                                 join OP in OrgPositions on p.PositionTypeId equals OP.Id into OPs
                                 from rops in OPs.DefaultIfEmpty()
-
-
                                 join ST in _context.SalaryType on p.SalaryTypeId equals ST.Id into STs
                                 from str in STs.DefaultIfEmpty()
-
                                 join L in _context.Location on p.LocationId equals L.Id into Ls
                                 from Lr in Ls.DefaultIfEmpty()
-
                                 join PT in _context.PlanType on p.PlanTypeId equals PT.Id into PTs
                                 from PTr in PTs.DefaultIfEmpty()
-
                                 where p.ParentId == request.ParentId
                                 select new SearchedPosition
                                 {
-
                                     Id = p.Id,
                                     ParentId = p.ParentId,
                                     NodeId = Convert.ToInt32(p.Id),
@@ -123,7 +106,6 @@ namespace NHCM.Application.Organogram.Queries
                                     LocationText = Lr.Dari,
                                     PlanTypeText = PTr.Name,
                                 }).OrderBy(c => c.Sorter).DefaultIfEmpty().ToListAsync(cancellationToken);
-
             }
 
             else if (request.OrganoGramId != null)
@@ -135,13 +117,10 @@ namespace NHCM.Application.Organogram.Queries
                                 from rops in OPs.DefaultIfEmpty()
                                 join ST in _context.SalaryType on position.SalaryTypeId equals ST.Id into STs
                                 from str in STs.DefaultIfEmpty()
-
                                 join L in _context.Location on position.LocationId equals L.Id into Ls
                                 from Lr in Ls.DefaultIfEmpty()
-
                                 join PT in _context.PlanType on position.PlanTypeId equals PT.Id into PTs
                                 from PTr in PTs.DefaultIfEmpty()
-
                                 where position.OrganoGramId == request.OrganoGramId
                                 select new SearchedPosition
                                 {
@@ -166,7 +145,6 @@ namespace NHCM.Application.Organogram.Queries
                                     PlanTypeText = PTr.Name,
                                 }).OrderBy(c => c.Sorter).ToListAsync(cancellationToken);
             }
-
             return result;
         }
     }
