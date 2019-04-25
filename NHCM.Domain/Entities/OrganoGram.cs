@@ -15,7 +15,7 @@ namespace NHCM.Domain.Entities
 
         public int Id { get; set; }
         public int OrganizationId { get; set; }
-        public short StatusId { get; set; }
+        public int StatusId { get; set; }
         public int Year { get; set; }
         public int IsPositionsCopied { get; set; }
         public int NumberOfPositions { get; set; }

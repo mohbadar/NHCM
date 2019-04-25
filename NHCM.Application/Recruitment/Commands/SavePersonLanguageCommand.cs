@@ -31,18 +31,12 @@ namespace NHCM.Application.Recruitment.Commands
         
     }
     public class SavePersonLanguageCommandHandler : IRequestHandler<SavePersonLanguageCommand, List<SearchedPersonLanguage>>
-    {
-
-
-        private readonly HCMContext _context;
-       
+    { 
+        private readonly HCMContext _context; 
         public SavePersonLanguageCommandHandler(HCMContext context )
         {
-            _context = context;
-          
-        }
-
-
+            _context = context; 
+        } 
         public async Task<List<SearchedPersonLanguage>> Handle(SavePersonLanguageCommand request, CancellationToken cancellationToken)
         {
             List<SearchedPersonLanguage> result = new List<SearchedPersonLanguage>();
@@ -66,19 +60,9 @@ namespace NHCM.Application.Recruitment.Commands
                         CreatedBy = request.CreatedBy
                     };
                     _context.PersonLanguage.Add(personLanguage);
-                    await _context.SaveChangesAsync(cancellationToken);
-
-
-                  
-                    result = await common.SearchPersonLanguages(new Queries.SearchPersonLanguageQuery() { Id = personLanguage.Id }, cancellationToken);
-
-
+                    await _context.SaveChangesAsync(cancellationToken); 
+                    result = await common.SearchPersonLanguages(new Queries.SearchPersonLanguageQuery() { Id = personLanguage.Id }, cancellationToken);                    
                 }
-
-
-
-
-
             }
             else
             {

@@ -8,41 +8,51 @@ using System.Collections.Generic;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
+using NHCM.Application.Organogram.Models;
 
 namespace NHCM.Application.Lookup.Queries
 {
-    public class GetReportToQuery : IRequest<List<Position>>
+    public class GetReportToQuery : IRequest<List<PositionType>>
     {
-        public decimal? Id { get; set; }
-        public int? organogramid { get; set; }
+        public int? ID { get; set; }
+        
     }
 
-    public class GetReportToHandler : IRequestHandler<GetReportToQuery, List<Position>>
+    public class GetReportToHandler : IRequestHandler<GetReportToQuery, List<PositionType>>
     {
         private readonly HCMContext _dbContext;
         public GetReportToHandler(HCMContext context)
         {
             _dbContext = context;
         }
-        public async Task<List<Position>> Handle(GetReportToQuery request, CancellationToken cancellationToken)
+        public async Task<List<PositionType>> Handle(GetReportToQuery request, CancellationToken cancellationToken)
         {
-            List<Position> list = new List<Position>();
+            List<PositionType> list = new List<PositionType>();
 
-            if (request.Id != null)
-            {
-
-                list = await _dbContext.Position.Where(p => p.Id == request.Id).ToListAsync(cancellationToken);
+            if (request.ID != null)
+            { 
+                list = await (from orgp in _dbContext.OrgPosition
+                                join pot in _dbContext.PositionType on orgp.PositionTypeId equals pot.Id into oppt
+                                from resultoppt in oppt.DefaultIfEmpty() 
+                                where orgp.Id == request.ID 
+                                select new PositionType
+                                {
+                                    Id = resultoppt.Id,
+                                    Name = resultoppt.Name
+                                }).ToListAsync(cancellationToken);
                 return list;
-            }
-            else if (request.organogramid != null)
-            {
-                // Get List of Organiztin "Report to list" by parent id id
-                list = await _dbContext.Position.Where(p => p.OrganoGramId == request.organogramid).ToListAsync(cancellationToken);
-                return list;
-            }
+            } 
             else
             {
-                list = await _dbContext.Position.ToListAsync(cancellationToken);
+                list = await (from orgp in _dbContext.OrgPosition
+                              join pot in _dbContext.PositionType on orgp.PositionTypeId equals pot.Id into oppt
+                              from resultoppt in oppt.DefaultIfEmpty()
+                              
+                              select new PositionType
+                              {
+                                  Id = resultoppt.Id,
+                                  Name = resultoppt.Name
+                              }).ToListAsync(cancellationToken);
                 return list;
             }
 

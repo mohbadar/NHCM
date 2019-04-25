@@ -16,13 +16,15 @@ namespace NHCM.Application.Organogram.Queries
     {
         public int? Id { get; set; }
         public int? OrganizationId { get; set; }
-        public short? StatusId { get; set; }
+        public int? StatusId { get; set; }
         public int? Year { get; set; }
         public int? NumberOfPositions { get; set; }
         public int? IsPositionsCopied { get; set; }
         public string CreationType { get; set; }
         public string StatusText { get; set; }
         public string OrganizationText { get; set; }
+         
+        public int ProccessID { get; set; }
     }
 
 
@@ -39,9 +41,11 @@ namespace NHCM.Application.Organogram.Queries
                 result = await (from Organogram in _context.OrganoGram
                                 join Orgunit in _context.Organization on Organogram.OrganizationId equals Orgunit.Id into orgs
                                 from resultOrgUnit in orgs.DefaultIfEmpty()
-                                join st in _context.Status on Organogram.StatusId equals st.Id into se
-                                from resultStatus in se.DefaultIfEmpty()
-                                where Organogram.OrganizationId == request.OrganizationId && Organogram.Year == request.Year
+
+                                join prTr in _context.Process on request.StatusId equals prTr.Id into proccessT
+                                from resultprTr in proccessT.DefaultIfEmpty()
+
+                                where Organogram.OrganizationId == request.OrganizationId && Organogram.Year == request.Year 
                                 select new SearchedPlan
                                 {
                                     Id = Organogram.Id,
@@ -50,7 +54,7 @@ namespace NHCM.Application.Organogram.Queries
                                     Year = Organogram.Year,
                                     IsPositionsCopied= Organogram.IsPositionsCopied,
                                     NumberOfPositions = Organogram.NumberOfPositions,
-                                    StatusText = resultStatus.Dari,
+                                    StatusText = resultprTr.Name,
                                     OrganizationText = resultOrgUnit.Dari,
                                     CreationType = Organogram.IsPositionsCopied.Equals(1) ? "انتقال از سال " + (Organogram.Year - 1).ToString() : "ترتیب جدید"
                                 }).ToListAsync(cancellationToken);
@@ -61,8 +65,10 @@ namespace NHCM.Application.Organogram.Queries
                 result = await (from Organogram in _context.OrganoGram
                                 join organization in _context.Organization on Organogram.OrganizationId equals organization.Id into orgs
                                 from resultOrgUnit in orgs.DefaultIfEmpty()
-                                join st in _context.Status on Organogram.StatusId equals st.Id into se
-                                from resultStatus in se.DefaultIfEmpty()
+
+                                join prTr in _context.Process on request.StatusId equals prTr.Id into proccessT
+                                from resultprTr in proccessT.DefaultIfEmpty()
+                                 
                                 where Organogram.Id == request.Id || Organogram.OrganizationId == request.OrganizationId
                                 select new SearchedPlan
                                 {
@@ -72,7 +78,7 @@ namespace NHCM.Application.Organogram.Queries
                                     Year = Organogram.Year,
                                     IsPositionsCopied = Organogram.IsPositionsCopied,
                                     NumberOfPositions = Organogram.NumberOfPositions,
-                                    StatusText = resultStatus.Dari,
+                                    StatusText = resultprTr.Name,
                                     OrganizationText = resultOrgUnit.Dari,
                                     CreationType = Organogram.IsPositionsCopied.Equals(1) ? "انتقال از سال " + (Organogram.Year - 1).ToString() : "ترتیب جدید"
                                 }).ToListAsync(cancellationToken);
@@ -82,8 +88,12 @@ namespace NHCM.Application.Organogram.Queries
                 result = await (from Organogram in _context.OrganoGram
                                 join Orgunit in _context.Organization on Organogram.OrganizationId equals Orgunit.Id into orgs
                                 from resultOrgUnit in orgs.DefaultIfEmpty()
-                                join st in _context.Status on Organogram.StatusId equals st.Id into se
-                                from resultStatus in se.DefaultIfEmpty()
+
+                                join prTr in _context.Process on request.StatusId equals prTr.Id into proccessT
+                                from resultprTr in proccessT.DefaultIfEmpty()
+                                 
+
+                                //where  resultprTr.Id == request.ProccessID
                                 select new SearchedPlan
                                 {
                                     Id = Organogram.Id,
@@ -92,7 +102,7 @@ namespace NHCM.Application.Organogram.Queries
                                     Year = Organogram.Year,
                                     IsPositionsCopied = Organogram.IsPositionsCopied,
                                     NumberOfPositions = Organogram.NumberOfPositions,
-                                    StatusText = resultStatus.Dari,
+                                    StatusText = resultprTr.Name,
                                     OrganizationText = resultOrgUnit.Dari,
                                     CreationType = Organogram.IsPositionsCopied.Equals(1) ? "انتقال از سال " + (Organogram.Year - 1).ToString() : "ترتیب جدید"
                                 }).ToListAsync(cancellationToken);

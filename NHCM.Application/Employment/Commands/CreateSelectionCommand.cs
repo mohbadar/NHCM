@@ -1,25 +1,19 @@
 ﻿using MediatR;
 using System;
-using System.Collections.Generic;
-using System.Text;
-using NHCM.Domain;
+using System.Collections.Generic; 
 using NHCM.Domain.Entities;
 using System.Threading;
-using System.Threading.Tasks;
-using NHCM.Persistence.Extensions;
+using System.Threading.Tasks; 
 using NHCM.Persistence;
-using System.Linq;
-using Microsoft.EntityFrameworkCore;
+using System.Linq; 
 using NHCM.Application.Employment.Models;
-using NHCM.Application.Employment.Queries;
-using NHCM.Application.Organogram.Queries;
-using NHCM.Application.Organogram.Models;
+using NHCM.Application.Employment.Queries; 
+using NHCM.Application.Infrastructure.Exceptions;
 
 namespace NHCM.Application.Employment.Commands
 {
     public class CreateSelectionCommand : IRequest<List<SearchedSelectionModel>>
-    {
-         
+    { 
         public decimal PositionId { get; set; }
         public DateTime EffectiveDate { get; set; }
         public decimal? Id { get; set; }
@@ -28,8 +22,8 @@ namespace NHCM.Application.Employment.Commands
         public string Remarks { get; set; }
         public DateTime? VerdictDate { get; set; }
         public string VerdictRegNo { get; set; }
-        public string FinalNo { get; set; }
-
+        public string FinalNo { get; set; } 
+        public int OrganoGramID { get; set; } 
     }
      
     public class CreateSelectionCommandHandler : IRequestHandler<CreateSelectionCommand, List<SearchedSelectionModel>>
@@ -43,23 +37,48 @@ namespace NHCM.Application.Employment.Commands
         }
         public async Task<List<SearchedSelectionModel>> Handle(CreateSelectionCommand request, CancellationToken cancellationToken)
         {
-            List<SearchedSelectionModel> result = new List<SearchedSelectionModel>(); 
+            List<SearchedSelectionModel> result = new List<SearchedSelectionModel>();  
             if (request.Id == null || request.Id == default(decimal))
             {
-                _context.Selections.Add(new Selection()
+                // Business Rule Check 1 : Check if person has already been selected for any position at the selected Tashkil 
+                Selection SS = (from S in _context.Selection
+                               join P in _context.Position on S.PositionId equals P.Id into SP
+                               from spResult in SP.DefaultIfEmpty()
+                               join org in _context.OrganoGram on spResult.OrganoGramId equals org.Id into spOrg
+                               from spOrgResult in spOrg.DefaultIfEmpty()
+                               where spOrgResult.Id == request.OrganoGramID && S.PersonId == request.PersonId
+                              select S
+                          ).SingleOrDefault();
+
+                //if ((from S in _context.Selection 
+                //     join P in _context.Position on S.PositionId equals P.Id into SP
+                //     from spResult in SP.DefaultIfEmpty()
+                //     join org in _context.OrganoGram on spResult.OrganoGramId equals org.Id into spOrg
+                //     from spOrgResult in spOrg.DefaultIfEmpty()
+                //     where spOrgResult.Id == request.OrganoGramID && S.PersonId == request.PersonId 
+                //     select S).Any())
+                if (SS != null)
                 {
-                    PositionId = request.PositionId,
-                    PersonId = request.PersonId,
-                    EffectiveDate = request.EffectiveDate,
-                    VerdictDate = request.VerdictDate.Value,
-                    EventTypeId = request.EventTypeId,
-                    VerdictRegNo = request.VerdictRegNo,
-                    Remarks = request.Remarks,
-                    FinalNo = request.FinalNo, 
-                }); 
-                await _context.SaveChangesAsync(cancellationToken); 
-                result = await _mediator.Send(new SearchSelectionQuery() { OrganoGramId = _context.Position.Where(a => a.Id == request.PositionId).SingleOrDefault().OrganoGramId });
-                return result;
+                    throw new BusinessRulesException("شخص انتخاب شده در تشکیل فعلی قبلا شاغل یکی از بست ها میباشد");
+                } 
+                else
+                {
+                    Selection selection = new Selection()
+                    {
+                        PositionId = request.PositionId,
+                        PersonId = request.PersonId,
+                        EffectiveDate = request.EffectiveDate,
+                        VerdictDate = request.VerdictDate.Value,
+                        EventTypeId = request.EventTypeId,
+                        VerdictRegNo = request.VerdictRegNo,
+                        Remarks = request.Remarks,
+                        FinalNo = request.FinalNo,
+                    };
+                    _context.Selection.Add(selection);
+                    await _context.SaveChangesAsync(cancellationToken);
+                    result = await _mediator.Send(new SearchSelectionQuery() { PositionId = Convert.ToInt16(selection.PositionId) });
+                    return result;
+                }
             } 
             else
             {

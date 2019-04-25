@@ -47,8 +47,8 @@ namespace NHCM.WebUI.Types
         public List<SelectListItem> ListOfPublicationType;
         public List<SelectListItem> ListOfOrganization;
         public List<SelectListItem> ListOfOrgUnit = new List<SelectListItem>();
-        public List<SelectListItem> ListOfSalaryType;
-        public List<SelectListItem> ListOfReportTo;
+        public List<SelectListItem> ListOfOrgUnitType;
+        public List<SelectListItem> ListOfSalaryType; 
         public List<SelectListItem> ListOfPlanType;
         public List<SelectListItem> ListOfPositionType;
         public List<EducationLevel> ListOfOrganoGram = new List<EducationLevel>();
@@ -58,7 +58,8 @@ namespace NHCM.WebUI.Types
         public List<SelectListItem> ListOfPosition;
         public List<SelectListItem> ListOfProcesses = new List<SelectListItem>();
         public List<SelectListItem> ListOfPersianYears = new List<SelectListItem>();
-        public List<SelectListItem> ListOfWorkAreas = new List<SelectListItem>();  
+        public List<SelectListItem> ListOfWorkAreas = new List<SelectListItem>();
+        public List<SelectListItem> ListOfReportTo;
 
         
     }

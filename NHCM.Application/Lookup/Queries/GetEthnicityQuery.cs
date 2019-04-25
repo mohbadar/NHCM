@@ -16,9 +16,7 @@ namespace NHCM.Application.Lookup.Queries
     public class GetEthnicityQuery : IRequest<List<Ethnicity>>
     {
         public int? ID { get; set; }
-    }
-
-
+    }    
     public class GetEthnicityQueryHandler : IRequestHandler<GetEthnicityQuery, List<Ethnicity>>
     {
         private readonly HCMContext _dbContext;
@@ -28,9 +26,7 @@ namespace NHCM.Application.Lookup.Queries
         }
         public async Task<List<Ethnicity>> Handle(GetEthnicityQuery request, CancellationToken cancellationToken)
         {
-
             List<Ethnicity> ethnicities = new List<Ethnicity>();
-
             if (request.ID != null)
             {
                 // Return specific ethnicity.
@@ -42,10 +38,7 @@ namespace NHCM.Application.Lookup.Queries
                 // Return all ethnicity.
                 ethnicities = await _dbContext.Ethnicity.ToListAsync(cancellationToken);
                 return ethnicities;
-
             }
-
-
         }
     }
 }

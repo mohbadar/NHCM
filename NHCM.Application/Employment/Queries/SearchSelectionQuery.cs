@@ -21,6 +21,7 @@ namespace NHCM.Application.Employment.Queries
         public int? OrganoGramId { get; set; }
         public int? Id { get; set; }
         public int? PositionId { get; set; }
+        public decimal? PersonID { get; set; }
     }
 
 
@@ -38,18 +39,15 @@ namespace NHCM.Application.Employment.Queries
         public async Task<List<SearchedSelectionModel>> Handle(SearchSelectionQuery request, CancellationToken cancellationToken)
         {
             List<SearchedSelectionModel> result = new List<SearchedSelectionModel>();
-            List<SearchedPosition> Positions = new List<SearchedPosition>();
-
+            List<SearchedPosition> Positions = new List<SearchedPosition>();  
             if (request.PositionId != null)
             {
                 Positions = await _mediator.Send(new SearchPositionQuery() { Id = request.PositionId });
-            }
+            }             
             else
             {
                 Positions = await _mediator.Send(new SearchPositionQuery() { OrganoGramId = request.OrganoGramId });
-            }
-
-
+            }        
             if (request.Id != null)
             {
                 SearchedSelectionModel Record = await (from Selection in _context.Selection

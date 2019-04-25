@@ -27,23 +27,15 @@ namespace NHCM.Application.Lookup.Queries
         public async Task<List<PlanType>> Handle(GetPlanTypeQuery request, CancellationToken cancellationToken)
         {
             List<PlanType> list = new List<PlanType>();
-
             if (request.Id == null || request.Id == default(short))
             {
-
-
                 list = await _dbContext.PlanType.ToListAsync(cancellationToken);
-
                 return list;
-
-
             }
             else
             {
-
                 list = await _dbContext.PlanType.Where(p => p.Id == request.Id).ToListAsync(cancellationToken);
                 return list;
-
             }
         }
     }

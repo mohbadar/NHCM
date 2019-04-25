@@ -15,21 +15,21 @@ namespace NHCM.Persistence.Configurations
             builder.ToTable("PositionType", "look");
 
             builder.Property(e => e.Id)
-                    .HasColumnName("ID")
-                    .HasDefaultValueSql("nextval('look.positiontype_id_seq'::regclass)");
+                .HasColumnName("ID")
+                .HasDefaultValueSql("nextval('look.positiontype_id_seq'::regclass)");
 
             builder.Property(e => e.IsUnit).HasDefaultValueSql("false");
 
             builder.Property(e => e.Name)
-                    .IsRequired()
-                    .HasMaxLength(50);
+                .IsRequired()
+                .HasMaxLength(50);
 
             builder.Property(e => e.OrgUnitTypeId).HasColumnName("OrgUnitTypeID");
 
             builder.Property(e => e.ParentId).HasColumnName("ParentID");
 
             builder.Property(e => e.RankId).HasColumnName("RankID");
-           
+
         }
     }
 }

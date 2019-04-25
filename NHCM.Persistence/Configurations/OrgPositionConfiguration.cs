@@ -15,7 +15,7 @@ namespace NHCM.Persistence.Configurations
 
             builder.Property(e => e.Id)
                 .HasColumnName("ID")
-                .ValueGeneratedNever();
+                .HasDefaultValueSql("nextval('look.\"OrgPosition_ID_seq\"'::regclass)");
 
             builder.Property(e => e.OrgUnitTypeId).HasColumnName("OrgUnitTypeID");
 

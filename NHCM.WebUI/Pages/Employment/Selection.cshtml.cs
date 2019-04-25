@@ -21,22 +21,21 @@ namespace NHCM.WebUI.Pages.Employment
     {
         [BindProperty]
         public string ScreenID { get; set;  }
+
         public async Task OnGetAsync()
         {
-             ScreenID = EncryptionHelper.Encrypt("51");
+            ScreenID = EncryptionHelper.Encrypt("51");
 
-
-
-           int SID = Convert.ToInt32(EncryptionHelper.Decrypt(ScreenID));
+            int SID = Convert.ToInt32(EncryptionHelper.Decrypt(ScreenID));
+          
+            //int ScreenID = Convert.ToInt32(EncryptionHelper.Decrypt(HttpContext.Request.Query["p"]));
             List<SearchedProcess> Processes = await Mediator.Send(new GetProcess() { ScreenId = SID });
             if (Processes.Any())
             {
                 HttpContext.Session.SetInt32("ModuleID", Processes.FirstOrDefault().ModuleId);
                 HttpContext.Session.SetInt32("ProcessID", Processes.FirstOrDefault().Id);
             }
-        }
-
-
+        } 
         public async Task<IActionResult> OnPostEvents(string body)
         {
             try
@@ -67,9 +66,7 @@ namespace NHCM.WebUI.Pages.Employment
                     Description = ex.Message
                 });
             }
-        }
-
-
+        } 
         public async Task<IActionResult> OnPostEmployees(string body)
         {
             try
@@ -81,17 +78,14 @@ namespace NHCM.WebUI.Pages.Employment
                     result.Add(new { Text = p.FirstName + "  " + p.LastName, ID = p.Id.ToString() });
                 return new JsonResult(new UIResult()
                 {
-                    Data = new { list = result },
-
-                    Status = UIStatus.Success,
-
+                    Data = new { list = result }, 
+                    Status = UIStatus.Success, 
                     Text = string.Empty,
                     Description = string.Empty
                 });
             }
             catch (Exception ex)
-            {
-
+            { 
                 return new JsonResult(new UIResult()
                 {
                     Data = null,
@@ -100,17 +94,13 @@ namespace NHCM.WebUI.Pages.Employment
                     Description = ex.Message
                 });
             }
-        }
-
+        }  
         public async Task<IActionResult> OnPostSave([FromBody]CreateSelectionCommand command)
         {
             try
             {
                 List<SearchedSelectionModel> dbResult = new List<SearchedSelectionModel>();
-                dbResult = await Mediator.Send(command);
-
-                //List<SearchedSelectionModel> SelectionDBResult = await Mediator.Send(command);
-
+                dbResult = await Mediator.Send(command); 
                 if (dbResult.Any())
                 {
                     int ModuleID = HttpContext.Session.GetInt32("ModuleID").Value;
@@ -118,10 +108,8 @@ namespace NHCM.WebUI.Pages.Employment
                     int id = Convert.ToInt32(dbResult.FirstOrDefault().Id);
 
                     await Mediator.Send(new SaveProcessTracksCommand() { ModuleId = ModuleID, ProcessId = ProcessID, RecordId = id });
-                }
-
-                return new JsonResult(new UIResult()
-
+                } 
+                return new JsonResult(new UIResult() 
                 {
                     Data = new { list = dbResult },
                     Status = UIStatus.Success,
@@ -130,8 +118,7 @@ namespace NHCM.WebUI.Pages.Employment
                 });
             }
             catch (Exception ex)
-            {
-
+            { 
                 return new JsonResult(new UIResult()
                 {
                     Data = null,
@@ -141,8 +128,7 @@ namespace NHCM.WebUI.Pages.Employment
                     Description = ex.Message + " \n StackTrace : " + ex.StackTrace
                 });
             }
-        }
-
+        } 
         public async Task<IActionResult> OnPostSearch([FromBody] SearchSelectionQuery command)
         {
             try
