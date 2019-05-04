@@ -825,7 +825,7 @@
                     var elname = fld.attr('id');
                     var datatype = fld.attr('data-type');
                     var path = self.path + '/' + datatype;
-                     var data = {};
+                    var data = {};
                     data.id = v;
                     clean.data.post({
                         async: false, url: path, data: clean.data.json.write(data), dataType: 'json',
@@ -935,7 +935,11 @@
                     clean.widget.error(title, des);
                 }
             }
+        },
+        loadInModal: function () {
+
+
         }
-    }
+    };
 }
 )();

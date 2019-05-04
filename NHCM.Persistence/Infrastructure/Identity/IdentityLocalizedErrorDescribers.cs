@@ -22,7 +22,7 @@ namespace NHCM.Persistence.Infrastructure.Identity
         {
             return new IdentityError() {
                 Code = nameof(DuplicateEmail),
-                Description = $" قبلا استفاده شده لطفا ایمیل متفاوت را استفاده کنید {email} "
+                Description = $"{email} قبلا استفاده شده لطفا ایمیل متفاوت را استفاده کنید  "
             };
         }
 
@@ -31,7 +31,7 @@ namespace NHCM.Persistence.Infrastructure.Identity
             return new IdentityError()
             {
                 Code = nameof(DuplicateRoleName),
-                Description = $" قبلا استفاده شده لطفا نام متفاوت را استفاده کنید {role} "
+                Description = $"{role} قبلا استفاده شده لطفا نام متفاوت را استفاده کنید  "
             };
         }
 
@@ -40,7 +40,7 @@ namespace NHCM.Persistence.Infrastructure.Identity
             return new IdentityError()
             {
                 Code = nameof(DuplicateUserName),
-                Description = $" قبلا استفاده شده لطفا نام کاربری متفاوت را استفاده کنید {userName} "
+                Description = $"{userName} قبلا استفاده شده لطفا نام کاربری متفاوت را استفاده کنید  "
             };
         }
 
@@ -49,7 +49,7 @@ namespace NHCM.Persistence.Infrastructure.Identity
             return new IdentityError()
             {
                 Code = nameof(InvalidEmail),
-                Description = $" نادرست میباشد  لطفا  ایمیل درست را استفاده کنید {email} "
+                Description = $"{email} نادرست میباشد  لطفا  ایمیل درست را استفاده کنید  "
             };
         }
 
@@ -59,7 +59,7 @@ namespace NHCM.Persistence.Infrastructure.Identity
             return new IdentityError()
             {
                 Code = nameof(InvalidRoleName),
-                Description = $" نادرست میباشد  لطفا  نام درست را استفاده کنید {role} "
+                Description = $"{role} نادرست میباشد  لطفا  نام درست را استفاده کنید  "
             };
         }
 
@@ -68,7 +68,7 @@ namespace NHCM.Persistence.Infrastructure.Identity
             return new IdentityError()
             {
                 Code = nameof(InvalidUserName),
-                Description = $" نادرست میباشد  لطفا  نام   کاربری درست را استفاده کنید {userName} "
+                Description = $"{userName} نادرست میباشد  لطفا  نام   کاربری درست را استفاده کنید  "
             };
         }
 
