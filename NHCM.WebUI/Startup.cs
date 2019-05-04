@@ -60,7 +60,7 @@ namespace NHCM.WebUI
 
             // 2 Add DbContext
             services.AddDbContext<HCMContext>();
-            services.AddSession();
+            services.AddSession(options => { options.Cookie.IsEssential = true; });
 
             // 3 Identity
             services.AddDbContext<HCMIdentityDbContext>();

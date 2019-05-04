@@ -1,27 +1,28 @@
-﻿@page
-@model NHCM.WebUI.Areas.Security.Pages.RegisterModel
+﻿@page "{handler?}"
+@model NHCM.WebUI.Pages.Security.RegisterModel
 @{
     Layout = "Security/Shared/_SecuritySharedLayout";
 }
 
-<div class="panel-heading">
-    <h1 class="panel-title">ایجاد نام کاربری</h1>
-</div>
 
+
+@Html.AntiForgeryToken()
 <div class="panel-body">
     <div class="row">
-        <div class="col-md-6 pull-right">
-            <form method="post" class="form main-form page-component" type="form">
+        <div class="col-md-6">
+            <form id="dv_Security_Register" class="form main-form page-component" type="form" prefix="ux">
+
                 <fieldset class="content-group">
                     <legend>برای ایجاد حساب کاربری لطفا از فورم ذیل استفاده کنید</legend>
                     <div class="row">
                         <div class="col-md-12 col-sm-12 col-xs-12 pull-right">
                             <div class="form-group">
-                                <label asp-for="@Model.EmployeeID" class="text-bold">
+                                <label class="text-bold">
+                                    کارمند
                                 </label>
-                                <span asp-validation-for="@Model.EmployeeID" class="text-danger"></span>
-                                <select asp-for="@Model.EmployeeID" asp-items="@Model.ViewData["ListOfPersons"] as IEnumerable<SelectListItem>" class="select required">
-                                    <option value="">--</option>
+
+                                <select id="uxemployeeid" name="uxEmployeeID" asp-items="@Model.ListOfPerson" class="select" required>
+                                    <option></option>
                                 </select>
                             </div>
                         </div>
@@ -29,13 +30,12 @@
                     <div class="row">
                         <div class="col-md-12 col-sm-12 col-xs-12 pull-right">
                             <div class="form-group">
-                                <label asp-for="@Model.OrganizationID" class="text-bold">
-
-
+                                <label class="text-bold">
+                                    ارگان
                                 </label>
-                                <span asp-validation-for="@Model.OrganizationID" class="text-danger"></span>
-                                <select asp-for="@Model.OrganizationID" asp-items="@Model.ViewData["ListOfOrgs"] as IEnumerable<SelectListItem>" class="select">
-                                    <option value=""></option>
+
+                                <select id="uxorganizationid" name="uxOrganizationID" asp-items="@Model.ListOfOrganization" class="select" required>
+                                    <option></option>
                                 </select>
                             </div>
                         </div>
@@ -43,13 +43,13 @@
                     <div class="row">
                         <div class="col-md-12 col-sm-12 col-xs-12 pull-right">
                             <div class="form-group has-feedback has-feedback-left">
-                                <label asp-for="@Model.Email" class="text-bold">
-
+                                <label class="text-bold">
+                                    ایمیل آدرس
 
                                 </label>
 
-                                <span asp-validation-for="@Model.Email" class="text-danger"></span>
-                                <input asp-for="@Model.Email" class="form-control" />
+
+                                <input id="uxemail" name="uxEmail" class="form-control" />
                                 <div class="form-control-feedback">
                                     <i class="icon-mail5 text-size-base">
 
@@ -61,13 +61,14 @@
                     <div class="row">
                         <div class="col-md-12 col-sm-12 col-xs-12 pull-right">
                             <div class="form-group has-feedback has-feedback-left">
-                                <label asp-for="@Model.UserName" class="text-bold">
+                                <label class="text-bold">
 
+                                    نام کاربری
 
                                 </label>
 
-                                <span asp-validation-for="@Model.UserName" class="text-danger"></span>
-                                <input asp-for="@Model.UserName" class="form-control" />
+                                @*<span asp-validation-for="@Model.UserName" class="text-danger"></span>*@
+                                <input id="uxusername" name="uxUserName" class="form-control" />
                                 <div class="form-control-feedback">
                                     <i class="icon-user text-size-base">
 
@@ -80,49 +81,139 @@
                 </fieldset>
                 <div class="row div-form-control">
                     <div class="col-md-12">
-                        <div class="form-group">
-                            <button type="submit" asp-page-handler="Register" class="btn btn-primary"><i class="icon-floppy-disk position-right"></i>ثبت کاربر</button>
+                        <div class="form-group actions">
+                            @*<button type="submit" asp-page-handler="Register" class="btn btn-primary"><i class="icon-floppy-disk position-right"></i>ثبت کاربر</button>*@
+                            <button type="button" action="save" class="btn btn-primary"><i class="icon-floppy-disk position-right"></i>ثبت کاربر</button>
 
                         </div>
                     </div>
                 </div>
             </form>
         </div>
-        <div class="col-md-6">
-            <div class="row">
-                <div class="col-md-12">
-                    @if (ModelState.ErrorCount > 0)
-                    {
-                        <label class="control-label text-bold text-danger">
-                            لطفا دقت نماید
-                        </label>
-                        <ul>
-                            @foreach (var item in ViewData.ModelState.Values)
-                            {
-                                foreach (var error in item.Errors)
-                                {
-                                    <li style="color:red">@error.ErrorMessage</li>
-                                }
-                            }
-                        </ul>
-                    }
-                    else
-                    {
-                        <div style="width:100%; text-align:center">
-                            <label class="control-label text-bold text-success">@Model.SuccessMessage</label>
+    </div>
+</div>
+
+
+
+@*<div class="panel-heading">
+        <h1 class="panel-title">ایجاد نام کاربری</h1>
+    </div>
+
+    <div class="panel-body">
+        <div class="row">
+            <div class="col-md-6 pull-right">
+                <form method="post" class="form main-form page-component" type="form">
+                    <fieldset class="content-group">
+                        <legend>برای ایجاد حساب کاربری لطفا از فورم ذیل استفاده کنید</legend>
+                        <div class="row">
+                            <div class="col-md-12 col-sm-12 col-xs-12 pull-right">
+                                <div class="form-group">
+                                    <label asp-for="@Model.EmployeeID" class="text-bold">
+                                    </label>
+                                    <span asp-validation-for="@Model.EmployeeID" class="text-danger"></span>
+                                    <select asp-for="@Model.EmployeeID" asp-items="@Model.ViewData["ListOfPersons"] as IEnumerable<SelectListItem>" class="select required">
+                                        <option value="">--</option>
+                                    </select>
+                                </div>
+                            </div>
                         </div>
-                    }
+                        <div class="row">
+                            <div class="col-md-12 col-sm-12 col-xs-12 pull-right">
+                                <div class="form-group">
+                                    <label asp-for="@Model.OrganizationID" class="text-bold">
+
+
+                                    </label>
+                                    <span asp-validation-for="@Model.OrganizationID" class="text-danger"></span>
+                                    <select asp-for="@Model.OrganizationID" asp-items="@Model.ViewData["ListOfOrgs"] as IEnumerable<SelectListItem>" class="select">
+                                        <option value=""></option>
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-12 col-sm-12 col-xs-12 pull-right">
+                                <div class="form-group has-feedback has-feedback-left">
+                                    <label asp-for="@Model.Email" class="text-bold">
+
+
+                                    </label>
+
+                                    <span asp-validation-for="@Model.Email" class="text-danger"></span>
+                                    <input asp-for="@Model.Email" class="form-control" />
+                                    <div class="form-control-feedback">
+                                        <i class="icon-mail5 text-size-base">
+
+                                        </i>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-12 col-sm-12 col-xs-12 pull-right">
+                                <div class="form-group has-feedback has-feedback-left">
+                                    <label asp-for="@Model.UserName" class="text-bold">
+
+
+                                    </label>
+
+                                    <span asp-validation-for="@Model.UserName" class="text-danger"></span>
+                                    <input asp-for="@Model.UserName" class="form-control" />
+                                    <div class="form-control-feedback">
+                                        <i class="icon-user text-size-base">
+
+                                        </i>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                    </fieldset>
+                    <div class="row div-form-control">
+                        <div class="col-md-12">
+                            <div class="form-group">
+                                <button type="submit" asp-page-handler="Register" class="btn btn-primary"><i class="icon-floppy-disk position-right"></i>ثبت کاربر</button>
+
+                            </div>
+                        </div>
+                    </div>
+                </form>
+            </div>
+            <div class="col-md-6">
+                <div class="row">
+                    <div class="col-md-12">
+                        @if (ModelState.ErrorCount > 0)
+                        {
+                            <label class="control-label text-bold text-danger">
+                                لطفا دقت نماید
+                            </label>
+                            <ul>
+                                @foreach (var item in ViewData.ModelState.Values)
+                                {
+                                    foreach (var error in item.Errors)
+                                    {
+                                        <li style="color:red">@error.ErrorMessage</li>
+                                    }
+                                }
+                            </ul>
+                        }
+                        else
+                        {
+                            <div style="width:100%; text-align:center">
+                                <label class="control-label text-bold text-success">@Model.SuccessMessage</label>
+                            </div>
+                        }
+                    </div>
                 </div>
             </div>
         </div>
     </div>
-</div>
-@section Scripts{
-    <partial name="Security/Shared/_ValidationScriptsPartial" />
-    <script>
-        $(document).ready(function () {
+    @section Scripts{
+        <partial name="Security/Shared/_ValidationScriptsPartial" />
+        <script>
+            $(document).ready(function () {
 
-            $('.select').select2();
-        });
-    </script>
-}
+                $('.select').select2();
+            });
+        </script>
+    }*@

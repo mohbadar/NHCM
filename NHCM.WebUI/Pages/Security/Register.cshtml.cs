@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Text;
 using System.Threading.Tasks;
@@ -6,6 +7,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
+using NHCM.Application.Accounts.Commands;
 using NHCM.Application.Lookup.Queries;
 using NHCM.Application.Recruitment.Models;
 using NHCM.Application.Recruitment.Queries;
@@ -13,54 +15,23 @@ using NHCM.Domain.Entities;
 using NHCM.Persistence.Infrastructure.Identity;
 using NHCM.Persistence.Infrastructure.Services;
 using NHCM.WebUI.Types;
-namespace NHCM.WebUI.Areas.Security.Pages
+namespace NHCM.WebUI.Pages.Security
 {
     [Authorize("UserRegistrar")]
     public class RegisterModel : BasePage
     {
-        private readonly SignInManager<HCMUser> _signInManager;
+
         private readonly UserManager<HCMUser> _userManager;
-        private readonly ICurrentUser _currentUser;
-
         public int? SignedInUserOrganizationID { get; set; }
-        public string ErrorMessage { get; set; }
-        public string SuccessMessage { get; set; }
-        
-        [BindProperty]
-        [Display(Name = "ارگان")]
-        [Required(ErrorMessage = "انتخاب موسسه ضروری میباشد")]
-        public int OrganizationID { get; set; }
 
-        [BindProperty]
-        [Display(Name = "کارمند")]
-        [Required(ErrorMessage = "انتخاب کارمند ضروری میباشد")]
-        public int EmployeeID { get; set; }
-
-        [BindProperty]
-        [Display(Name = "ایمیل")]
-        [Required(ErrorMessage = "ایمیل فرد ضروری میباشد")]
-        [DataType(DataType.EmailAddress, ErrorMessage = "لطفا ایمل درست را وارد کنید")]
-        public string Email { get; set; }
-
-        [BindProperty]
-        [Display(Name = "نام کاربری")]
-        [Required(ErrorMessage = "نام کاربری ضروری میباشد")]
-        public string UserName { get; set; }
-
-
-        public RegisterModel(UserManager<HCMUser> userManager, SignInManager<HCMUser> signInManager, ICurrentUser currentUser)
+        public RegisterModel(UserManager<HCMUser> userManager)
         {
-            _userManager    =   userManager;
-            _signInManager  =   signInManager;
-            _currentUser    =   currentUser;
+            _userManager = userManager;
         }
         public async Task OnGetAsync()
         {
 
-
-            HCMUser signedInUser = await _userManager.GetUserAsync(User);
-            SignedInUserOrganizationID = signedInUser.OrganizationID;
-
+            SignedInUserOrganizationID = ((HCMUser)await _userManager.GetUserAsync(User)).OrganizationID;
 
             //Get Organization
             ListOfOrganization = new List<SelectListItem>();
@@ -69,13 +40,12 @@ namespace NHCM.WebUI.Areas.Security.Pages
             foreach (Organization organization in organizations)
                 ListOfOrganization.Add(new SelectListItem(organization.Dari, organization.Id.ToString()));
 
-            ViewData["ListOfOrgs"] = ListOfOrganization;
 
             // Get List Of  Persons
             ListOfPerson = new List<SelectListItem>();
             List<SearchedPersonModel> searchedPeople = new List<SearchedPersonModel>();
             // CHANGE: change the SearchPersonQuery Request to include a property to bring all records not only 10000
-            searchedPeople = await Mediator.Send(new SearchPersonQuery() { OrganizationId = await _currentUser.GetUserOrganizationID(), NoOfRecords = 10000 });
+            searchedPeople = await Mediator.Send(new SearchPersonQuery() { OrganizationId = SignedInUserOrganizationID, NoOfRecords = 10000 });
 
             foreach (SearchedPersonModel person in searchedPeople)
             {
@@ -85,47 +55,28 @@ namespace NHCM.WebUI.Areas.Security.Pages
                     Value = person.Id.ToString()
                 });
             }
-
-            ViewData["ListOfPersons"] = ListOfPerson;
-
-
         }
-
-        public async Task OnPostRegister()
+        public async Task<IActionResult> OnPostSave([FromBody] CreateUserCommand command)
         {
-
-            if (ModelState.IsValid)
+            try
             {
-                string GeneratedPassword = CredentialHelper.GenerateRandomPassowrd(CredentialHelper.SystemPasswordPolicy);
-                HCMUser user = new HCMUser()
+                List<string> result = await Mediator.Send(command);
+                return new JsonResult(new UIResult()
                 {
+                    Data = new { list = result },
+                    Status = UIStatus.Success,
+                    Text = "کاربر موفقانه ثبت سیستم شد" + "\n" + "رمز عبور: " +  result[0].ToString(),
+                    Description = string.Empty
 
-                    UserName = UserName,
-                    Email = Email,
-                    OrganizationID = OrganizationID,
-                    EmployeeID = EmployeeID,
-                    PasswordChanged = false
-                };
-
-
-                IdentityResult result = await _userManager.CreateAsync(user, GeneratedPassword);
-
-                if (result.Succeeded)
-                {
-                    SuccessMessage = GeneratedPassword;
-                }
-                else
-                {
-                    foreach (var error in result.Errors)
-                    {
-                        ModelState.AddModelError(string.Empty, error.Description);
-                        ErrorMessage += "\n " + error.Description;
-                    }
-                }
+                });
+            }
+            catch (Exception ex)
+            {
+                return new JsonResult(CustomMessages.FabricateException(ex));
             }
         }
 
-        public  void OnPost()
+        public void OnPost()
         {
         }
     }
