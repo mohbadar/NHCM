@@ -938,6 +938,7 @@
         },
         loadInModal: function () {
 
+            var self = this;
 
         }
     };

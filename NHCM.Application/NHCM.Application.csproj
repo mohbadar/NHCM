@@ -21,6 +21,8 @@
   <ItemGroup>
     <Folder Include="Employment\Commands\" />
     <Folder Include="Employment\Models\" />
+    <Folder Include="IdentityCard\Commands\" />
+    <Folder Include="IdentityCard\Queries\" />
     <Folder Include="Lookup\Validators\" />
   </ItemGroup>
 </Project>
