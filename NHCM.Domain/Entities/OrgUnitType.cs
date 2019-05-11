@@ -9,5 +9,6 @@ namespace NHCM.Domain.Entities
         public string Name { get; set; }
         public short? ParentId { get; set; }
         public bool? IsHead { get; set; }
+        public string NameEng { get; set; }
     }
 }

@@ -85,6 +85,8 @@ namespace NHCM.Persistence
         public virtual DbSet<OrgPosition> OrgPosition { get; set; }
         public virtual DbSet<OrgUnitType> OrgUnitType { get; set; }
         public virtual DbSet<ProcessConnection> ProcessConnection { get; set; }
+
+        public virtual DbSet<IdentityCard> IdentityCard { get; set; }
         #endregion DbSets
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
