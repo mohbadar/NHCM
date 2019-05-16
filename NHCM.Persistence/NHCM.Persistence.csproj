@@ -22,4 +22,9 @@
   <ItemGroup>
     <ProjectReference Include="..\NHCM.Domain\NHCM.Domain.csproj" />
   </ItemGroup>
+
+
+  <ItemGroup>
+    <Folder Include="ReportsFarmat\" />
+  </ItemGroup>
 </Project>

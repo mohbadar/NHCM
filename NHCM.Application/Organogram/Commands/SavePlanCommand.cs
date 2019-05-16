@@ -12,6 +12,7 @@ using Microsoft.EntityFrameworkCore;
 using NHCM.Application.Lookup.Queries;
 using NHCM.Application.Infrastructure.Exceptions;
 using NHCM.Application.Organogram.Queries;
+using NHCM.Persistence.Infrastructure.Services;
 
 namespace NHCM.Application.Organogram.Commands
 {
@@ -31,10 +32,12 @@ namespace NHCM.Application.Organogram.Commands
     {
         private readonly HCMContext _context;
         private readonly IMediator _mediator;
-        public SaveOrganogramCommandHandler(HCMContext context, IMediator mediator)
+        private readonly ICurrentUser _currentUser;
+        public SaveOrganogramCommandHandler(HCMContext context, IMediator mediator, ICurrentUser currentUser)
         {
             _context = context;
             _mediator = mediator;
+            _currentUser = currentUser;
 
         }
 
@@ -44,59 +47,75 @@ namespace NHCM.Application.Organogram.Commands
 
             if (request.Id == default(decimal))
             {
-                result = await _mediator.Send(new SearchPlanQuery() { OrganizationId = request.OrganizationId, Year = request.Year });
-                if (result.Any())
-                {
-                    throw new BusinessRulesException("اداره در سال انتخاب شده تشکیل دارد");
-                }
-                else
-                {
-                    OrganoGram organogram = new OrganoGram()
-                    {
-                        OrganizationId = request.OrganizationId,
-                        IsPositionsCopied = request.IsPositionsCopied,
-                        StatusId = request.StatusId,
-                        Year = request.Year,
-                        NumberOfPositions = request.NumberOfPositions
-                    };
-                    _context.OrganoGram.Add(organogram);
-                    await _context.SaveChangesAsync(cancellationToken);
+                int CurrentUserId = await _currentUser.GetUserId();
 
-                    if (request.IsPositionsCopied == 1)
+                using (var transaction = _context.Database.BeginTransaction())
+                {
+                    try
                     {
-                        OrganoGram orglast = (from a in _context.OrganoGram where a.Year == (request.Year - 1) && a.OrganizationId == request.OrganizationId select a).SingleOrDefault();
-                        List<Position> list = _context.Position.Where(c => c.OrganoGramId == orglast.Id && c.ParentId == null).ToList();
+                        List<OrganoGram> List = _context.OrganoGram.Where(o => o.OrganizationId == request.OrganizationId && o.Year == request.Year).ToList();
+                        if (List.Any())
+                        {
+                            throw new BusinessRulesException("اداره در سال انتخاب شده تشکیل دارد");
+                        }
+                        else
+                        {
+                            OrganoGram organogram = new OrganoGram()
+                            {
+                                OrganizationId = request.OrganizationId,
+                                IsPositionsCopied = request.IsPositionsCopied,
+                                StatusId = request.StatusId,
+                                Year = request.Year,
+                                NumberOfPositions = request.NumberOfPositions
+                            };
+                            _context.OrganoGram.Add(organogram);
+                            await _context.SaveChangesAsync(CurrentUserId,cancellationToken);
 
-                        if (list.Any())
-                        {
-                            await CopyPositionsAsync(list.FirstOrDefault(), organogram.Id, null);
+                            if (request.IsPositionsCopied == 1)
+                            {
+                                OrganoGram orglast = (from a in _context.OrganoGram where a.Year == (request.Year - 1) && a.OrganizationId == request.OrganizationId select a).SingleOrDefault();
+                                List<Position> list = _context.Position.Where(c => c.OrganoGramId == orglast.Id && c.ParentId == null).ToList();
+
+                                if (list.Any())
+                                {
+                                    await CopyPositionsAsync(list.FirstOrDefault(), organogram.Id, null);
+                                }
+                            }
+                            else
+                            {
+                                List<Organization> org = await _mediator.Send(new GetOrganiztionQuery() { Id = organogram.OrganizationId });
+                                List<SearchedOrgPosition> orgp = await _mediator.Send(new SearchOrgPositionQuery() { Id = org.FirstOrDefault().OrgUnitTypeId, Children = false });
+                                List<WorkArea> walist = (from a in _context.WorkArea where a.Title.Trim().Equals(org.FirstOrDefault().Dari.Trim()) select a).ToList();
+                                if (!walist.Any())
+                                {
+                                    WorkArea a = new WorkArea();
+                                    a.Title = org.FirstOrDefault().Dari.Trim();
+                                    await _context.SaveChangesAsync(CurrentUserId,cancellationToken);
+                                    walist = (from b in _context.WorkArea where b.Title.Trim().Equals(org.FirstOrDefault().Dari.Trim()) select b).ToList();
+                                }
+                                List<SearchedPosition> positionresults = await _mediator.Send(new SavePositionCommand()
+                                {
+                                    WorkingAreaId = Convert.ToInt32(walist.FirstOrDefault().Id),
+                                    PositionTypeId = orgp.FirstOrDefault().Id,
+                                    LocationId = 1,
+                                    SalaryTypeId = 1,
+                                    OrganoGramId = organogram.Id,
+                                    Code = org.FirstOrDefault().Id.ToString() + "0000" + 1.ToString(),
+                                    PlanTypeId = 1
+                                });
+                            }
+                            result = await _mediator.Send(new Queries.SearchPlanQuery() { Id = organogram.Id });
                         }
+                        transaction.Commit();
                     }
-                    else
+                    catch (Exception ex)
                     {
-                        List<Organization> org = await _mediator.Send(new GetOrganiztionQuery() { Id = organogram.OrganizationId });
-                        List<SearchedOrgPosition> orgp = await _mediator.Send(new SearchOrgPositionQuery() { Id = org.FirstOrDefault().OrgUnitTypeId, Children = false });
-                        List<WorkArea> walist = (from a in _context.WorkArea where a.Title.Trim().Equals(org.FirstOrDefault().Dari.Trim()) select a).ToList();
-                        if (!walist.Any())
-                        {
-                            WorkArea a = new WorkArea();
-                            a.Title = org.FirstOrDefault().Dari.Trim();
-                            await _context.SaveChangesAsync(cancellationToken);
-                            walist = (from b in _context.WorkArea where b.Title.Trim().Equals(org.FirstOrDefault().Dari.Trim()) select b).ToList();
-                        }
-                        List<SearchedPosition> positionresults = await _mediator.Send(new SavePositionCommand()
-                        {
-                            WorkingAreaId = Convert.ToInt32(walist.FirstOrDefault().Id),
-                            PositionTypeId = orgp.FirstOrDefault().Id,
-                            LocationId = 1,
-                            SalaryTypeId = 1,
-                            OrganoGramId = organogram.Id,
-                            Code = org.FirstOrDefault().Id.ToString() + "0000" + 1.ToString(),
-                            PlanTypeId = 1
-                        });
+                        transaction.Rollback();
+                        throw new Exception();
                     }
-                    result = await _mediator.Send(new Queries.SearchPlanQuery() { Id = organogram.Id });
+
                 }
+               
             }
             else
             {
