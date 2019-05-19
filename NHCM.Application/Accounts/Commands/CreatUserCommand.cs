@@ -36,6 +36,7 @@ namespace NHCM.Application.Accounts.Commands
         }
         public async Task<List<string>> Handle(CreateUserCommand request, CancellationToken cancellationToken)
         {
+            // Final Result
             List<string> fresult = new List<string>();
 
             string GeneratedPassword = CredentialHelper.GenerateRandomPassowrd(CredentialHelper.SystemPasswordPolicy);

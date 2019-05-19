@@ -9,6 +9,7 @@ using System.Collections.Generic;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
+using NHCM.Persistence.Infrastructure.Services;
 
 namespace NHCM.Application.Recruitment.Commands
 {
@@ -45,12 +46,13 @@ namespace NHCM.Application.Recruitment.Commands
     {
         private readonly HCMContext _context;
         private readonly IMediator _mediator;
+        private readonly ICurrentUser _currentUser;
 
-        public SavePersonReferenceCommandHandler(HCMContext context, IMediator mediator)
+        public SavePersonReferenceCommandHandler(HCMContext context, IMediator mediator, ICurrentUser currentUser)
         {
             _context = context;
             _mediator = mediator;
-
+            _currentUser = currentUser;
         }
         public async Task<List<SearchedPersonReference>> Handle(SavePersonReferenceCommand request, CancellationToken cancellationToken)
         {
@@ -59,48 +61,59 @@ namespace NHCM.Application.Recruitment.Commands
 
             if (request.Id == null || request.Id == default(decimal))
             {
+                int CurrentUserId = await _currentUser.GetUserId();
 
-                using (_context)
+                using (var transaction = _context.Database.BeginTransaction())
                 {
-
-                    Reference reference = new Reference()
+                    try
                     {
-                         
-                        PersonId  = request.PersonId,
-                        ModifiedOn = request.ModifiedOn,
-                        ModifiedBy = request.ModifiedBy,
-                        ReferenceNo = request.ReferenceNo,
-                        CreatedOn = request.CreatedOn,
-                        CreatedBy = request.CreatedBy,
-                        FirstName = request.FirstName,
-                        LastName = request.LastName,
-                        FatherName = request.FatherName,
-                        GrandFatherName = request.GrandFatherName,
-                        Occupation = request.Occupation,
-                        Organization = request.Organization,
-                        TelephoneNo = request.TelephoneNo,
-                        District = request.District,
-                        LocationId = request.LocationId,
-                        RelationShip = request.RelationShip,
-                        ReferenceTypeId = request.ReferenceTypeId,
+                        using (_context)
+                        {
 
-                        Amount = request.Amount,
-                        BankId = request.BankId,
-                        ReceiptNumber = request.ReceiptNumber,
-                        DocumentNumber = request.DocumentNumber,
-                        DocumentDate = request.DocumentDate,
-                        Remark = request.Remark
-                    };
+                            Reference reference = new Reference()
+                            {
 
+                                PersonId = request.PersonId,
+                                ModifiedOn = request.ModifiedOn,
+                                ModifiedBy = request.ModifiedBy,
+                                ReferenceNo = request.ReferenceNo,
+                                CreatedOn = request.CreatedOn,
+                                CreatedBy = request.CreatedBy,
+                                FirstName = request.FirstName,
+                                LastName = request.LastName,
+                                FatherName = request.FatherName,
+                                GrandFatherName = request.GrandFatherName,
+                                Occupation = request.Occupation,
+                                Organization = request.Organization,
+                                TelephoneNo = request.TelephoneNo,
+                                District = request.District,
+                                LocationId = request.LocationId,
+                                RelationShip = request.RelationShip,
+                                ReferenceTypeId = request.ReferenceTypeId,
 
-
-                    _context.Reference.Add(reference);
-                   await _context.SaveChangesAsync(cancellationToken);
-                    result = await _mediator.Send(new Queries.SearchPersonReferenceQuery() { Id = reference.Id });
-                    
+                                Amount = request.Amount,
+                                BankId = request.BankId,
+                                ReceiptNumber = request.ReceiptNumber,
+                                DocumentNumber = request.DocumentNumber,
+                                DocumentDate = request.DocumentDate,
+                                Remark = request.Remark
+                            };
 
 
+
+                            _context.Reference.Add(reference);
+                            await _context.SaveChangesAsync(CurrentUserId, cancellationToken);
+                            result = await _mediator.Send(new Queries.SearchPersonReferenceQuery() { Id = reference.Id });
+                            transaction.Commit();
+                        }
+                    }
+                    catch (Exception ex)
+                    {
+                        transaction.Rollback();
+                        throw new Exception();
+                    }
                 }
+
             }
             else
             {

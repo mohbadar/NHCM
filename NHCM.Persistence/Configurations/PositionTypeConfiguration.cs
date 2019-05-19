@@ -24,6 +24,8 @@ namespace NHCM.Persistence.Configurations
                 .IsRequired()
                 .HasMaxLength(50);
 
+            builder.Property(e => e.NameEng).HasMaxLength(250);
+
             builder.Property(e => e.OrgUnitTypeId).HasColumnName("OrgUnitTypeID");
 
             builder.Property(e => e.ParentId).HasColumnName("ParentID");

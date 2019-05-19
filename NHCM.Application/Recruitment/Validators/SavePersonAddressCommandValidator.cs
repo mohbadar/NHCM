@@ -11,7 +11,7 @@ namespace NHCM.Application.Recruitment.Validators
     {
         public SavePersonAddressCommandValidator()
         {
-            //Vallige
+            //Village
             RuleFor(a => a.Village)
                 .NotNull()
                 .NotEmpty()
@@ -20,7 +20,7 @@ namespace NHCM.Application.Recruitment.Validators
             RuleFor(a => a.Village).CannotInclude(ValidationHelper.ForbiddenSymbols).WithMessage("قریه اصلی نمیتواند یکی از حرف های ذیل را داشته باشد");
             RuleFor(a => a.Village).DariTextOnly().WithMessage("قریه تنها به دری بوده میتواند");
            
-            //Current Vallige
+            //Current Village
             RuleFor(a => a.Cvillage)
                 .NotNull()
                 .NotEmpty()
@@ -29,7 +29,7 @@ namespace NHCM.Application.Recruitment.Validators
             RuleFor(a => a.Cvillage).CannotInclude(ValidationHelper.ForbiddenSymbols).WithMessage("قریه فعلی نمیتواند یکی از حرف های ذیل را داشته باشد");
             RuleFor(a => a.Cvillage).DariTextOnly().WithMessage("قریه فعلی تنها به دری بوده میتواند");
 
-            //Street NO
+            //Street No
             RuleFor(a => a.StreetNo)
                 .NotNull()
                 .NotEmpty()
@@ -39,7 +39,7 @@ namespace NHCM.Application.Recruitment.Validators
             RuleFor(a => a.StreetNo).NotEmpty().WithMessage("نمبر سرک خالی بوده نمیتواند");
             RuleFor(a => a.StreetNo).DigitOnly().WithMessage("نمبر سرک تنها عدد بوده میتواند");
 
-            //House NO
+            //House No
             RuleFor(a => a.HouseNo)
                 .NotNull()
                 .NotEmpty()
@@ -49,7 +49,7 @@ namespace NHCM.Application.Recruitment.Validators
             RuleFor(a => a.HouseNo).NotEmpty().WithMessage("نمبر خانه خالی بوده نمیتواند");
             RuleFor(a => a.HouseNo).DigitOnly().WithMessage("نمبر خانه تنهاعدد بوده میتواند");
 
-            //Mobile NO
+            //Mobile No
             RuleFor(a => a.Mobile)
                 .NotNull()
                 .NotEmpty()
@@ -59,7 +59,7 @@ namespace NHCM.Application.Recruitment.Validators
             RuleFor(a => a.Mobile).MobileNumberOnly().WithMessage("نمبر موبایل درست نمیباشد لطفا شماره را درست وارد نمایید");
             RuleFor(a => a.Mobile).NotEmpty().WithMessage("نمبر موبایل خالی بوده نمیتواند");
 
-            //Telephon NO
+            //Telephon No
             RuleFor(a => a.Phone)
                 .NotNull()
                 .NotEmpty()

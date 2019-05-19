@@ -10,6 +10,7 @@ using NHCM.Application.Recruitment.Models;
 using System.Threading;
 using System.Threading.Tasks;
 using NHCM.Application.Recruitment.Queries;
+using NHCM.Persistence.Infrastructure.Services;
 
 namespace NHCM.Application.Recruitment.Commands
 {
@@ -34,10 +35,12 @@ namespace NHCM.Application.Recruitment.Commands
     {
         private HCMContext _context;
         private IMediator _mediator;
-        public SavePersonPublicationCommandHandler(HCMContext context, IMediator mediator)
+        private readonly ICurrentUser _currentUser;
+        public SavePersonPublicationCommandHandler(HCMContext context, IMediator mediator, ICurrentUser currentUser)
         {
             _context = context;
             _mediator = mediator;
+            _currentUser = currentUser;
         }
         public async Task<List<SearchedPersonPublication>> Handle(SavePersonPublicationCommand request, CancellationToken cancellationToken)
         {
@@ -46,27 +49,43 @@ namespace NHCM.Application.Recruitment.Commands
             if (request.Id == null || request.Id == default(int))
             {
                 // Save
-                using (_context)
-                {
-                    Publication publication = new Publication()
-                    {
-                       PersonId  = request.PersonId,
-                        PublicationTypeId = request.PublicationTypeId,
-                        Subject = request.Subject,
-                        PublishDate = request.PublishDate,
-                        ModifiedOn = request.ModifiedOn,
-                        ModifiedBy = request.ModifiedBy,
-                        ReferenceNo = request.ReferenceNo,
-                        CreatedOn = request.CreatedOn,
-                        CreatedBy = request.CreatedBy,
-                        Isbn = request.Isbn,
-                        NoofPages = request.NoofPages,
-                    };                   
-                    _context.Publication.Add(publication);
-                    await _context.SaveChangesAsync(cancellationToken);
+                int CurrentUserId = await _currentUser.GetUserId();
 
-                    result = await _mediator.Send(new SearchPersonPublicationQuery() { Id = publication.Id });
+                using (var transaction = _context.Database.BeginTransaction())
+                {
+                    try
+                    {
+                        using (_context)
+                        {
+                            Publication publication = new Publication()
+                            {
+                                PersonId = request.PersonId,
+                                PublicationTypeId = request.PublicationTypeId,
+                                Subject = request.Subject,
+                                PublishDate = request.PublishDate,
+                                ModifiedOn = request.ModifiedOn,
+                                ModifiedBy = request.ModifiedBy,
+                                ReferenceNo = request.ReferenceNo,
+                                CreatedOn = request.CreatedOn,
+                                CreatedBy = request.CreatedBy,
+                                Isbn = request.Isbn,
+                                NoofPages = request.NoofPages,
+                            };
+                            _context.Publication.Add(publication);
+                            await _context.SaveChangesAsync(CurrentUserId, cancellationToken);
+
+                            result = await _mediator.Send(new SearchPersonPublicationQuery() { Id = publication.Id });
+                            transaction.Commit();
+                        }
+                    }
+                    catch (Exception ex)
+                    {
+                        transaction.Rollback();
+                        throw new Exception();
+                    }
                 }
+
+               
             }
             else
             {

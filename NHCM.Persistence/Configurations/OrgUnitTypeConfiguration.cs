@@ -23,6 +23,8 @@ namespace NHCM.Persistence.Configurations
                 .IsRequired()
                 .HasMaxLength(100);
 
+            builder.Property(e => e.NameEng).HasMaxLength(250);
+
             builder.Property(e => e.ParentId).HasColumnName("ParentID");
         }
     }

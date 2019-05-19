@@ -10,6 +10,7 @@ using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
 using System.Linq;
 using NHCM.Application.Common;
+using NHCM.Persistence.Infrastructure.Services;
 
 namespace NHCM.Application.Recruitment.Commands
 {
@@ -43,93 +44,75 @@ namespace NHCM.Application.Recruitment.Commands
     public class SavePersonRelativesHandler : IRequestHandler<SavePersonRelatives, List<SearchedPersonRelative>>
     {
         private readonly HCMContext _context;
-        public SavePersonRelativesHandler(HCMContext context)
+        private readonly ICurrentUser _currentUser;
+        public SavePersonRelativesHandler(HCMContext context, ICurrentUser currentUser)
         {
             _context = context;
+            _currentUser = currentUser;
         }
         public async Task<List<SearchedPersonRelative>> Handle(SavePersonRelatives request, CancellationToken cancellationToken)
         {
             List<SearchedPersonRelative> result = new List<SearchedPersonRelative>();
-
-           
-
+                       
             if (request.Id == null || request.Id == default(decimal))
             {
-                using (_context)
+                int CurrentUserId = await _currentUser.GetUserId();
+
+                using (var transaction = _context.Database.BeginTransaction())
                 {
-
-
-                    Relative relative = new Relative()
+                    try
                     {
+                        using (_context)
+                        {
 
-                        RelationShipId = request.RelationShipId,
-                        FirstName = request.FirstName,
-                        LastName = request.LastName,
-                        FatherName = request.FatherName,
-                        GrandFatherName = request.GrandFatherName,
-                        Profession = request.Profession,
-                        LocationId = request.LocationId,
-                        PersonId = request.PersonId,
-                        NidNo = request.NidNo,
-                        Address = request.Address,
-                        ContactInfo = request.ContactInfo,
-                        EmailAddress = request.EmailAddress,
-                        Village = request.Village,
-                        Remark = request.Remark,
+                            Relative relative = new Relative()
+                            {
 
-                        CreatedOn = request.CreatedOn,
-                        ModifiedBy = request.ModifiedBy,
+                                RelationShipId = request.RelationShipId,
+                                FirstName = request.FirstName,
+                                LastName = request.LastName,
+                                FatherName = request.FatherName,
+                                GrandFatherName = request.GrandFatherName,
+                                Profession = request.Profession,
+                                LocationId = request.LocationId,
+                                PersonId = request.PersonId,
+                                NidNo = request.NidNo,
+                                Address = request.Address,
+                                ContactInfo = request.ContactInfo,
+                                EmailAddress = request.EmailAddress,
+                                Village = request.Village,
+                                Remark = request.Remark,
 
-                        ModifiedOn = request.ModifiedOn,
-                        CreatedBy = request.CreatedBy
+                                CreatedOn = request.CreatedOn,
+                                ModifiedBy = request.ModifiedBy,
 
-
-                    };
-                    _context.Relative.Add(relative);
-                    await _context.SaveChangesAsync(cancellationToken);
-
-
-                    PersonCommon common = new PersonCommon(_context);
-
-                    // Return Saved Relative
-                    result = await common.SearchPersonRelative(new Queries.SearchPersonRelativeQuery() { Id = relative.Id }, cancellationToken);
-                    
-
-              //result = new List<SearchedPersonRelative>();
-              //      result = await (from r in _context.Relative
-              //                      join relationship in _context.Relationship on r.RelationShipId equals relationship.Id into rR
-              //                      from resultRr in rR.DefaultIfEmpty()
-              //                      join l in _context.Location on r.LocationId equals l.Id into rL
-              //                      from resultrL in rL.DefaultIfEmpty()
-                                    
-              //                      where r.Id == relative.Id
-              //                      select new SearchedPersonRelative
-              //                      {
-
-              //                          Id = relative.Id,
-              //                          FatherName = relative.FatherName,
-              //                          FirstName = relative.FirstName,
-              //                          PersonId = relative.PersonId,
-              //                          GrandFatherName = relative.GrandFatherName,
-              //                          RelationShipId = relative.RelationShipId,
-              //                          NidNo = relative.NidNo,
-              //                          Profession = relative.Profession,
-              //                          Address = relative.Address,
-              //                          ContactInfo = relative.ContactInfo,
-              //                          EmailAddress = relative.EmailAddress,
-              //                          Village = relative.Village,
-              //                          LocationId = relative.LocationId,
-              //                          Remark = relative.Remark,
-              //                          RelationShipIdText = resultRr.Name,
-              //                          LocationText  = resultrL.Dari
+                                ModifiedOn = request.ModifiedOn,
+                                CreatedBy = request.CreatedBy
 
 
-              //                      }).ToListAsync(cancellationToken);
+                            };
+                            _context.Relative.Add(relative);
+                            await _context.SaveChangesAsync(CurrentUserId, cancellationToken);
 
 
-              
-                    
+                            PersonCommon common = new PersonCommon(_context);
+
+                            // Return Saved Relative
+                            result = await common.SearchPersonRelative(new Queries.SearchPersonRelativeQuery() { Id = relative.Id }, cancellationToken);
+
+
+                           
+                        }
+                        transaction.Commit();
+                    }
+                    catch (Exception ex)
+                    {
+                        transaction.Rollback();
+                        throw new Exception();
+                    }
                 }
+
+                
             }
 
 

@@ -13,11 +13,11 @@ using Microsoft.EntityFrameworkCore;
 using NHCM.Application.Recruitment.Queries;
 using NHCM.Application.Recruitment.Models;
 using NHCM.Application.Common;
-
+using NHCM.Persistence.Infrastructure.Services;
 
 namespace NHCM.Application.Recruitment.Commands
 {
-    public class SavePersonEducation :IRequest<List<SearchedPersonEducations>>
+    public class SavePersonEducation : IRequest<List<SearchedPersonEducations>>
     {
 
         public decimal? Id { get; set; }
@@ -48,65 +48,82 @@ namespace NHCM.Application.Recruitment.Commands
 
         private readonly HCMContext _context;
         private readonly IMediator _mediator;
-   
-        public SavePersonEducationHandler(HCMContext context, IMediator mediator)
+
+        private readonly ICurrentUser _currentUser;
+
+        public SavePersonEducationHandler(HCMContext context, IMediator mediator, ICurrentUser currentUser)
         {
             _context = context;
             _mediator = mediator;
-           
+            _currentUser = currentUser;
+
         }
         public async Task<List<SearchedPersonEducations>> Handle(SavePersonEducation request, CancellationToken cancellationToken)
         {
-           
+
             List<SearchedPersonEducations> dbResult = new List<SearchedPersonEducations>();
 
             // Save
             if (request.Id == null || request.Id == default(decimal))
             {
+                int CurrentUserId = await _currentUser.GetUserId();
 
-                using (_context)
+
+                using (var transaction = _context.Database.BeginTransaction())
                 {
-                    // Construct Education Object
-                    Education education = new Education()
+                    try
                     {
-                        PersonId = request.PersonId,
-                        EducationLevelId = request.EducationLevelId,
-                        ModifiedOn = request.ModifiedOn,
-                        ModifiedBy = request.ModifiedBy,
-                        ReferenceNo = request.ReferenceNo,
-                        CreatedOn = request.CreatedOn,
-                        CreatedBy = request.CreatedBy,
-                        StartDate = request.StartDate,
-                        EndDate = request.EndDate,
-                        OfficialDocumentNo = request.OfficialDocumentNo,
-                        LocationId = request.LocationId,
-                        Institute = request.Institute,
-                        Course = request.Course,
-                        Department = request.Department,
-                        Inservice = request.Inservice,
-                        Major = request.Major,
-                        Remarks = request.Remarks,
-                        MigratedLocation = request.MigratedLocation,
-                        Faculty = request.Faculty
-                    };
+                        using (_context)
+                        {
+                            // Construct Education Object
+                            Education education = new Education()
+                            {
+                                PersonId = request.PersonId,
+                                EducationLevelId = request.EducationLevelId,
+                                ModifiedOn = request.ModifiedOn,
+                                ModifiedBy = request.ModifiedBy,
+                                ReferenceNo = request.ReferenceNo,
+                                CreatedOn = request.CreatedOn,
+                                CreatedBy = request.CreatedBy,
+                                StartDate = request.StartDate,
+                                EndDate = request.EndDate,
+                                OfficialDocumentNo = request.OfficialDocumentNo,
+                                LocationId = request.LocationId,
+                                Institute = request.Institute,
+                                Course = request.Course,
+                                Department = request.Department,
+                                Inservice = request.Inservice,
+                                Major = request.Major,
+                                Remarks = request.Remarks,
+                                MigratedLocation = request.MigratedLocation,
+                                Faculty = request.Faculty
+                            };
 
-                    _context.Education.Add(education);
-                    await _context.SaveChangesAsync(cancellationToken);
-                    dbResult = await _mediator.Send(new SearchPersonEducationQuery() { Id = education.Id });
-                    return dbResult;
-            
+                            _context.Education.Add(education);
+                            await _context.SaveChangesAsync(CurrentUserId, cancellationToken);
+                            dbResult = await _mediator.Send(new SearchPersonEducationQuery() { Id = education.Id });
 
-                   
+                            transaction.Commit();
+                            return dbResult; 
+                        }
+                    }
+                    catch (Exception ex)
+                    {
+                        transaction.Rollback();
+                        throw new Exception();
+                    }
                 }
+
+                
             }
             // Update
             else
             {
                 using (_context)
                 {
-                    Education education =await (from e in _context.Education
-                                           where e.Id.Equals(request.Id.Value)
-                                           select e).FirstOrDefaultAsync();
+                    Education education = await (from e in _context.Education
+                                                 where e.Id.Equals(request.Id.Value)
+                                                 select e).FirstOrDefaultAsync();
 
                     education.PersonId = request.PersonId;
                     education.EducationLevelId = request.EducationLevelId;
