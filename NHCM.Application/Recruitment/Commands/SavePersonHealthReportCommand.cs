@@ -10,6 +10,7 @@ using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
+using NHCM.Persistence.Infrastructure.Services;
 
 namespace NHCM.Application.Recruitment.Commands
 {
@@ -32,12 +33,12 @@ namespace NHCM.Application.Recruitment.Commands
     {
         private readonly HCMContext _context;
         private readonly IMediator _mediator;
-
-        public SavePersonHealthReportCommandHandler(HCMContext context, IMediator mediator)
+        private readonly ICurrentUser _currentUser;
+        public SavePersonHealthReportCommandHandler(HCMContext context, IMediator mediator, ICurrentUser currentUser)
         {
             _context = context;
             _mediator = mediator;
-
+            _currentUser = currentUser;
         }
 
         public async Task<List<SearchedPersonHealthReport>> Handle(SavePersonHealthReportCommand request, CancellationToken cancellationToken)
@@ -48,29 +49,43 @@ namespace NHCM.Application.Recruitment.Commands
 
             if (request.Id == null || request.Id == default(decimal))
             {
-                using (_context)
+
+                int CurrentUserId = await _currentUser.GetUserId();
+
+                using (var transaction = _context.Database.BeginTransaction())
                 {
-                    HealthReport healthReport = new HealthReport()
+                    try
                     {
+                        using (_context)
+                        {
+                            HealthReport healthReport = new HealthReport()
+                            {
 
-                        PersonId = request.PersonId,
-                        ReportDate = request.ReportDate,
-                        StatusId = request.StatusId,
-                        ModifiedOn = request.ModifiedOn,
-                        ModifiedBy = request.ModifiedBy,
-                        ReferenceNo = request.ReferenceNo,
-                        CreatedOn = request.CreatedOn,
-                        CreatedBy = request.CreatedBy,
-                        Approved = request.Approved,
-                        Remarks = request.Remarks
-                    };
+                                PersonId = request.PersonId,
+                                ReportDate = request.ReportDate,
+                                StatusId = request.StatusId,
+                                ModifiedOn = request.ModifiedOn,
+                                ModifiedBy = request.ModifiedBy,
+                                ReferenceNo = request.ReferenceNo,
+                                CreatedOn = request.CreatedOn,
+                                CreatedBy = request.CreatedBy,
+                                Approved = request.Approved,
+                                Remarks = request.Remarks
+                            };
 
-                    _context.HealthReport.Add(healthReport);
-                    await _context.SaveChangesAsync(cancellationToken);
+                            _context.HealthReport.Add(healthReport);
+                            await _context.SaveChangesAsync(CurrentUserId, cancellationToken);
 
-                    result = await _mediator.Send(new Queries.SearchPersonHealthReportQuery() { Id = healthReport.Id });
+                            result = await _mediator.Send(new Queries.SearchPersonHealthReportQuery() { Id = healthReport.Id });
+                            transaction.Commit();
+                        }
+                    }
+                    catch (Exception ex)
+                    {
+                        transaction.Rollback();
+                        throw new Exception();
+                    }
                 }
-
             }
 
             else

@@ -4,6 +4,7 @@ using NHCM.Application.Common;
 using NHCM.Application.Recruitment.Models;
 using NHCM.Domain.Entities;
 using NHCM.Persistence;
+using NHCM.Persistence.Infrastructure.Services;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -32,10 +33,12 @@ namespace NHCM.Application.Recruitment.Commands
     }
     public class SavePersonLanguageCommandHandler : IRequestHandler<SavePersonLanguageCommand, List<SearchedPersonLanguage>>
     { 
-        private readonly HCMContext _context; 
-        public SavePersonLanguageCommandHandler(HCMContext context )
+        private readonly HCMContext _context;
+        private readonly ICurrentUser _currentUser;
+        public SavePersonLanguageCommandHandler(HCMContext context, ICurrentUser currentUser)
         {
-            _context = context; 
+            _context = context;
+            _currentUser = currentUser;
         } 
         public async Task<List<SearchedPersonLanguage>> Handle(SavePersonLanguageCommand request, CancellationToken cancellationToken)
         {
@@ -44,25 +47,39 @@ namespace NHCM.Application.Recruitment.Commands
 
             if (request.Id == null || request.Id == default(decimal))
             {
+                int CurrentUserId = await _currentUser.GetUserId();
 
-                using (_context)
+                using (var transaction = _context.Database.BeginTransaction())
                 {
-                    PersonLanguage personLanguage = new PersonLanguage()
+                    try
                     {
-                        PersonId = request.PersonId,
-                        LanguageId = request.LanguageId,
-                        ReadingExpertise = request.ReadingExpertise,
-                        UnderstandingExpertise = request.UnderstandingExpertise,
-                        WritingExpertise = request.WritingExpertise,
-                        SpeakingExpertise = request.SpeakingExpertise,
-                        ReferenceNo = request.ReferenceNo,
-                        CreatedOn = request.CreatedOn,
-                        CreatedBy = request.CreatedBy
-                    };
-                    _context.PersonLanguage.Add(personLanguage);
-                    await _context.SaveChangesAsync(cancellationToken); 
-                    result = await common.SearchPersonLanguages(new Queries.SearchPersonLanguageQuery() { Id = personLanguage.Id }, cancellationToken);                    
+                        using (_context)
+                        {
+                            PersonLanguage personLanguage = new PersonLanguage()
+                            {
+                                PersonId = request.PersonId,
+                                LanguageId = request.LanguageId,
+                                ReadingExpertise = request.ReadingExpertise,
+                                UnderstandingExpertise = request.UnderstandingExpertise,
+                                WritingExpertise = request.WritingExpertise,
+                                SpeakingExpertise = request.SpeakingExpertise,
+                                ReferenceNo = request.ReferenceNo,
+                                CreatedOn = request.CreatedOn,
+                                CreatedBy = request.CreatedBy
+                            };
+                            _context.PersonLanguage.Add(personLanguage);
+                            await _context.SaveChangesAsync(CurrentUserId, cancellationToken);
+                            result = await common.SearchPersonLanguages(new Queries.SearchPersonLanguageQuery() { Id = personLanguage.Id }, cancellationToken);
+                            transaction.Commit();
+                        }
+                    }
+                    catch (Exception ex)
+                    {
+                        transaction.Rollback();
+                        throw new Exception();
+                    }
                 }
+               
             }
             else
             {

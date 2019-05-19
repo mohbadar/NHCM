@@ -4,6 +4,7 @@ using NHCM.Application.Recruitment.Models;
 using NHCM.Application.Recruitment.Queries;
 using NHCM.Domain.Entities;
 using NHCM.Persistence;
+using NHCM.Persistence.Infrastructure.Services;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -43,62 +44,69 @@ namespace NHCM.Application.Recruitment.Commands
     {
         private readonly HCMContext _context;
         private readonly IMediator _mediator;
-        public SavePersonExperienceCommandHandler(HCMContext context, IMediator mediator)
+        private readonly ICurrentUser _currentUser;
+        public SavePersonExperienceCommandHandler(HCMContext context, IMediator mediator, ICurrentUser currentUser)
         {
             _context = context;
             _mediator = mediator;
+            _currentUser = currentUser;
         }
         public async Task<List<SearchedPersonExperience>> Handle(SavePersonExperienceCommand request, CancellationToken cancellationToken)
         {
             List<SearchedPersonExperience> result = new List<SearchedPersonExperience>();
-
             if( request.Id == null || request.Id == default(decimal))
             {
                 // Save
+                int CurrentUserId = await _currentUser.GetUserId();
 
-                using (_context)
+                using (var transaction = _context.Database.BeginTransaction())
                 {
-                    Experience personExperience = new Experience()
+                    try
                     {
-                        Designation = request.Designation,
+                        using (_context)
+                        {
+                            Experience personExperience = new Experience()
+                            {
+                                Designation = request.Designation,
 
-                        PersonId = request.PersonId,
-                        Organization = request.Organization,
-                        ModifiedOn = request.ModifiedOn,
-                        ModifiedBy = request.ModifiedBy,
-                        ReferenceNo = request.ReferenceNo,
-                        CreatedOn = request.CreatedOn,
-                        CreatedBy = request.CreatedBy ?? 10, // UNTILL : application of idenity
-                        RequestNo = request.RequestNo,
-                        LocationId = request.LocationId,
-                        DocumentNo = request.DocumentNo,
-                        RankId = request.RankId,
-                        PromotionId = request.PromotionId,
-                        StartDate = request.StartDate,
-                        EndDate = request.EndDate,
-                        ContactInfo = request.ContactInfo,
-                        JobstatusId = request.JobstatusId,
-                        JobDescription = request.JobDescription,
-                        Approved = request.Approved,
-                        Remarks = request.Remarks,
-                        ExperienceTypeId = request.ExperienceTypeId,
-                    };
+                                PersonId = request.PersonId,
+                                Organization = request.Organization,
+                                ModifiedOn = request.ModifiedOn,
+                                ModifiedBy = request.ModifiedBy,
+                                ReferenceNo = request.ReferenceNo,
+                                CreatedOn = request.CreatedOn,
+                                CreatedBy = request.CreatedBy ?? 10, // UNTILL : application of idenity
+                                RequestNo = request.RequestNo,
+                                LocationId = request.LocationId,
+                                DocumentNo = request.DocumentNo,
+                                RankId = request.RankId,
+                                PromotionId = request.PromotionId,
+                                StartDate = request.StartDate,
+                                EndDate = request.EndDate,
+                                ContactInfo = request.ContactInfo,
+                                JobstatusId = request.JobstatusId,
+                                JobDescription = request.JobDescription,
+                                Approved = request.Approved,
+                                Remarks = request.Remarks,
+                                ExperienceTypeId = request.ExperienceTypeId,
+                            };
 
-                    _context.Experience.Add(personExperience);
-                    await _context.SaveChangesAsync(cancellationToken);
+                            _context.Experience.Add(personExperience);
+                            await _context.SaveChangesAsync(CurrentUserId, cancellationToken);
 
-                    result = await _mediator.Send(new SearchPersonExperienceQuery() { Id = personExperience.Id });
+                            result = await _mediator.Send(new SearchPersonExperienceQuery() { Id = personExperience.Id });
 
+                            transaction.Commit();
+                        }
 
+                    }
+                    catch (Exception ex)
+                    {
+                        transaction.Rollback();
+                        throw new Exception();
+                    }
                 }
-
-                   
-
-                
             }
-
-           
-
             else
             {
                 // Update
