@@ -101,10 +101,10 @@ namespace NHCM.Persistence.Configurations
                 .HasForeignKey(d => d.DocumentTypeId)
                 .HasConstraintName("Person_DocumentTypeID_fkey");
 
-            builder.HasOne(d => d.Organization)
-                .WithMany(p => p.Person)
-                .HasForeignKey(d => d.OrganizationId)
-                .HasConstraintName("Person_OrganizationID_fkey");
+            //builder.HasOne(d => d.Organization)
+            //    .WithMany(p => p.Person)
+            //    .HasForeignKey(d => d.OrganizationId)
+            //    .HasConstraintName("Person_OrganizationID_fkey");
 
         }
     }

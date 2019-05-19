@@ -19,6 +19,12 @@
     <PackageReference Include="MediatR" Version="6.0.0" />
   </ItemGroup>
   <ItemGroup>
+
+    <Folder Include="Employment\Commands\" />
+    <Folder Include="Employment\Models\" />
+    <Folder Include="Reports\" />
+
     <Folder Include="Lookup\Validators\" />
+
   </ItemGroup>
 </Project>
