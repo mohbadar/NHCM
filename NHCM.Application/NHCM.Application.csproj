@@ -22,7 +22,6 @@
 
     <Folder Include="Employment\Commands\" />
     <Folder Include="Employment\Models\" />
-    <Folder Include="Reports\" />
 
     <Folder Include="Lookup\Validators\" />
 

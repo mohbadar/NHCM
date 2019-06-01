@@ -9,6 +9,7 @@ using NHCM.Domain.Entities;
 using NHCM.Persistence.Infrastructure;
 using System.Linq;
 using NHCM.Persistence.Infrastructure.Services;
+using NHCM.Domain.ReportEntities;
 
 namespace NHCM.Persistence
 {
@@ -87,7 +88,10 @@ namespace NHCM.Persistence
         public virtual DbSet<ProcessConnection> ProcessConnection { get; set; }
 
         public virtual DbSet<IdentityCard> IdentityCard { get; set; }
+        ///// Report Dbset
+        public virtual DbQuery<StatisticalReport> StatisticalReports { get; set; }
         #endregion DbSets
+         
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
