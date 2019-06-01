@@ -22,7 +22,7 @@ namespace NHCM.Persistence.Configurations
                 .IsRequired()
                 .HasMaxLength(100);
 
-           // builder.Property(e => e.TitleEng).HasMaxLength(250);
+            builder.Property(e => e.TitleEng).HasMaxLength(250);
 
 
         }

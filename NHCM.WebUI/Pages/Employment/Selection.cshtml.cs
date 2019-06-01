@@ -72,7 +72,7 @@ namespace NHCM.WebUI.Pages.Employment
             try
             {
                 List<SearchedPersonModel> Persons = new List<SearchedPersonModel>();
-                Persons = await Mediator.Send(new SearchPersonQuery() { Id = null, OrganizationId=2 });
+                Persons = await Mediator.Send(new SearchPersonQuery() { Id = null });
                 List<object> result = new List<object>();
                 foreach (SearchedPersonModel p in Persons)
                     result.Add(new { Text = p.FirstName + "  " + p.LastName, ID = p.Id.ToString() });

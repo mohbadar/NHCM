@@ -69,7 +69,9 @@ namespace NHCM.WebUI.Pages.Organogram
                 if (dbResult.Any())
                 {
                     int ModuleID = HttpContext.Session.GetInt32("ModuleID").Value;
-                    int ProcessID = HttpContext.Session.GetInt32("ProcessID").Value;                    
+                    int ProcessID = HttpContext.Session.GetInt32("ProcessID").Value;
+
+                    
                     await Mediator.Send(new SaveProcessTracksCommand() { ModuleId = ModuleID, ProcessId = ProcessID, RecordId = dbResult.FirstOrDefault().Id });
                 }
 

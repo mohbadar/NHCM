@@ -160,7 +160,7 @@ namespace NHCM.Application.Common
                                           DocumentTypeText = resultPDT.Name,
                                           NIDText = ConvertJSONToString(p.Nid, resultPDT.Name) ?? "درج نگردیده",
                                           DoBText = PersianLibrary.PersianDate.GetFormatedString(p.DateOfBirth)
-                                      }).OrderBy(x => x.Id).ToListAsync();
+                                      }).OrderBy(x => x.Id).Take((request.NoOfRecords == 0) ? 100 : request.NoOfRecords).ToListAsync();
             }
             else
             {

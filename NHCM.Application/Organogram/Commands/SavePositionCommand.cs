@@ -39,7 +39,7 @@ namespace NHCM.Application.Organogram.Commands
         public async Task<List<SearchedPosition>> Handle(SavePositionCommand request, CancellationToken cancellationToken)
         {
             List<SearchedPosition> result = new List<SearchedPosition>();
-            List<Position> list = (from a in _context.Position where a.OrganoGramId == request.OrganoGramId && a.WorkingAreaId == request.WorkingAreaId && a.Code == request.Code select a).ToList();
+            List<Position> list = (from a in _context.Position where a.OrganoGramId == request.OrganoGramId && a.WorkingAreaId == request.WorkingAreaId && a.PositionTypeId == request.PositionTypeId && a.Id != request.Id select a).ToList();
 
             if (list.Any())
             {

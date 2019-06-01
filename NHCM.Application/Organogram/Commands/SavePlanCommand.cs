@@ -32,6 +32,7 @@ namespace NHCM.Application.Organogram.Commands
     {
         private readonly HCMContext _context;
         private readonly IMediator _mediator;
+
         private readonly ICurrentUser _currentUser;
         public SaveOrganogramCommandHandler(HCMContext context, IMediator mediator, ICurrentUser currentUser)
         {
@@ -46,15 +47,21 @@ namespace NHCM.Application.Organogram.Commands
             List<SearchedPlan> result = new List<SearchedPlan>();
 
             if (request.Id == default(decimal))
+
             {
+
+            { 
+
                 int CurrentUserId = await _currentUser.GetUserId();
 
                 using (var transaction = _context.Database.BeginTransaction())
                 {
                     try
                     {
+
                         List<OrganoGram> List = _context.OrganoGram.Where(o => o.OrganizationId == request.OrganizationId && o.Year == request.Year).ToList();
                         if (List.Any())
+
                         {
                             throw new BusinessRulesException("اداره در سال انتخاب شده تشکیل دارد");
                         }
@@ -69,7 +76,9 @@ namespace NHCM.Application.Organogram.Commands
                                 NumberOfPositions = request.NumberOfPositions
                             };
                             _context.OrganoGram.Add(organogram);
+
                             await _context.SaveChangesAsync(CurrentUserId,cancellationToken);
+
 
                             if (request.IsPositionsCopied == 1)
                             {
@@ -90,7 +99,9 @@ namespace NHCM.Application.Organogram.Commands
                                 {
                                     WorkArea a = new WorkArea();
                                     a.Title = org.FirstOrDefault().Dari.Trim();
-                                    await _context.SaveChangesAsync(CurrentUserId, cancellationToken);
+
+                                    await _context.SaveChangesAsync(CurrentUserId,cancellationToken);
+
                                     walist = (from b in _context.WorkArea where b.Title.Trim().Equals(org.FirstOrDefault().Dari.Trim()) select b).ToList();
                                 }
                                 List<SearchedPosition> positionresults = await _mediator.Send(new SavePositionCommand()
@@ -114,8 +125,10 @@ namespace NHCM.Application.Organogram.Commands
                         throw new Exception();
                     }
 
+
                 }
                
+
             }
             else
             {
