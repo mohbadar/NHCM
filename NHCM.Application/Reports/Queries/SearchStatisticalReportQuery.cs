@@ -31,7 +31,6 @@ namespace NHCM.Application.Reports.Queries
         { 
             List<StatisticalReport> result = new List<StatisticalReport>();
             result = await _context.StatisticalReports.FromSql("select * from rpt.statisticalreport()").ToListAsync();
-
             return result;
         }
     }
