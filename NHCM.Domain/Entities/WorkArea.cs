@@ -7,6 +7,6 @@ namespace NHCM.Domain.Entities
     {
         public decimal Id { get; set; }
         public string Title { get; set; }
-        public string TitleEng { get; set; }
+        //public string TitleEng { get; set; }
     }
 }

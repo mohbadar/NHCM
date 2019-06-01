@@ -18,7 +18,6 @@
         this.fields = [];
         this.datepickers = [];
         this.modal = {};
-        this.processmodal = {};
         this.grid = {};
         this.grid.template = this.el.find('.form-grid');
         this.grid.table = this.el.attr('id').replace('dv', 'gv');
@@ -101,7 +100,7 @@
             }
 
             if (self.el.attr('hasprocess')) {
-                self.el.find('.actions').append('<button type="button" class="btn btn-primary" action="process" style="float:left; margin-left: 5px;"><i class="icon-loop position-right"></i>طی مراحل </button>');
+                self.el.find('.actions').append('<button type="button" class="btn btn-primary" action="process" style="float:left;"><i class="icon-loop position-right"></i>طی مراحل </button>');
                 self.getactions();
             }
 
@@ -540,7 +539,6 @@
         attach: function () {
             var self = this;
             if (!$.isEmptyObject(self.record)) {
-
                 path = "/Document/Document/Get";
                 var modalid = self.prefix + self.el.attr('id') + '_Modal';
                 if ($.isEmptyObject(self.modal)) {
@@ -549,8 +547,7 @@
                     $('.dependent-screens').append(modal);
                     self.modal = $('#' + modalid);
                     var data = {};
-
-                    clean.data.get({
+                    clean.data.post({
                         async: false, url: path, data: clean.data.json.write(data), dataType: 'html',
                         success: function (msg) {
                             var html = msg;
@@ -880,6 +877,7 @@
                     }
                 }
             });
+
         },
         process: function () {
             var self = this;
@@ -889,58 +887,48 @@
                 ScreenID = self.page.parameter('p');
             else
                 ScreenID = self.el.find('#pageid').val();
-            if (self.record.id === undefined || self.record.id === null) {
-                clean.widget.error("کوشش خلاف اصول", "ریکارد انتخاب شده واجد شرایط به طی مراحل نیست");
-            }
-            else {
-                if (!$.isEmptyObject(self.record)) {
-                    path = "/Document/Process?p=" + ScreenID;
-                    var modalid = self.prefix + self.el.attr('id') + '_Modal_Process';
-                    if ($.isEmptyObject(self.processmodal)) {
-                        var modal = '<div id="' + modalid + '" class="modal fade"><div class="modal-dialog modal-lg"><div class="modal-content"></div></div></div>';
-                        var close = '<button type="button" class="btn btn-link close-bttn" data-dismiss="modal"><i class="icon-close2 position-right"></i>صرف نظر</button>'
-                        $('.dependent-screens').append(modal);
-                        self.processmodal = $('#' + modalid);
-                        clean.data.get({
-                            async: false, url: path, data: clean.data.json.write(), dataType: 'html',
-                            success: function (msg) {
-                                var html = msg;
-                                self.processmodal.find('.modal-content').html(html);
-                                var subform = {};
-                                subform.el = $('#' + $(html).find('form').attr('id'));
-                                subform.el.attr('parent', self.el.attr('id'));
-                                var items = self.path.split('/');
-                                subform.el.find('.actions').append(close);
-                                subform.parent = self;
-                                subform.page = self.page;
-                                if (subform.el.hasClass('page-component')) {
-                                    if (subform.el.attr('type') == 'form' && subform.el.hasClass('sub-form')) {
-                                        sub = new clean[subform.el.attr('type')](subform);
-                                        self.page.subforms.push(sub);
-                                        sub.loadDynamicLists(ScreenID);
-                                        sub.search();
-                                    }
+            if (!$.isEmptyObject(self.record)) {
+                path = "/Document/Process?p=" + ScreenID;
+                var modalid = self.prefix + self.el.attr('id') + '_Modal';
+                if ($.isEmptyObject(self.modal)) {
+                    var modal = '<div id="' + modalid + '" class="modal fade"><div class="modal-dialog modal-lg"><div class="modal-content"></div></div></div>';
+                    var close = '<button type="button" class="btn btn-link close-bttn" data-dismiss="modal"><i class="icon-close2 position-right"></i>صرف نظر</button>'
+                    $('.dependent-screens').append(modal);
+                    self.modal = $('#' + modalid);
+                    clean.data.get({
+                        async: false, url: path, data: clean.data.json.write(), dataType: 'html',
+                        success: function (msg) {
+                            var html = msg;
+                            self.modal.find('.modal-content').html(html);
+                            var subform = {};
+                            subform.el = $('#' + $(html).find('form').attr('id'));
+                            subform.el.attr('parent', self.el.attr('id'));
+                            var items = self.path.split('/');
+                            subform.el.find('.actions').append(close);
+                            subform.parent = self;
+                            subform.page = self.page;
+                            if (subform.el.hasClass('page-component')) {
+                                if (subform.el.attr('type') == 'form' && subform.el.hasClass('sub-form')) {
+                                    sub = new clean[subform.el.attr('type')](subform);
+                                    self.page.subforms.push(sub);
+                                    sub.loadDynamicLists(ScreenID);
+                                    sub.search();
                                 }
                             }
-                        });
-                    }
-                    self.processmodal.modal();
+                        }
+                    });
                 }
-                else {
-                    var title = 'فورم $formname خالی میباشد';
-                    var des = 'برای اینکه طی مراحل اسناد مربوط به فورم $formname را مشاهده نمائید، لطفاً ریکارد این فورم را مشخص سازید';
-                    var heading = self.el.parents('.panel-body').siblings('.panel-heading').find('h1');
-                    title = title.replace('$formname', $(heading).text());
-                    des = des.replace('$formname', $(heading).text());
-                    clean.widget.error(title, des);
-                }
+                self.modal.modal();
             }
-        },
-        loadInModal: function () {
-
-            var self = this;
-
+            else {
+                var title = 'فورم $formname خالی میباشد';
+                var des = 'برای اینکه طی مراحل اسناد مربوط به فورم $formname را مشاهده نمائید، لطفاً ریکارد این فورم را مشخص سازید';
+                var heading = self.el.parents('.panel-body').siblings('.panel-heading').find('h1');
+                title = title.replace('$formname', $(heading).text());
+                des = des.replace('$formname', $(heading).text());
+                clean.widget.error(title, des);
+            }
         }
-    };
+    }
 }
 )();
