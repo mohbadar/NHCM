@@ -15,13 +15,13 @@ using System.Threading.Tasks;
 
 namespace NHCM.Application.Employment.Queries
 {
-    public class GetCardDataQuery : IRequest<List<CardDataModel>>
+    public class GetCardDataQuery : IRequest<CardDataModel>
     {
         public string HrCode { get; set; }
 
     }
 
-    public class GetCardDataQueryHandler : IRequestHandler<GetCardDataQuery, List<CardDataModel>>
+    public class GetCardDataQueryHandler : IRequestHandler<GetCardDataQuery, CardDataModel>
     {
         private readonly HCMContext _context;
         private readonly ICurrentUser _currentUser;
@@ -32,9 +32,9 @@ namespace NHCM.Application.Employment.Queries
             _currentUser = currentUser;
             _mediator = mediator;
         }
-        public async Task<List<CardDataModel>> Handle(GetCardDataQuery request, CancellationToken cancellationToken)
+        public async Task<CardDataModel> Handle(GetCardDataQuery request, CancellationToken cancellationToken)
         {
-            List<CardDataModel> listOfCardData = new List<CardDataModel>();
+            CardDataModel listOfCardData = new CardDataModel();
             
             if (!string.IsNullOrEmpty(request.HrCode))
             {
@@ -55,13 +55,16 @@ namespace NHCM.Application.Employment.Queries
                                         where p.Hrcode == request.HrCode
                                         select new CardDataModel
                                         {
-                                            FullName = new StringBuilder() { }.Append(p.FirstName).Append(" ").Append(p.LastName).ToString(),
-                                            FullNameE = new StringBuilder() { }.Append(p.FirstNameEng).Append(" ").Append(p.LastNameEng).ToString(),
+                                        //    FullName = new StringBuilder() { }.Append(p.FirstName).Append(" ").Append(p.LastName).ToString(),
+                                        //    FullNameE = new StringBuilder() { }.Append(p.FirstNameEng).Append(" ").Append(p.LastNameEng).ToString(),
+                                            FullName = p.FirstName + " " + p.LastName,
+                                            FullNameE = p.FirstNameEng + " " + p.LastNameEng,
+                                            Hrcode = p.Hrcode,
                                             PositionTitle = resultJoinThree.Name,
                                             OrgUnitName = resultJoinFour.Title,
                                             PositionTitleE = resultJoinThree.NameEng
                                         }
-                                       ).ToListAsync();
+                                       ).Take(1).SingleOrDefaultAsync();
 
             }
             else

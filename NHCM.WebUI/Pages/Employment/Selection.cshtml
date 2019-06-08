@@ -11,13 +11,13 @@
         <h1 class="panel-title">تعیینات مطابق به تشکیلات تائید شده</h1>
     </div>
 
-   
+
     <div class="panel-body" style="padding-bottom:5px;">
 
-        <form id="dv_Employment_Selection" class="form sub-form page-component" type="form" category="modal" prefix="ux" parent="dv_Employment_Plan" parentcol="OrganoGramId" hasprocess="true" >
-            
-            <input id="pageid" type="hidden" asp-for="@Model.ScreenID"  /> 
-            
+        <form id="dv_Employment_Selection" class="form sub-form page-component" type="form" category="modal" prefix="ux" parent="dv_Employment_Plan" parentcol="OrganoGramId" hasprocess="true">
+
+            <input id="pageid" type="hidden" asp-for="@Model.ScreenID" />
+
 
             <div class="modal fade">
                 <div class="modal-dialog modal-lg">
@@ -48,25 +48,25 @@
                                                     نوع تعیینات
                                                     <span class="text-danger">&nbsp;*</span>
                                                 </label>
-                                                <select id="uxeventtypeid" name="uxeventtypeid" data-type="events" class="select" required>
+                                                <select id="uxeventtypeid" name="uxeventtypeid" data-type="events"  class="select"  required>
                                                     <option></option>
                                                 </select>
                                             </div>
                                         </div>
                                     </div>
                                     <div class="row">
-                                        <div class="col-md-3 col-sm-12 col-xs-12 pull-right">
+                                        <div class="col-md-3 col-sm-12 col-xs-12 pull-right hokmi">
                                             <div class="form-group has-feedback has-feedback-left">
                                                 <label class="text-bold">
                                                     نمبر حکم
                                                     <span class="text-danger">&nbsp;*</span>
                                                 </label>
-                                                <input id="uxverdictregno" name="uxverdictregno" type="text" class="form-control" required />
+                                                <input id="uxverdictregno" name="uxverdictregno" type="text" class="form-control "  />
 
                                             </div>
                                         </div>
 
-                                        <div class="col-md-4 col-sm-12 col-xs-12 pull-right">
+                                        <div class="col-md-4 col-sm-12 col-xs-12 pull-right hokmi">
                                             <div class="form-group">
                                                 <label class="text-bold">
                                                     تاریخ حکم (هجری شمسی)
@@ -74,12 +74,12 @@
                                                 </label>
                                                 <div class="input-group">
                                                     <span class="input-group-addon"><i class="icon-calendar3"></i></span>
-                                                    <input type="text" id="uxverdictdatepersian" name="uxverdictdatepersian" class="form-control Shamsi" sibling="uxverdictdate" placeholder="تاریخ حکم" required />
+                                                    <input type="text" id="uxverdictdatepersian" name="uxverdictdatepersian" class="form-control Shamsi" sibling="uxverdictdate" placeholder="تاریخ حکم"  />
                                                 </div>
                                             </div>
                                         </div>
 
-                                        <div class="col-md-4 col-sm-12 col-xs-12 pull-right">
+                                        <div class="col-md-4 col-sm-12 col-xs-12 pull-right hokmi">
                                             <div class="form-group">
                                                 <label class="text-bold">
                                                     تاریخ حکم (میلادی)
@@ -87,23 +87,23 @@
                                                 </label>
                                                 <div class="input-group">
                                                     <span class="input-group-addon"><i class="icon-calendar3"></i></span>
-                                                    <input type="text" id="uxverdictdate" name="uxverdictdate" class="form-control Miladi" sibling="uxverdictdatepersian" placeholder="تاریخ حکم" required />
+                                                    <input type="text" id="uxverdictdate" name="uxverdictdate" class="form-control Miladi" sibling="uxverdictdatepersian" placeholder="تاریخ حکم"  />
                                                 </div>
                                             </div>
                                         </div>
                                     </div>
                                     <div class="row">
-                                        <div class="col-md-3 col-sm-12 col-xs-12 pull-right">
+                                        <div class="col-md-3 col-sm-12 col-xs-12 pull-right nonhokmi">
                                             <div class="form-group has-feedback has-feedback-left">
                                                 <label class="text-bold">
                                                     نتیجه امتحان
                                                     <span class="text-danger">&nbsp;*</span>
                                                 </label>
-                                                <input id="uxfinalno" name="uxfinalno" type="text" class="form-control" required />
+                                                <input id="uxfinalno" name="uxfinalno" type="text" class="form-control rrequired"  />
 
                                             </div>
                                         </div>
-                                        <div class="col-md-4 col-sm-12 col-xs-12 pull-right">
+                                        <div class="col-md-4 col-sm-12 col-xs-12 pull-right nonhokmi">
                                             <div class="form-group">
                                                 <label class="text-bold">
                                                     تاریخ منظوری (هجری شمسی)
@@ -111,12 +111,12 @@
                                                 </label>
                                                 <div class="input-group">
                                                     <span class="input-group-addon"><i class="icon-calendar3"></i></span>
-                                                    <input type="text" id="uxeffectivedatepersian" name="uxeffectivedatepersian" class="form-control Shamsi" sibling="uxeffectivedate" placeholder="تاریخ منظوری" required />
+                                                    <input type="text" id="uxeffectivedatepersian" name="uxeffectivedatepersian" class="form-control Shamsi rrequired" sibling="uxeffectivedate" placeholder="تاریخ منظوری"  />
                                                 </div>
                                             </div>
                                         </div>
 
-                                        <div class="col-md-4 col-sm-12 col-xs-12 pull-right">
+                                        <div class="col-md-4 col-sm-12 col-xs-12 pull-right nonhokmi">
                                             <div class="form-group">
                                                 <label class="text-bold">
                                                     تاریخ منظوری (میلادی)
@@ -124,7 +124,7 @@
                                                 </label>
                                                 <div class="input-group">
                                                     <span class="input-group-addon"><i class="icon-calendar3"></i></span>
-                                                    <input type="text" id="uxeffectivedate" name="uxeffectivedate" class="form-control Miladi" sibling="uxeffectivedatepersian" placeholder="تاریخ منظوری" required />
+                                                    <input type="text" id="uxeffectivedate" name="uxeffectivedate" class="form-control Miladi rrequired" sibling="uxeffectivedatepersian" placeholder="تاریخ منظوری"  />
                                                 </div>
                                             </div>
                                         </div>
@@ -181,7 +181,4 @@
         </form>
     </div>
 </div>
-
-
-
-
+ 

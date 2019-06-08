@@ -8,7 +8,7 @@ namespace NHCM.Application.Employment.Models
     {
         public decimal SelectionId { get; set; }
         public decimal PositionId { get; set; }
-        public DateTime EffectiveDate { get; set; }
+        public DateTime? EffectiveDate { get; set; }
         public decimal Id { get; set; }
         public int EventTypeId { get; set; }
         public decimal PersonId { get; set; }
