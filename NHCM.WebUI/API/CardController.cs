@@ -33,7 +33,7 @@ namespace NHCM.WebUI.API
         public async Task<IActionResult> GetEmployeeInfo([FromRoute]string hrCode)
         {
 
-            List<CardDataModel> cardInfo = new List<CardDataModel>();
+             CardDataModel  cardInfo = new  CardDataModel ();
 
             cardInfo = await _mediator.Send(new GetCardDataQuery() { HrCode = hrCode });
             

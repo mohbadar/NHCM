@@ -15,7 +15,7 @@ namespace NHCM.Application.Employment.Commands
     public class CreateSelectionCommand : IRequest<List<SearchedSelectionModel>>
     { 
         public decimal PositionId { get; set; }
-        public DateTime EffectiveDate { get; set; }
+        public DateTime? EffectiveDate { get; set; }
         public decimal? Id { get; set; }
         public int EventTypeId { get; set; }
         public decimal PersonId { get; set; }
@@ -68,7 +68,7 @@ namespace NHCM.Application.Employment.Commands
                         PositionId = request.PositionId,
                         PersonId = request.PersonId,
                         EffectiveDate = request.EffectiveDate,
-                        VerdictDate = request.VerdictDate.Value,
+                        VerdictDate = request.VerdictDate,
                         EventTypeId = request.EventTypeId,
                         VerdictRegNo = request.VerdictRegNo,
                         Remarks = request.Remarks,
@@ -89,7 +89,7 @@ namespace NHCM.Application.Employment.Commands
                 d.PersonId = request.PersonId;
                 d.EventTypeId = request.EventTypeId;
                 d.EffectiveDate = request.EffectiveDate;
-                d.VerdictDate = request.VerdictDate.Value;
+                d.VerdictDate = request.VerdictDate;
                 d.VerdictRegNo = request.VerdictRegNo;
                 d.Remarks = request.Remarks;
                 d.FinalNo = request.FinalNo; 

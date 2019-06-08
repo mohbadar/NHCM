@@ -122,7 +122,20 @@
                     setTimeout(function () {
                         self.el.valid();
                     }, 100);
+                } 
+                // if eventtype == حکمی hide other fields
+                if ($thisVal == 1114) { 
+                    $('.nonhokmi').hide();
+                    $('.hokmi').show();
                 }
+                // if eventtype != حکمی hide other fields
+                if ($thisVal == 4 || $thisVal == 8 || $thisVal == 15 || $thisVal == 79) {
+                    $('.hokmi').hide();
+                    $('.nonhokmi').show();
+                }
+
+               
+
             });
 
             if ($.isEmptyObject(self.modal)) {
