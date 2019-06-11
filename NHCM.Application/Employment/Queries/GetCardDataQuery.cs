@@ -4,6 +4,7 @@ using NHCM.Application.Employment.Models;
 using NHCM.Application.Employment.Queries;
 using NHCM.Application.Infrastructure.Exceptions;
 using NHCM.Domain.Entities;
+using NHCM.Domain.ViewsEntities;
 using NHCM.Persistence;
 using NHCM.Persistence.Infrastructure.Services;
 using System;
@@ -15,13 +16,13 @@ using System.Threading.Tasks;
 
 namespace NHCM.Application.Employment.Queries
 {
-    public class GetCardDataQuery : IRequest<CardDataModel>
+    public class GetCardDataQuery : IRequest<List<carddetails>>
     {
         public string HrCode { get; set; }
 
     }
 
-    public class GetCardDataQueryHandler : IRequestHandler<GetCardDataQuery, CardDataModel>
+    public class GetCardDataQueryHandler : IRequestHandler<GetCardDataQuery,List<carddetails>>
     {
         private readonly HCMContext _context;
         private readonly ICurrentUser _currentUser;
@@ -32,48 +33,29 @@ namespace NHCM.Application.Employment.Queries
             _currentUser = currentUser;
             _mediator = mediator;
         }
-        public async Task<CardDataModel> Handle(GetCardDataQuery request, CancellationToken cancellationToken)
+        public async Task<List<carddetails>> Handle(GetCardDataQuery request, CancellationToken cancellationToken)
         {
-            CardDataModel listOfCardData = new CardDataModel();
-            
+            List<carddetails> listOfCardData = new List<carddetails>();
+            List<carddetails> Record = new List<carddetails>();
+
             if (!string.IsNullOrEmpty(request.HrCode))
             {
-                // p => Person, s => Selection, pt => PositionType, po => Position
-                listOfCardData = await (from p in _context.Person
-                                        join s in _context.Selection on p.Id equals s.PersonId into joinOne
-                                        from resultjoinOne in joinOne.DefaultIfEmpty()
-
-                                        join po in _context.Position on resultjoinOne.PositionId equals po.Id into joinTwo
-                                        from resultjoinTwo in joinTwo.DefaultIfEmpty()
-
-                                        join pt in _context.PositionType on resultjoinTwo.PositionTypeId equals pt.Id into joinThree
-                                        from resultJoinThree in joinThree.DefaultIfEmpty()
-
-                                        join wa in _context.WorkArea on resultjoinTwo.WorkingAreaId equals wa.Id into joinFour
-                                        from resultJoinFour in joinFour.DefaultIfEmpty()
-
-                                        where p.Hrcode == request.HrCode
-                                        select new CardDataModel
-                                        {
-                                        //    FullName = new StringBuilder() { }.Append(p.FirstName).Append(" ").Append(p.LastName).ToString(),
-                                        //    FullNameE = new StringBuilder() { }.Append(p.FirstNameEng).Append(" ").Append(p.LastNameEng).ToString(),
-                                            FullName = p.FirstName + " " + p.LastName,
-                                            FullNameE = p.FirstNameEng + " " + p.LastNameEng,
-                                            Hrcode = p.Hrcode,
-                                            PositionTitle = resultJoinThree.Name,
-                                            OrgUnitName = resultJoinFour.Title,
-                                            PositionTitleE = resultJoinThree.NameEng
-                                        }
-                                       ).Take(1).SingleOrDefaultAsync();
-
-            }
+                listOfCardData = await _context.Carddetails.FromSql("SELECT * FROM public.carddetails").ToListAsync();
+                Record = listOfCardData.Where(h => h.hrcode == request.HrCode).ToList();
+                if (Record.Any())
+                {
+                    return Record;
+                }
+                else
+                {
+                    throw new BusinessRulesException("لست خالی میباشد");
+                }
+            } 
             else
             {
                 throw new BusinessRulesException("کودکادری خالی بوده نمیتواند");
             }
-
-            return listOfCardData;
-
+             
         }
     }
 }

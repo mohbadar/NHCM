@@ -512,9 +512,13 @@
             });
 
             if ($('#' + self.grid.table).attr('type') == 'treetable') {
-                $('#' + self.grid.table).treetable('destroy');
+                $('#' + self.grid.table).treetable('destroy'); 
                 $('#' + self.grid.table).treetable({ expandable: true });
-                $('#' + self.grid.table).treetable('expandAll');
+
+
+                $('#' + self.grid.table).treetable('collapseAll');
+
+
                 $('#' + self.grid.table).parents('.dataTables_scrollBody').css({ overflow: 'visible' });
             }
             $('[data-popup="tooltip"]').tooltip({ template: '<div class="tooltip"><div class="bg-primary"><div class="tooltip-arrow"></div><div class="tooltip-inner"></div></div></div>', trigger: 'click' });

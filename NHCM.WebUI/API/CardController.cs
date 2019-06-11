@@ -11,6 +11,7 @@ using NHCM.Application.Employment.Queries;
 using NHCM.WebUI.Types;
 using NHCM.Application.Document.Disk.FileManager;
 using Microsoft.Extensions.Configuration;
+using NHCM.Domain.ViewsEntities;
 
 namespace NHCM.WebUI.API
 {
@@ -33,7 +34,7 @@ namespace NHCM.WebUI.API
         public async Task<IActionResult> GetEmployeeInfo([FromRoute]string hrCode)
         {
 
-             CardDataModel  cardInfo = new  CardDataModel ();
+            List<carddetails> cardInfo = new List<carddetails>();
 
             cardInfo = await _mediator.Send(new GetCardDataQuery() { HrCode = hrCode });
             

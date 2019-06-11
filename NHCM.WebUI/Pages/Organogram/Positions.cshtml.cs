@@ -130,7 +130,7 @@ namespace NHCM.WebUI.Pages.Organogram
                 PositionType = await Mediator.Send(new SearchOrgPositionQuery() { Id = presult.FirstOrDefault().PositionTypeId, Children = true });
 
                 foreach (SearchedOrgPosition po in PositionType)
-                    result.Add(new { Text = po.PositionTypeText + " | " + po.RankText, ID = po.PositionTypeId.ToString() });
+                    result.Add(new { Text = po.PositionTypeText + " | " + po.RankText, ID = po.Id.ToString() });
 
 
                 return new JsonResult(new UIResult()

@@ -1,9 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Text;
 
-namespace NHCM.Domain.Entities
+namespace NHCM.Application.Lookup.Models
 {
-    public  class WorkArea
+    public class SearchedWorkAreaModel
     {
         public decimal Id { get; set; }
         public string Title { get; set; }
