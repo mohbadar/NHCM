@@ -70,43 +70,43 @@ namespace NHCM.Application.Organogram.Queries
                                 }).OrderBy(c=>c.Sorter).DefaultIfEmpty().ToListAsync(cancellationToken);
 
             }
-            if (request.ParentId != null)
-            {
-                result = await (from p in _context.Position
-                                join w in _context.WorkArea on p.WorkingAreaId equals w.Id into pw
-                                from rpw in pw.DefaultIfEmpty()
-                                join OP in OrgPositions on p.PositionTypeId equals OP.Id into OPs
-                                from rops in OPs.DefaultIfEmpty()
-                                join ST in _context.SalaryType on p.SalaryTypeId equals ST.Id into STs
-                                from str in STs.DefaultIfEmpty()
-                                join L in _context.Location on p.LocationId equals L.Id into Ls
-                                from Lr in Ls.DefaultIfEmpty()
-                                join PT in _context.PlanType on p.PlanTypeId equals PT.Id into PTs
-                                from PTr in PTs.DefaultIfEmpty()
-                                where p.ParentId == request.ParentId
-                                select new SearchedPosition
-                                {
-                                    Id = p.Id,
-                                    ParentId = p.ParentId,
-                                    NodeId = Convert.ToInt32(p.Id),
-                                    ParentNodeId = Convert.ToInt32(p.ParentId),
-                                    WorkingAreaId = p.WorkingAreaId,
-                                    Code = p.Code,
-                                    PositionTypeId = p.PositionTypeId,
-                                    LocationId = p.LocationId,
-                                    SalaryTypeId = p.SalaryTypeId,
-                                    Sorter = p.Sorter,
-                                    OrganoGramId = p.OrganoGramId,
-                                    PlanTypeId = p.PlanTypeId,
-                                    WorkAreaText = rpw.Title,
-                                    RankText = rops.RankText,
-                                    PositionTypeText = rops.PositionTypeText,
-                                    OrgUnitText = rops.OrgUnitText,
-                                    SalaryTypeText = str.Dari,
-                                    LocationText = Lr.Dari,
-                                    PlanTypeText = PTr.Name,
-                                }).OrderBy(c => c.Sorter).DefaultIfEmpty().ToListAsync(cancellationToken);
-            }
+            //if (request.ParentId != null)
+            //{
+            //    result = await (from p in _context.Position
+            //                    join w in _context.WorkArea on p.WorkingAreaId equals w.Id into pw
+            //                    from rpw in pw.DefaultIfEmpty()
+            //                    join OP in OrgPositions on p.PositionTypeId equals OP.Id into OPs
+            //                    from rops in OPs.DefaultIfEmpty()
+            //                    join ST in _context.SalaryType on p.SalaryTypeId equals ST.Id into STs
+            //                    from str in STs.DefaultIfEmpty()
+            //                    join L in _context.Location on p.LocationId equals L.Id into Ls
+            //                    from Lr in Ls.DefaultIfEmpty()
+            //                    join PT in _context.PlanType on p.PlanTypeId equals PT.Id into PTs
+            //                    from PTr in PTs.DefaultIfEmpty()
+            //                    where p.ParentId == request.ParentId
+            //                    select new SearchedPosition
+            //                    {
+            //                        Id = p.Id,
+            //                        ParentId = p.ParentId,
+            //                        NodeId = Convert.ToInt32(p.Id),
+            //                        ParentNodeId = Convert.ToInt32(p.ParentId),
+            //                        WorkingAreaId = p.WorkingAreaId,
+            //                        Code = p.Code,
+            //                        PositionTypeId = p.PositionTypeId,
+            //                        LocationId = p.LocationId,
+            //                        SalaryTypeId = p.SalaryTypeId,
+            //                        Sorter = p.Sorter,
+            //                        OrganoGramId = p.OrganoGramId,
+            //                        PlanTypeId = p.PlanTypeId,
+            //                        WorkAreaText = rpw.Title,
+            //                        RankText = rops.RankText,
+            //                        PositionTypeText = rops.PositionTypeText,
+            //                        OrgUnitText = rops.OrgUnitText,
+            //                        SalaryTypeText = str.Dari,
+            //                        LocationText = Lr.Dari,
+            //                        PlanTypeText = PTr.Name,
+            //                    }).OrderBy(c => c.Sorter).DefaultIfEmpty().ToListAsync(cancellationToken);
+            //}
 
             else if (request.OrganoGramId != null)
             {

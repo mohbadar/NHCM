@@ -17,11 +17,12 @@ namespace NHCM.Domain.Entities
         public int WorkingAreaId { get; set; }
         public int? Reference { get; set; }
         public decimal? ParentId { get; set; }
+        public string Sorter { get; set; }
         public int PositionTypeId { get; set; }
         public int StatusId { get; set; }
         public int LocationId { get; set; }
         public int SalaryTypeId { get; set; }
-        public string Sorter { get; set; }
+        //public string Sorter { get; set; }
         public int OrganoGramId { get; set; }
         public short PlanTypeId { get; set; }
         public string Code { get; set; }

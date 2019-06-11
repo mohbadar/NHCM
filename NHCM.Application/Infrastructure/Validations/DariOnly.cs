@@ -16,7 +16,7 @@ namespace NHCM.Application.Infrastructure.Validations
         protected override bool IsValid(PropertyValidatorContext context)
         {
 
-           if(Regex.IsMatch(context.PropertyValue.ToString(), @"[\u0600-\u06FF]+$"))
+           if(Regex.IsMatch(context.PropertyValue.ToString(), @"[\u0600-\u06FF]"))
             {
                 return true;
             }

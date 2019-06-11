@@ -39,7 +39,7 @@ namespace NHCM.Application.Organogram.Commands
         public async Task<List<SearchedPosition>> Handle(SavePositionCommand request, CancellationToken cancellationToken)
         {
             List<SearchedPosition> result = new List<SearchedPosition>();
-            List<Position> list = (from a in _context.Position where a.OrganoGramId == request.OrganoGramId && a.WorkingAreaId == request.WorkingAreaId && a.Code == request.Code select a).ToList();
+            List<Position> list = (from a in _context.Position where a.OrganoGramId == request.OrganoGramId && a.WorkingAreaId == request.WorkingAreaId && a.PositionTypeId == request.PositionTypeId && a.Code == request.Code select a).ToList();
 
             if (list.Any())
             {
@@ -77,7 +77,7 @@ namespace NHCM.Application.Organogram.Commands
                 else
                 {
                     Position toUpdateRecord = await (from po in _context.Position
-                                                     where po.Id == request.Id
+                                                     where po.Code == request.Code
                                                      select po).SingleOrDefaultAsync();
                     toUpdateRecord.WorkingAreaId = request.WorkingAreaId;
                     toUpdateRecord.ParentId = request.ParentId;
@@ -85,11 +85,21 @@ namespace NHCM.Application.Organogram.Commands
                     toUpdateRecord.PositionTypeId = request.PositionTypeId;
                     toUpdateRecord.LocationId = request.LocationId;
                     toUpdateRecord.SalaryTypeId = request.SalaryTypeId;
-                    toUpdateRecord.Sorter = "4545";
+
+                   // toUpdateRecord.Sorter = "4545";
+                    if (request.ParentId > 0)
+                    {
+                        Position parent = (from a in _context.Position where a.Id == request.ParentId select a).SingleOrDefault();
+                        String parentsorter = parent.Sorter;
+                        int count = (from a in _context.Position where a.ParentId == request.ParentId select a).ToList().Count();
+                        toUpdateRecord.Sorter = parentsorter + '.' + (count + 1).ToString();
+                    }
+
                     toUpdateRecord.OrganoGramId = request.OrganoGramId;
                     toUpdateRecord.PlanTypeId = request.PlanTypeId;
                     await _context.SaveChangesAsync(cancellationToken);
-                    result = await _mediator.Send(new Queries.SearchPositionQuery() { Id = toUpdateRecord.ParentId });
+                    //result = await _mediator.Send(new Queries.SearchPositionQuery() { Id = toUpdateRecord.ParentId });
+                    result = await _mediator.Send(new Queries.SearchPositionQuery() { Id = toUpdateRecord.Id });
                 }
             }
             return result;
