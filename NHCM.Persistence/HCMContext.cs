@@ -87,11 +87,13 @@ namespace NHCM.Persistence
         public virtual DbSet<OrgPosition> OrgPosition { get; set; }
         public virtual DbSet<OrgUnitType> OrgUnitType { get; set; }
         public virtual DbSet<ProcessConnection> ProcessConnection { get; set; }
+        public virtual DbSet<DailyLog> DailyLog { get; set; }
 
         public virtual DbSet<IdentityCard> IdentityCard { get; set; }
         public virtual DbQuery<carddetails> Carddetails { get; set; }
         ///// Report Dbset
         public virtual DbQuery<StatisticalReport> StatisticalReports { get; set; }
+        public virtual DbQuery<AttendanceReport> AttendanceReports { get; set; }
         #endregion DbSets
          
 

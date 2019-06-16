@@ -4,6 +4,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Rendering;
 using NHCM.Application.Employment.Commands;
 using NHCM.Application.Employment.Models;
 using NHCM.Application.Employment.Queries;
@@ -24,6 +25,14 @@ namespace NHCM.WebUI.Pages.Employment
 
         public async Task OnGetAsync()
         {
+
+            ListOfRanks = new List<SelectListItem>();
+            List<Rank> ranks = new List<Rank>();
+            ranks = await Mediator.Send(new GetRankQuery() { ID = null , CategoryId = 6});
+            foreach (Rank rank in ranks)
+                ListOfRanks.Add(new SelectListItem() { Text = rank.Name, Value = rank.Id.ToString() });
+
+
             ScreenID = EncryptionHelper.Encrypt("51");
 
             int SID = Convert.ToInt32(EncryptionHelper.Decrypt(ScreenID));
