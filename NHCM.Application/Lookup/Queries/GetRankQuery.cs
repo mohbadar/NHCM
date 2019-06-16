@@ -14,6 +14,7 @@ namespace NHCM.Application.Lookup.Queries
     public class GetRankQuery : IRequest<List<Rank>>
     {
         public int? ID { get; set; }
+        public short? CategoryId { get; set; }
     }
     public class GetRankQueryHandler : IRequestHandler<GetRankQuery, List<Rank>>
     {
@@ -27,9 +28,19 @@ namespace NHCM.Application.Lookup.Queries
         {
             List<Rank> result = new List<Rank>();
 
-            if (request.ID == null || request.ID == default(int)) result = await _context.Rank.ToListAsync(cancellationToken);
-            else result = await _context.Rank.Where(e => e.Id == request.ID).ToListAsync(cancellationToken);
+            //if (request.ID == null || request.ID == default(int)) result = await _context.Rank.ToListAsync(cancellationToken);
 
+            //else result = await _context.Rank.Where(e => e.Id == request.ID).ToListAsync(cancellationToken);
+            if (request.CategoryId != null)
+            {
+                result = await _context.Rank.Where(r => r.CategoryId == request.CategoryId).ToListAsync(cancellationToken);
+            }
+            else if (request.ID != null)
+            {
+                result = await _context.Rank.Where(e => e.Id == request.ID).ToListAsync(cancellationToken);
+            }
+           
+            else result = await _context.Rank.ToListAsync(cancellationToken);
 
             return result;
         }

@@ -18,7 +18,8 @@ namespace NHCM.Application.Employment.Models
         public DateTime? VerdictDate { get; set; }
         public string VerdictRegNo { get; set; }
         public string FinalNo { get; set; }
-        public string ReferenceNo { get; set; }
+        public string ReferenceNo { get; set; } 
+        public short? QadamID { get; set; }
         // TEMP:
         public string DateText { get; set; }
         public int OrganogramId { get; set; }

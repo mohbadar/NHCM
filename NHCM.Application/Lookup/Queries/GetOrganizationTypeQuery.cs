@@ -27,6 +27,7 @@ namespace NHCM.Application.Lookup.Queries
             List<OrganizationType> result = new List<OrganizationType>();
 
             if (request.ID == null || request.ID == default(int)) result = await _context.OrganizationType.ToListAsync(cancellationToken);
+            
             else result = await _context.OrganizationType.Where(e => e.Id == request.ID).ToListAsync(cancellationToken);
 
 

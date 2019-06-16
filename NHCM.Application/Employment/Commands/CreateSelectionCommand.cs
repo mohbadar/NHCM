@@ -23,7 +23,8 @@ namespace NHCM.Application.Employment.Commands
         public DateTime? VerdictDate { get; set; }
         public string VerdictRegNo { get; set; }
         public string FinalNo { get; set; } 
-        public int OrganoGramID { get; set; } 
+        public int OrganoGramID { get; set; }
+        public short? QadamID { get; set; }
     }
      
     public class CreateSelectionCommandHandler : IRequestHandler<CreateSelectionCommand, List<SearchedSelectionModel>>
@@ -73,6 +74,7 @@ namespace NHCM.Application.Employment.Commands
                         VerdictRegNo = request.VerdictRegNo,
                         Remarks = request.Remarks,
                         FinalNo = request.FinalNo,
+                        QadamID = request.QadamID
                     };
                     _context.Selection.Add(selection);
                     await _context.SaveChangesAsync(cancellationToken);
@@ -92,7 +94,8 @@ namespace NHCM.Application.Employment.Commands
                 d.VerdictDate = request.VerdictDate;
                 d.VerdictRegNo = request.VerdictRegNo;
                 d.Remarks = request.Remarks;
-                d.FinalNo = request.FinalNo; 
+                d.FinalNo = request.FinalNo;
+                d.QadamID = request.QadamID;
                 await _context.SaveChangesAsync(); 
                 result = await _mediator.Send(new SearchSelectionQuery() { OrganoGramId = _context.Position.Where(a => a.Id == request.PositionId).SingleOrDefault().OrganoGramId });
                 return result; 

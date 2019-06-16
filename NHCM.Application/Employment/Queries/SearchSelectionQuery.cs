@@ -54,7 +54,7 @@ namespace NHCM.Application.Employment.Queries
                                                        join Person in _context.Person on Selection.PersonId equals Person.Id into Persons
                                                        from PersonResult in Persons.DefaultIfEmpty()
                                                        join P in Positions on Selection.PositionId equals P.Id into PositionsList
-                                                       from PositionResult in PositionsList.DefaultIfEmpty()
+                                                       from PositionResult in PositionsList.DefaultIfEmpty() 
                                                        where Selection.PositionId == PositionResult.Id
                                                        select new SearchedSelectionModel
                                                        {
@@ -65,6 +65,7 @@ namespace NHCM.Application.Employment.Queries
                                                            EventTypeId = Selection.EventTypeId,
                                                            Remarks = Selection.Remarks,
                                                            FinalNo = Selection.FinalNo,
+                                                           QadamID = Selection.QadamID,
                                                            VerdictDate = Selection.VerdictDate,
                                                            VerdictRegNo = Selection.VerdictRegNo,
                                                            PersonId = Selection.PersonId,
@@ -102,7 +103,7 @@ namespace NHCM.Application.Employment.Queries
                                             EffectiveDate = Selection.EffectiveDate,
                                             EventTypeId = Selection.EventTypeId,
                                             Remarks = Selection.Remarks,
-                                            FinalNo = Selection.FinalNo,
+                                            FinalNo = Selection.FinalNo, 
                                             VerdictDate = Selection.VerdictDate,
                                             VerdictRegNo = Selection.VerdictRegNo,
                                             PersonId = Selection.PersonId
@@ -115,6 +116,7 @@ namespace NHCM.Application.Employment.Queries
                     Record.WorkAreaText = P.WorkAreaText;
                     Record.PositionTypeText = P.PositionTypeText;
                     Record.RankText = P.RankText;
+                   
                     Record.OrgUnitText = P.OrgUnitText;
                     Record.Sorter = P.Sorter;
                     Record.Code = P.Code;

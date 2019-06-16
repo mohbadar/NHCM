@@ -30,7 +30,7 @@
                                 <fieldset class="content-group">
                                     <legend class="text-bold">برای مشاهده، تعیینات کارمندان لطفاً تشکیل مربوطه را انتخاب نمائید</legend>
                                     <div class="row">
-                                        <div class="col-md-7 col-sm-12 col-xs-12 pull-right">
+                                        <div class="col-md-5 col-sm-12 col-xs-12 pull-right">
                                             <div class="form-group">
                                                 <label class="text-bold">
                                                     کارمند
@@ -42,13 +42,25 @@
                                             </div>
                                         </div>
 
+                                        <div class="col-md-2 col-sm-12 col-xs-12 pull-right">
+                                            <div class="form-group">
+                                                <label class="text-bold">
+                                                    قدم
+                                                    <span class="text-danger">&nbsp;*</span>
+                                                </label>
+                                                <select id="uxqadamid" name="uxqadamid" asp-items="@Model.ListOfRanks" class="select"   required>
+                                                    <option></option>
+                                                </select>
+                                            </div>
+                                        </div>
+
                                         <div class="col-md-4 col-sm-12 col-xs-12 pull-right">
                                             <div class="form-group">
                                                 <label class="text-bold">
                                                     نوع تعیینات
                                                     <span class="text-danger">&nbsp;*</span>
                                                 </label>
-                                                <select id="uxeventtypeid" name="uxeventtypeid" data-type="events"  class="select"  required>
+                                                <select id="uxeventtypeid" name="uxeventtypeid" data-type="events" class="select" required>
                                                     <option></option>
                                                 </select>
                                             </div>

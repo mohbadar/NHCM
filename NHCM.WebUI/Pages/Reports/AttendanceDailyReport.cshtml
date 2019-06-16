@@ -1,0 +1,117 @@
+﻿@page "{handler?}/{id?}"
+@model NHCM.WebUI.Pages.Reports.AttendanceDailyReportModel
+@{
+    ViewData["Title"] = "AttendanceDailyReport";
+    Layout = "~/Pages/Shared/_CustomLayout.cshtml";
+}
+@Html.AntiForgeryToken()
+
+<div class="panel-heading">
+    <h1 class="panel-title">گزارش حاضری روزمره کارمندان</h1>
+</div>
+<div class="panel-body" style="padding-bottom:5px;">
+    <form id="dv_Reports_AttendanceDailyReport" class="form main-form page-component" type="form" prefix="att">
+        <fieldset class="content-group">
+            <legend class="text-bold">برای اینکه حاضری کارمندان را مشاهده نمائید، لطفاً ریاست مورد نظر خویش را انتخاب نموده و تاریخ شروع و ختم گزارش را تعین نمائید. </legend>
+            <div class="row">
+                <div class="col-md-4 col-sm-12 col-xs-12 pull-right">
+                    <div class="form-group has-feedback has-feedback-left">
+                        <label class="text-bold">
+                            ریاست را انتخاب نمائید
+                            <span class="text-danger">&nbsp;*</span>
+                        </label>
+                        <select id="attdepartmentid" name="attdepartmentid"  class="select search" data-type="department"  >
+                            <option></option>
+                        </select>
+                    </div>
+                </div>  
+            </div>
+            <div class="row">
+                <div class="col-md-6 pull-right">
+                    <div class="row">
+                        <div class="col-md-6 col-sm-12 col-xs-12 pull-right">
+                            <div class="form-group">
+                                <label class="text-bold">
+                                    تاریخ آغاز
+                                    <span class="text-danger">&nbsp;*</span>
+                                </label>
+                                <div class="input-group">
+                                    <span class="input-group-addon"><i class="icon-calendar3"></i></span>
+                                    <input type="text" id="attstartdateshamsi" name="attstartdateshamsi" class="form-control Shamsi" sibling="attstartdate" placeholder="هجری شمسی" aria-label="date1" aria-describedby="date1" />
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-6 col-sm-12 col-xs-12 pull-right">
+                            <div class="form-group">
+                                <label class="text-bold">
+                                    <span class="text-danger">&nbsp;*</span>
+                                </label>
+                                <div class="input-group">
+                                    <span class="input-group-addon"><i class="icon-calendar3"></i></span>
+                                    <input type="text"  id="attstartdate" sibling="attstartdateshamsi" name="attstartdate"  class="form-control Miladi search" placeholder="میلادی" aria-label="date1" aria-describedby="date1" required />
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-6 pull-right">
+                    <div class="row">
+                        <div class="col-md-6 col-sm-12 col-xs-12 pull-right">
+                            <div class="form-group">
+                                <label class="text-bold">
+                                    تاریخ ختم
+                                    <span class="text-danger">&nbsp;*</span>
+                                </label>
+                                <div class="input-group">
+                                    <span class="input-group-addon"><i class="icon-calendar3"></i></span>
+                                    <input type="text" id="attenddateshamsi" name="attenddateshamsi" sibling="attenddate" class="form-control Shamsi" placeholder="هجری شمسی" aria-label="date1" aria-describedby="date1" />
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-6 col-sm-12 col-xs-12 pull-right">
+                            <div class="form-group">
+                                <label class="text-bold">
+                                    <span class="text-danger">&nbsp;*</span>
+                                </label>
+                                <div class="input-group">
+                                    <span class="input-group-addon"><i class="icon-calendar3"></i></span>
+                                    <input type="text"  id="attenddate"  name="attenddate" sibling="attenddateshamsi" class="form-control Miladi search" placeholder="میلادی" aria-label="date2" aria-describedby="date2" required />
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div> 
+            </div>
+            <hr /> 
+            <div class="row div-form-control">
+                <div class="col-md-12">
+                    <div class="form-group">
+                        <button type="button" class="btn btn-primary" action="search"><i class="icon-search4 position-right"></i>جستجو </button>
+                        <button type="button" class="btn btn-primary" action="new"><i class="icon-new-tab position-right"></i>صفحه جدید</button>
+                    </div>
+                </div>
+            </div> 
+            <div class="form-grid">
+                <table style="direction: rtl;" bindonclick="true" filter="true">
+                    <thead>
+                        <tr>
+                            <th colname="FullName">اسم مکمل</th> 
+                            <th colname="FatherName">ولد</th>
+                            <th colname="bast">بست</th>
+                            <th colname="qadam">قدم</th>
+                            <th colname="userid">کود حاضری</th> 
+                            <th colname="postion">عنوان وظیفه</th>
+                            <th colname="department">ریاست</th>
+                            <th colname="present">حاضر</th>
+                            <th colname="absent">غیر حاضر</th>
+                            <th colname="leave">رخصت</th>
+                        </tr>
+                    </thead>
+                    <tbody></tbody>
+                </table>
+            </div> 
+        </fieldset>
+    </form>
+</div>
+
+

@@ -5,6 +5,7 @@ namespace NHCM.Domain.Entities
 {
     public  class Selection
     {
+         
         public decimal PositionId { get; set; }
         public DateTime? EffectiveDate { get; set; }
         public decimal Id { get; set; }
@@ -14,7 +15,10 @@ namespace NHCM.Domain.Entities
         public DateTime? VerdictDate { get; set; }
         public string VerdictRegNo { get; set; }
         public string FinalNo { get; set; }
-        public string ReferenceNo { get; set; }        
+        public short? QadamID { get; set; }
+        public string ReferenceNo { get; set; }
         public virtual Position Position { get; set; }
+         
+
     }
 }
